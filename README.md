@@ -1,2 +1,5 @@
 # repeat-after-me
- The offical repo for the repeat after me app beloning to T&M
+ The official repo for the repeat after me app belonging to T&M.
+
+# Dependencies
+Pynput: https://pypi.org/project/pynput/
