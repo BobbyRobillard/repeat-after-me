@@ -1,26 +1,20 @@
 from pynput.mouse import Button, Controller
 
-mouse = Controller()
+import tkinter as tk
 
-# Read pointer position
-print('The current pointer position is {0}'.format(
-    mouse.position))
+from tkinter import messagebox
 
-# # Set pointer position
-# mouse.position = (10, 20)
-# print('Now we have moved it to {0}'.format(
-#     mouse.position))
-#
-# # Move pointer relative to current position
-# mouse.move(5, -5)
-#
-# # Press and release
-# mouse.press(Button.left)
-# mouse.release(Button.left)
-#
-# # Double click; this is different from pressing and releasing
-# # twice on Mac OSX
-# mouse.click(Button.left, 2)
-#
-# # Scroll two steps down
-# mouse.scroll(0, 2)
+
+top = tk.Tk()
+
+def get_mouse_location():
+    mouse = Controller()
+    msg = messagebox.showinfo(
+        "Hello Python",
+        "The current pointer position is {0}".format(mouse.position)
+    )
+
+button = tk.Button(top, text="Hello", command=get_mouse_location)
+button.pack()
+
+top.mainloop()
