@@ -3,38 +3,68 @@ from pynput import mouse
 
 import tkinter as tk
 
-from tkinter import messagebox
+import sys
+
+controller = Controller()
+
+recordings = []
+
+is_recording = False
+
+listener = None
+
+top = tk.Tk()
 
 
-# top = tk.Tk()
-#
-# action = []
-#
-# controller = Controller()
-#
-#
-# def get_mouse_location():
-#     return controller.position
-#
-#
-# def add_mouse_location():
-#     action.append(get_mouse_location())
-#
-#
-# def on_click(x, y, button, pressed):
-#     add_mouse_location()
-#
-#
-# def take_action():
-#     for move in action:
-#         controller.position = (move[0], move[1])
-#         controller.click(Button.left, 1)
-#
-#
-# listener = mouse.Listener(on_click=on_click)
-# listener.start()
-#
-# button = tk.Button(top, text="Hello", command=take_action)
-# button.pack()
-#
-# top.mainloop()
+class Recording:
+    def __init__(self):
+        self.actions = []
+        self.key_bind_code = -1
+
+    def add_action(self):
+        self.actions.append(controller.position)
+
+    def play(self):
+        for action in actions:
+            do_action(action)
+
+
+def do_action(action):
+    controller.position = (action[0], action[1])
+    controller.click(Button.left, 1)
+
+
+def on_click(recording):
+    recording.add_action()
+    print("Action added")
+
+
+def start_recording():
+    r = Recording()
+    recordings.append(r)
+    listener = mouse.Listener(on_click=on_click(r))
+    listener.start()
+    print("Recording Started")
+    print("Recording: " + str(is_recording))
+
+
+def stop_recording():
+    listener.stop()
+    print("Recording Stopped")
+    print(str(recordings[len(recordings) - 1]))
+
+
+def handle_recording():
+    print("Recording: " + str(is_recording))
+    if is_recording:
+        stop_recording()
+        is_recording = False
+    else:
+        start_recording()
+        is_recording = True
+
+
+button = tk.Button(top, text="Record", command=handle_recording)
+button.pack()
+
+top.mainloop()
