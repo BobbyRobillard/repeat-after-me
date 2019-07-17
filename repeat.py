@@ -23,10 +23,12 @@ class Recording:
 
     def add_action(self):
         self.actions.append(controller.position)
+        print("adding action")
 
     def play(self):
-        for action in actions:
+        for action in self.actions:
             do_action(action)
+            print("Taking action")
 
 
 def do_action(action):
@@ -36,26 +38,27 @@ def do_action(action):
 
 def on_click(recording):
     recording.add_action()
-    print("Action added")
 
 
 def start_recording():
+    global recordings
+    global listener
     r = Recording()
     recordings.append(r)
     listener = mouse.Listener(on_click=on_click(r))
     listener.start()
-    print("Recording Started")
-    print("Recording: " + str(is_recording))
 
 
 def stop_recording():
+    global listener
     listener.stop()
-    print("Recording Stopped")
-    print(str(recordings[len(recordings) - 1]))
+
+    for recording in recordings:
+        recording.play()
 
 
 def handle_recording():
-    print("Recording: " + str(is_recording))
+    global is_recording
     if is_recording:
         stop_recording()
         is_recording = False
