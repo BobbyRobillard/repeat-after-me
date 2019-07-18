@@ -11,7 +11,18 @@ recordings = []
 
 is_recording = False
 
-listener = None
+
+def on_click(x, y, button, pressed):
+    print("Click Started")
+    global recordings
+    if pressed:
+        recordings[len(recordings) - 1].add_action()
+        print("Press Succeeded")
+    else:
+        print("Release Succeeded")
+
+
+listener = mouse.Listener(on_click=on_click)
 
 top = tk.Tk()
 
@@ -22,13 +33,14 @@ class Recording:
         self.key_bind_code = -1
 
     def add_action(self):
+        print("Add action started")
+        global controller
         self.actions.append(controller.position)
-        print("adding action")
+        print("Add action Succeeded")
 
     def play(self):
         for action in self.actions:
             do_action(action)
-            print("Taking action")
 
 
 def do_action(action):
@@ -36,25 +48,23 @@ def do_action(action):
     controller.click(Button.left, 1)
 
 
-def on_click(recording):
-    recording.add_action()
-
-
 def start_recording():
+    print("Recording Started")
     global recordings
     global listener
-    r = Recording()
-    recordings.append(r)
-    listener = mouse.Listener(on_click=on_click(r))
+    recordings.append(Recording())
+    listener = mouse.Listener(on_click=on_click)
     listener.start()
 
 
 def stop_recording():
+    print("Recording Stopped")
     global listener
     listener.stop()
 
     for recording in recordings:
-        recording.play()
+        for action in recording.actions:
+            print(str(action))
 
 
 def handle_recording():
