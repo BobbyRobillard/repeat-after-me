@@ -3,28 +3,25 @@ from pynput import mouse
 
 import tkinter as tk
 
-import sys
-
 controller = Controller()
 
 recordings = []
 
 is_recording = False
 
+top = tk.Tk()
+
 
 def on_click(x, y, button, pressed):
     print("Click Started")
     global recordings
-    if pressed:
-        recordings[len(recordings) - 1].add_action()
-        print("Press Succeeded")
-    else:
-        print("Release Succeeded")
-
-
-listener = mouse.Listener(on_click=on_click)
-
-top = tk.Tk()
+    global is_recording
+    if is_recording:
+        if pressed:
+            recordings[len(recordings) - 1].add_action()
+            print("Press Succeeded")
+        else:
+            print("Release Succeeded")
 
 
 class Recording:
@@ -48,36 +45,19 @@ def do_action(action):
     controller.click(Button.left, 1)
 
 
-def start_recording():
-    print("Recording Started")
-    global recordings
-    global listener
-    recordings.append(Recording())
-    listener = mouse.Listener(on_click=on_click)
-    listener.start()
-
-
-def stop_recording():
-    print("Recording Stopped")
-    global listener
-    listener.stop()
-
-    for recording in recordings:
-        for action in recording.actions:
-            print(str(action))
-
-
 def handle_recording():
     global is_recording
-    if is_recording:
-        stop_recording()
-        is_recording = False
-    else:
-        start_recording()
-        is_recording = True
+
+    if not is_recording:
+        recordings.append(Recording())
+
+    is_recording = not is_recording
 
 
 button = tk.Button(top, text="Record", command=handle_recording)
 button.pack()
 
+listener = mouse.Listener(on_click=on_click)
+listener.start()
+listener.join()
 top.mainloop()
