@@ -1,10 +1,12 @@
-from pynput.mouse import Button, Controller
+from pynput.mouse import Button, Controller as MouseController
+from pynput.keyboard import Controller as KeyboardController
 from pynput import mouse, keyboard
 
 import time
 import tkinter as tk
 
-controller = Controller()
+mouse_controller = MouseController()
+keyboard_controller = KeyboardController()
 
 recordings = []
 
@@ -22,16 +24,23 @@ def handle_keyboard_event(key):
     global setting_recording_key
     global recording_key
 
-    if setting_recording_key:
-        recording_key = key.char
-        setting_recording_key = False
-        print("Recording key set to: {0}".format(recording_key))
+    try:
+        if setting_recording_key:
+            recording_key = key.char
+            setting_recording_key = False
+            print("Recording key set to: {0}".format(recording_key))
 
-    elif key.char == recording_key:
-        handle_recording()
+        elif key.char == recording_key:
+            handle_recording()
 
-    else:
-        play_recording_from_keybind(key.char)
+        elif is_recording:
+            recordings[len(recordings) - 1].actions.append(KeyboardAction(key.char))
+
+        else:
+            play_recording_from_keybind(key.char)
+
+    except AttributeError:
+        print("Special key: {0} pressed".format(key))
 
 
 def handle_mouse_event(x, y, button, pressed):
@@ -40,28 +49,48 @@ def handle_mouse_event(x, y, button, pressed):
 
     if is_recording:
         if pressed:
-            recordings[len(recordings) - 1].add_action()
+            recordings[len(recordings) - 1].actions.append(MouseAction(x, y, button))
 
 
-class Recording:
+class MouseAction(object):
+    def __init__(self, x, y, button):
+        self.x = x
+        self.y = y
+        self.button = button
+
+    def __str__(self):
+        return "Mouse press: ({0}, {1})".format(self.x, self.y)
+
+    def do_action(self):
+        global mouse_controller
+        mouse_controller.position = (self.x, self.y)
+        mouse_controller.click(Button.left, 1)
+
+
+class KeyboardAction(object):
+    def __init__(self, char):
+        self.char = char
+
+    def __str__(self):
+        return "Keypress: {0}".format(self.char)
+
+    def do_action(self):
+        global keyboard_controller
+        keyboard_controller.press(self.char)
+
+
+class Recording(object):
     def __init__(self):
         self.actions = []
         self.key_bind_code = -1
 
-    def add_action(self):
-        global controller
-        self.actions.append(controller.position)
+    def __str__(self):
+        return str(self.actions)
 
     def play(self):
         for action in self.actions:
-            do_action(action)
-            time.sleep(.5)
-
-
-def do_action(action):
-    global controller
-    controller.position = (action[0], action[1])
-    controller.click(Button.left, 1)
+            action.do_action()
+            time.sleep(0.5)
 
 
 def handle_recording():
