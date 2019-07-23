@@ -18,6 +18,7 @@ top = tk.Tk()
 
 
 def handle_keyboard_event(key):
+    global is_playing
     global is_recording
     global recordings
 
@@ -76,7 +77,8 @@ class KeyboardAction(object):
 
     def do_action(self):
         global keyboard_controller
-        keyboard_controller.press(self.char)
+        # print("DOING KEYBOARD ACTION")
+        keyboard_controller.type(self.char)
 
 
 class Recording(object):
@@ -106,10 +108,14 @@ def handle_recording():
 
 
 def play_recording_from_keybind(char):
+    global keyboard_listener
+    keyboard_listener.stop()
     try:
         recordings[int(char) - 1].play()
     except Exception as e:
         print("No recording set to key {0}".format(char))
+    keyboard_listener = keyboard.Listener(on_press=handle_keyboard_event)
+    keyboard_listener.start()
 
 
 def set_recording_key():
