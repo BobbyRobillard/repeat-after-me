@@ -10,8 +10,13 @@ keyboard_controller = KeyboardController()
 
 recordings = []
 
+playback_mode_active = False
 is_recording = False
+
 setting_recording_key = False
+setting_playback_key = False
+
+playback_key = None
 recording_key = None
 
 top = tk.Tk()
@@ -20,10 +25,14 @@ top = tk.Tk()
 def handle_keyboard_event(key):
     global is_playing
     global is_recording
+
     global recordings
 
     global setting_recording_key
+    global setting_playback_key
+
     global recording_key
+    global playback_key
 
     try:
         if setting_recording_key:
@@ -31,14 +40,26 @@ def handle_keyboard_event(key):
             setting_recording_key = False
             print("Recording key set to: {0}".format(recording_key))
 
-        elif key.char == recording_key:
-            handle_recording()
+        elif setting_playback_key:
+            playback_key = key.char
+            setting_playback_key = False
+            print("Playback mode key set to: {0}".format(playback_key))
 
-        elif is_recording:
-            recordings[len(recordings) - 1].actions.append(KeyboardAction(key.char))
+        elif key.char == playback_key:
+            print("Handingling Playback")
+            handle_playback()
 
         else:
-            play_recording_from_keybind(key.char)
+            if playback_mode_active:
+
+                if key.char == recording_key:
+                    handle_recording()
+
+                elif is_recording:
+                    recordings[len(recordings) - 1].actions.append(KeyboardAction(key.char))
+
+                else:
+                    play_recording_from_keybind(key.char)
 
     except AttributeError:
         print("Special key: {0} pressed".format(key))
@@ -92,19 +113,31 @@ class Recording(object):
     def play(self):
         for action in self.actions:
             action.do_action()
-            time.sleep(0.5)
+            time.sleep(0.1)
 
 
 def handle_recording():
     global is_recording
 
-    if not is_recording:
+    is_recording = not is_recording
+
+    if is_recording:
         recordings.append(Recording())
         print("Recording Started")
     else:
         print("Recording Stopped")
 
-    is_recording = not is_recording
+
+def handle_playback():
+    global playback_mode_active
+
+    playback_mode_active = not playback_mode_active
+
+    if playback_mode_active:
+        print("Playback mode active")
+    else:
+        print("Playback mode disabled")
+
 
 
 def play_recording_from_keybind(char):
@@ -125,8 +158,20 @@ def set_recording_key():
     print("Please enter the key to start/stop recording...\n")
 
 
-button = tk.Button(top, text="Set Recording Key", command=set_recording_key)
-button.pack()
+def set_playback_key():
+    global setting_playback_key
+
+    setting_playback_key = True
+    print("Please enter the key to start/stop playback mode...\n")
+
+
+output = tk.Text(top)
+
+record_button = tk.Button(top, text="Set Recording Key", command=set_recording_key)
+playback_button = tk.Button(top, text="Set Playback Key", command=set_playback_key)
+
+record_button.pack()
+playback_button.pack()
 
 keyboard_listener = keyboard.Listener(on_press=handle_keyboard_event)
 mouse_listener = mouse.Listener(on_click=handle_mouse_event)
