@@ -175,11 +175,22 @@ def set_playback_key():
     setting_playback_key = True
     output_text.set("Please enter the key to start/stop playback mode...\n")
 
+
+def delete_recordings():
+    global output_text
+    global recordings
+
+    output_text.set("Recordings deleted\n")
+    recordings = []
+
+
 record_button = tk.Button(top, text="Set Recording Key", command=set_recording_key)
 playback_button = tk.Button(top, text="Set Playback Key", command=set_playback_key)
+delete_recordings_button = tk.Button(top, text="Delete Recordings", command=delete_recordings)
 
 record_button.pack()
 playback_button.pack()
+delete_recordings_button.pack()
 output.pack()
 
 keyboard_listener = keyboard.Listener(on_press=handle_keyboard_event)
