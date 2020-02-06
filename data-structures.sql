@@ -1,3 +1,13 @@
+-- #############################################################################
+-- Setup user to connect as
+CREATE USER test IDENTIFIED BY 'testing123';
+GRANT ALL PRIVILEGES ON *.* TO test;
+FLUSH PRIVILEGES;
+-- #############################################################################
+-- Setup datbase to use
+CREATE DATABASE test;
+USE test;
+-- #############################################################################
 CREATE TABLE User (
   user_id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(50),
@@ -5,6 +15,10 @@ CREATE TABLE User (
   last_name VARCHAR(50),
   password VARCHAR(255),
   email VARCHAR(255)
+);
+
+INSERT INTO User (username, first_name, last_name, password, email) VALUES (
+  "test", "John", "Doe", "password123", "test@testing.com"
 );
 -- #############################################################################
 CREATE TABLE Profile (
@@ -21,10 +35,10 @@ CREATE TABLE Recording (
   FOREIGN KEY(profile_id) REFERENCES Profile(profile_id)
 );
 -- #############################################################################
--- Add current recording foreign key to Profiles table. This has to be done after
--- because the recording table isn't createrd when the Profiles table is first created.
-ALTER TABLE Profiles ADD current_recording_id INT;
-ALTER TABLE Profiles ADD CONSTRAINT current_recording_id FOREIGN KEY(current_recording_id) REFERENCES Recording(recording_id);
+-- Add current recording foreign key to Profile table. This has to be done after
+-- because the recording table isn't createrd when the Profile table is first created.
+ALTER TABLE Profile ADD current_recording_id INT;
+ALTER TABLE Profile ADD CONSTRAINT current_recording_id FOREIGN KEY(current_recording_id) REFERENCES Recording(recording_id);
 -- #############################################################################
 CREATE TABLE Mouse_Event (
   event_id INT AUTO_INCREMENT PRIMARY KEY,

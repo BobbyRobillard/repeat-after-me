@@ -8,9 +8,9 @@ def start_connection():
 
 def test():
     cursor = start_connection()
-    cursor.execute("SELECT * FROM demo")
+    cursor.execute("SELECT * FROM User")
     data = cursor.fetchone()
-    print ("Data : %s " % data)
+    print ("Data : %s " % data[1])
     cursor.close()
 
 
