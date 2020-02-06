@@ -16,10 +16,6 @@ CREATE TABLE User (
   password VARCHAR(255),
   email VARCHAR(255)
 );
-
-INSERT INTO User (username, first_name, last_name, password, email) VALUES (
-  "test", "John", "Doe", "password123", "test@testing.com"
-);
 -- #############################################################################
 CREATE TABLE Profile (
   profile_id INT AUTO_INCREMENT PRIMARY KEY,
