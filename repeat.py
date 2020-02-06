@@ -118,7 +118,7 @@ class Recording(object):
     def play(self):
         for action in self.actions:
             action.do_action()
-            time.sleep(0.1)
+            time.sleep(0.33)
 
 
 def handle_recording():
