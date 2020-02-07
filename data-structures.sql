@@ -31,10 +31,10 @@ CREATE TABLE Recording (
   FOREIGN KEY(profile_id) REFERENCES Profile(profile_id)
 );
 -- #############################################################################
--- Add current recording foreign key to Profile table. This has to be done after
--- because the recording table isn't createrd when the Profile table is first created.
-ALTER TABLE Profile ADD current_recording_id INT;
-ALTER TABLE Profile ADD CONSTRAINT current_recording_id FOREIGN KEY(current_recording_id) REFERENCES Recording(recording_id);
+-- Add current profile foreign key to User table. This has to be done after
+-- because the profile table isn't createrd when the User table is first created.
+ALTER TABLE User ADD current_profile_id INT;
+ALTER TABLE User ADD CONSTRAINT current_profile_id FOREIGN KEY(current_profile_id) REFERENCES Profile(profile_id);
 -- #############################################################################
 CREATE TABLE Mouse_Event (
   event_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,6 +42,7 @@ CREATE TABLE Mouse_Event (
   x_position INT,
   y_position INT,
   is_press BOOLEAN,
+  is_move BOOLEAN,
   recording_id INT,
   FOREIGN KEY(recording_id) REFERENCES Recording(recording_id)
 );
