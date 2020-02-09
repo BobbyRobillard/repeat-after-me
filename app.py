@@ -1,7 +1,7 @@
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import *
 
-from utils import get_current_profile, add_profile
+from utils import get_current_profile, add_profile, get_profiles
 
 import sys
 
@@ -9,6 +9,7 @@ import sys
 class Window(QMainWindow):
     def __init__(self):
         username = "test"
+        user_id = 1
 
         super().__init__()
 
@@ -21,16 +22,21 @@ class Window(QMainWindow):
         button.setGeometry(260, 60, 30, 30)
         button.clicked.connect(self.add_profile_btn_click)
 
+        self.labelB = QLabel(self)
+        self.labelB.setGeometry(10, 100, 200, 100)
+
         current_profile_name = get_current_profile(username)[2]
-        self.labelA.setText("Current Profile: " + current_profile_name)
+        self.labelA.setText("CURRENT PROFILE:\n " + current_profile_name)
+        self.labelB.setText("YOUR PROFILES:\n" + get_profiles(user_id))
         self.setGeometry(100, 50, 500, 500)
         self.show()
 
-    def add_profile_btn_click(self, user_id):
+    def add_profile_btn_click(self):
         profile_name = self.textbox.text()
         # Replace with actual code to get current user's id
         add_profile(1, profile_name)
         self.labelA.setText("Added profile: {0}".format(profile_name))
+        self.labelB.setText("YOUR PROFILES:\n" + get_profiles(1))
 
 
 App = QApplication(sys.argv)

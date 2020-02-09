@@ -28,3 +28,21 @@ def add_profile(user_id, profile_name):
 
     conn.commit()
     conn.close()
+
+# ------------------------------------------------------------------------------
+
+def get_profiles(user_id):
+    conn = start_connection()
+    cursor = conn.cursor()
+
+    sql = 'SELECT Name FROM Profile WHERE user_id={0}'.format(user_id)
+    cursor.execute(sql)
+
+    names = [result[0] for result in cursor]
+
+    concated = ""
+
+    for name in names:
+        concated = concated + (name + "\n")
+
+    return concated
