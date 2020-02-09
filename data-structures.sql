@@ -21,7 +21,6 @@ CREATE TABLE Profile (
   profile_id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   name VARCHAR(50),
-  UNIQUE (user_id),
   FOREIGN KEY(user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 -- #############################################################################
