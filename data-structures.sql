@@ -56,3 +56,14 @@ CREATE TABLE Key_Event (
   FOREIGN KEY(recording_id) REFERENCES Recording(recording_id)
 );
 -- #############################################################################
+
+-- INSERT DUMMY DATA
+
+INSERT INTO User (username, first_name, last_name, password, email) VALUES (
+  "test", "John", "Doe", "password123", "testing123@test.com"
+);
+
+INSERT INTO Profile (user_id, name) VALUES (1, "Elementor Essentials!");
+
+UPDATE User SET current_profile_id = 1 WHERE user_id = 1;
+-- #############################################################################

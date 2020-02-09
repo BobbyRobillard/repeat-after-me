@@ -12,6 +12,3 @@ def test():
     data = cursor.fetchone()
     print ("Data : %s " % data[1])
     cursor.close()
-
-
-test()
