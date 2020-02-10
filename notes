@@ -1,0 +1,72 @@
+################################################################################
+                            Graphics Methods - graphics-utils.py
+################################################################################
+
+update_nav_tabs(active_tab) - Updates the color of the navigation tabs, sets passed in tab to active.
+
+################################################################################
+                          General Utility Methods - general-utils.py
+################################################################################
+
+get_user_id - Get the ID of the logged in user
+
+get_user(user_id) - Fetch a specific user from the database given a user_id
+
+open_cloud_profile(user_id) - Opens the RAM webapp to a user's profile
+
+open_help() - Opens the application's help window
+
+open_quick_record() - Opens the quick record window
+
+open_dashboard() - Opens the dashboard window
+
+login()
+
+logout()
+
+register_user()
+
+change_password()
+
+################################################################################
+                        Specific Functionality Methods - specific-utils.py
+################################################################################
+
+toggle_capturing_time_between_events() - Changes whether the timing between a user's events is captured during recording
+
+-----------------------------------------
+- Recordings
+-----------------------------------------
+start_recording(user_id) - Starts a new recording
+
+stop_recording() - Stops a recording in progress
+
+save_recording() - Saves recording to the current profile of the logged in user
+
+delete_recording(recording_id)
+
+edit_recording(recording_id)
+-----------------------------------------
+- Profiles
+-----------------------------------------
+get_profiles(user_id) - Fetches all the profiles related to a user
+
+delete_profile(profile_id)
+
+edit_profile(profile_id)
+
+add_profile(user_id)
+
+set_to_current_profile(profile_id)
+-----------------------------------------
+- Set Important Keys
+-----------------------------------------
+set_recording_key(user_id)
+
+set_active_mode_key(user_id)
+
+set_play_mode_key(user_id)
+
+################################################################################
+                        Database Functionality Methods - database.py
+################################################################################

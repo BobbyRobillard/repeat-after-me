@@ -14,7 +14,10 @@ CREATE TABLE User (
   first_name VARCHAR(50),
   last_name VARCHAR(50),
   password VARCHAR(255),
-  email VARCHAR(255)
+  email VARCHAR(255),
+  recording_key VARCHAR(10),
+  active_mode_key VARCHAR(10),
+  play_mode_key VARCHAR(10)
 );
 -- #############################################################################
 CREATE TABLE Profile (
@@ -27,6 +30,7 @@ CREATE TABLE Profile (
 CREATE TABLE Recording (
   recording_id INT AUTO_INCREMENT PRIMARY KEY,
   profile_id INT NOT NULL,
+  activation_key_code VARCHAR(10),
   FOREIGN KEY(profile_id) REFERENCES Profile(profile_id)
 );
 -- #############################################################################
@@ -49,7 +53,7 @@ CREATE TABLE Mouse_Event (
 CREATE TABLE Key_Event (
   event_id INT AUTO_INCREMENT PRIMARY KEY,
   delay_time INT DEFAULT 0,
-  button VARCHAR(20),
+  key_code VARCHAR(10),
   is_press BOOLEAN,
   recording_id INT,
   FOREIGN KEY(recording_id) REFERENCES Recording(recording_id)
