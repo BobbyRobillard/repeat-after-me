@@ -40,9 +40,9 @@ def get_profiles(user_id):
 
     names = [result[0] for result in cursor]
 
-    concated = ""
+    concated_profile_names = ""
 
     for name in names:
-        concated = concated + (name + "\n")
+        concated_profile_names = concated_profile_names + (name + "\n")
 
-    return concated
+    return concated_profile_names
