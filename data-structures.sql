@@ -10,11 +10,11 @@ USE test;
 -- #############################################################################
 CREATE TABLE User (
   user_id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(50),
-  first_name VARCHAR(50),
-  last_name VARCHAR(50),
-  password VARCHAR(255),
-  email VARCHAR(255),
+  username VARCHAR(50) NOT NULL,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
   recording_key VARCHAR(10),
   active_mode_key VARCHAR(10),
   play_mode_key VARCHAR(10)
@@ -23,14 +23,14 @@ CREATE TABLE User (
 CREATE TABLE Profile (
   profile_id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
-  name VARCHAR(50),
+  name VARCHAR(50) NOT NULL,
   FOREIGN KEY(user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 -- #############################################################################
 CREATE TABLE Recording (
   recording_id INT AUTO_INCREMENT PRIMARY KEY,
   profile_id INT NOT NULL,
-  activation_key_code VARCHAR(10),
+  activation_key_code VARCHAR(10) NOT NULL,
   FOREIGN KEY(profile_id) REFERENCES Profile(profile_id)
 );
 -- #############################################################################
@@ -42,20 +42,20 @@ ALTER TABLE User ADD CONSTRAINT current_profile_id FOREIGN KEY(current_profile_i
 CREATE TABLE Mouse_Event (
   event_id INT AUTO_INCREMENT PRIMARY KEY,
   delay_time INT DEFAULT 0,
-  x_position INT,
-  y_position INT,
-  is_press BOOLEAN,
-  is_move BOOLEAN,
-  recording_id INT,
+  x_position INT NOT NULL,
+  y_position INT NOT NULL,
+  is_press BOOLEAN NOT NULL,
+  is_move BOOLEAN NOT NULL,
+  recording_id INT NOT NULL,
   FOREIGN KEY(recording_id) REFERENCES Recording(recording_id)
 );
 -- #############################################################################
 CREATE TABLE Key_Event (
   event_id INT AUTO_INCREMENT PRIMARY KEY,
   delay_time INT DEFAULT 0,
-  key_code VARCHAR(10),
-  is_press BOOLEAN,
-  recording_id INT,
+  key_code VARCHAR(10) NOT NULL,
+  is_press BOOLEAN NOT NULL,
+  recording_id INT NOT NULL,
   FOREIGN KEY(recording_id) REFERENCES Recording(recording_id)
 );
 -- #############################################################################
