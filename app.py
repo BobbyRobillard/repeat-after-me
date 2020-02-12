@@ -7,6 +7,8 @@ from graphics import setup_navbar
 
 from HelpScreen import HelpWindow
 
+from QuickRecordScreen import QuickRecordWindow
+
 import sys
 
 
@@ -46,15 +48,14 @@ class Window(QMainWindow):
         self.labelB.setText("YOUR PROFILES:\n" + get_profiles(1))
 
     def open_help(self):
-        self.window = QMainWindow()
-        self.ui = HelpWindow()
-        self.window.show()
+        self.window = HelpWindow()
 
     def open_dashboard(self):
         print("Opening Dashboard")
 
     def start_quick_recording(self):
-        print("Opening Quick Record")
+        self.window = QuickRecordWindow()
+
 
 
 if __name__ == "__main__":
