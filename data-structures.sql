@@ -67,6 +67,7 @@ INSERT INTO User (username, first_name, last_name, password, email) VALUES (
 );
 
 INSERT INTO Profile (user_id, name) VALUES (1, "Elementor Essentials!");
+INSERT INTO Profile (user_id, name) VALUES (1, "Modern Warfare");
 
 UPDATE User SET current_profile_id = 1 WHERE user_id = 1;
 -- #############################################################################

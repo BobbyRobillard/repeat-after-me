@@ -43,7 +43,7 @@ class Window(QMainWindow):
     def add_profile_btn_click(self):
         profile_name = self.textbox.text()
         # Replace with actual code to get current user's id
-        add_profile(1, profile_name)
+        add_profile(profile_name)
         self.labelA.setText("Added profile: {0}".format(profile_name))
         self.labelB.setText("YOUR PROFILES:\n" + get_profiles(1))
 

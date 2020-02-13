@@ -1,4 +1,12 @@
 from database import *
+# ------------------------------------------------------------------------------
+
+
+def get_user_id():
+    return 1
+
+
+# ------------------------------------------------------------------------------
 
 
 def get_current_profile(username):
@@ -17,19 +25,25 @@ def get_current_profile(username):
 
     return profile
 
+
 # ------------------------------------------------------------------------------
 
-def add_profile(user_id, profile_name):
+
+def add_profile(profile_name):
     conn = start_connection()
     cursor = conn.cursor()
 
-    sql = 'INSERT INTO Profile (user_id, name) VALUES ({0}, "{1}")'.format(user_id, profile_name)
+    sql = 'INSERT INTO Profile (user_id, name) VALUES ({0}, "{1}")'.format(
+        get_user_id(),
+        profile_name
+    )
     cursor.execute(sql)
 
     conn.commit()
     conn.close()
 
 # ------------------------------------------------------------------------------
+
 
 def get_profiles(user_id):
     conn = start_connection()
@@ -40,9 +54,25 @@ def get_profiles(user_id):
 
     names = [result[0] for result in cursor]
 
+    conn.close()
+
     concated_profile_names = ""
 
     for name in names:
         concated_profile_names = concated_profile_names + (name + "\n")
 
     return concated_profile_names
+
+
+# ------------------------------------------------------------------------------
+
+
+def set_current_profile(profile_id):
+    conn = start_connection()
+    cursor = conn.cursor()
+
+    sql = 'UPDATE User SET current_profile_id={1} WHERE user_id={0}'.format(get_user_id(), profile_id)
+    cursor.execute(sql)
+
+    conn.commit()
+    conn.close()
