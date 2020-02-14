@@ -70,4 +70,5 @@ INSERT INTO Profile (user_id, name) VALUES (1, "Elementor Essentials!");
 INSERT INTO Profile (user_id, name) VALUES (1, "Modern Warfare");
 
 UPDATE User SET current_profile_id = 1 WHERE user_id = 1;
+UPDATE User SET recording_key = "A" WHERE user_id = 1;
 -- #############################################################################

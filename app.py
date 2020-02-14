@@ -36,7 +36,7 @@ class Window(QMainWindow):
 
         current_profile_name = get_current_profile(username)[2]
         self.labelA.setText("CURRENT PROFILE:\n " + current_profile_name)
-        self.labelB.setText("YOUR PROFILES:\n" + get_profiles(user_id))
+        self.labelB.setText("YOUR PROFILES:\n" + get_profiles())
         self.setGeometry(100, 50, 500, 500)
         self.show()
 
@@ -45,7 +45,7 @@ class Window(QMainWindow):
         # Replace with actual code to get current user's id
         add_profile(profile_name)
         self.labelA.setText("Added profile: {0}".format(profile_name))
-        self.labelB.setText("YOUR PROFILES:\n" + get_profiles(1))
+        self.labelB.setText("YOUR PROFILES:\n" + get_profiles())
 
     def open_help(self):
         self.window = HelpWindow()

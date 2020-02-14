@@ -55,7 +55,7 @@ delete_profile(profile_id)
 
 edit_profile(profile_id)
 
-add_profile(user_id)
+add_profile(name)
 
 set_to_current_profile(profile_id)
 -----------------------------------------
