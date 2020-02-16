@@ -140,7 +140,6 @@ def get_recordings(profile_id):
     cursor.execute(sql)
 
     recordings = [result for result in cursor]
-    print(str(recordings))
 
     conn.close()
 
