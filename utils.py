@@ -74,13 +74,13 @@ def get_play_mode_key():
 # ------------------------------------------------------------------------------
 # Profile Methods
 # ------------------------------------------------------------------------------
-def get_current_profile(username):
+def get_current_profile():
     conn = start_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
 
-    sql = 'SELECT current_profile_id FROM User WHERE username="{0}"'.format(username)
+    sql = 'SELECT current_profile_id FROM User WHERE user_id={0}'.format(get_user_id())
     cursor.execute(sql)
-    current_profile_id = cursor.fetchone()[0]
+    current_profile_id = cursor.fetchone()['current_profile_id']
 
     sql = 'SELECT * FROM Profile WHERE profile_id={0}'.format(current_profile_id)
     cursor.execute(sql)
@@ -105,16 +105,19 @@ def add_profile(profile_name):
 # ------------------------------------------------------------------------------
 def get_profiles():
     conn = start_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
 
-    sql = 'SELECT Name FROM Profile WHERE user_id={0}'.format(get_user_id())
+    sql = 'SELECT * FROM Profile WHERE user_id={0}'.format(get_user_id())
     cursor.execute(sql)
 
-    names = [result[0] for result in cursor]
+    profiles = [result for result in cursor]
+
+    for profile in profiles:
+        print(str(profile))
 
     conn.close()
 
-    return names
+    return profiles
 # ------------------------------------------------------------------------------
 def set_current_profile(profile_id):
     conn = start_connection()
