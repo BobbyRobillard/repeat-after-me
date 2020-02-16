@@ -18,7 +18,7 @@ class UtilsTestCase(unittest.TestCase):
 
     def test_set_current_profile(self):
         set_current_profile(2)
-        self.assertEqual(get_current_profile("test")[0], 2)
+        self.assertEqual(get_current_profile()['profile_id'], 2)
 
     def test_set_recording_key(self):
         set_recording_key("25")

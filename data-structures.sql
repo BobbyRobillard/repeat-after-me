@@ -29,6 +29,7 @@ CREATE TABLE Profile (
 -- #############################################################################
 CREATE TABLE Recording (
   recording_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
   profile_id INT NOT NULL,
   activation_key_code VARCHAR(10) NOT NULL,
   FOREIGN KEY(profile_id) REFERENCES Profile(profile_id)
@@ -71,4 +72,7 @@ INSERT INTO Profile (user_id, name) VALUES (1, "Modern Warfare");
 
 UPDATE User SET current_profile_id = 1 WHERE user_id = 1;
 UPDATE User SET recording_key = "A" WHERE user_id = 1;
+
+INSERT INTO Recording (profile_id, activation_key_code, name) VALUES (1, "1", "MAGA");
+INSERT INTO Recording (profile_id, activation_key_code, name) VALUES (1, "3", "BETTER MAGA");
 -- #############################################################################

@@ -112,9 +112,6 @@ def get_profiles():
 
     profiles = [result for result in cursor]
 
-    for profile in profiles:
-        print(str(profile))
-
     conn.close()
 
     return profiles
@@ -134,6 +131,20 @@ def set_current_profile(profile_id):
 def start_recording():
     global is_recording
     is_recording = True
+# -----------------------------------------------------------------------------
+def get_recordings(profile_id):
+    conn = start_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+    sql = 'SELECT * FROM Recording WHERE profile_id={0}'.format(profile_id)
+    cursor.execute(sql)
+
+    recordings = [result for result in cursor]
+    print(str(recordings))
+
+    conn.close()
+
+    return recordings
 # ------------------------------------------------------------------------------
 def stop_recording():
     global is_recording
