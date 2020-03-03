@@ -29,27 +29,7 @@ def get_recording_key():
     conn.close()
 
     return recording_key
-# ------------------------------------------------------------------------------
-def set_active_mode_key(new_key_code):
-    conn = start_connection()
-    cursor = conn.cursor()
 
-    sql = 'UPDATE User SET active_mode_key="{0}" WHERE user_id={1}'.format(new_key_code, get_user_id())
-    cursor.execute(sql)
-
-    conn.commit()
-    conn.close()
-# ------------------------------------------------------------------------------
-def get_active_mode_key():
-    conn = start_connection()
-    cursor = conn.cursor()
-
-    sql = 'SELECT active_mode_key FROM User WHERE user_id={0}'.format(get_user_id())
-    cursor.execute(sql)
-    recording_key = cursor.fetchone()[0]
-    conn.close()
-
-    return recording_key
 # ------------------------------------------------------------------------------
 def set_play_mode_key(new_key_code):
     conn = start_connection()

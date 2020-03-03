@@ -1,6 +1,5 @@
 from utils import (set_current_profile, get_current_profile, set_recording_key,
-                   get_recording_key, set_active_mode_key, get_active_mode_key,
-                   set_play_mode_key, get_play_mode_key, add_profile,
+                   get_recording_key, set_play_mode_key, get_play_mode_key, add_profile,
                    get_profiles, is_recording, start_recording, stop_recording)
 
 import unittest
@@ -23,10 +22,6 @@ class UtilsTestCase(unittest.TestCase):
     def test_set_recording_key(self):
         set_recording_key("25")
         self.assertEqual(get_recording_key(), "25")
-
-    def test_set_active_mode_key(self):
-        set_active_mode_key("a")
-        self.assertEqual(get_active_mode_key(), "a")
 
     def test_set_play_mode_key(self):
         set_play_mode_key("c")

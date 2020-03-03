@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# This script runs the tests for the application.
+# $ ./test
+
+echo "Activating virtual enviroment (venv) ..."
+source ~/venv/bin/activate
+if [ "$VIRTUAL_ENV" == "" ]; then
+  exit 1
+fi
+echo "Done"
+
+echo "Running system tests ..."
+python test.py
+echo "Done"
+
+echo "Deactivating virtual enviornment ..."
+deactivate
+echo "Done"
+# 2019.07.12-RCR

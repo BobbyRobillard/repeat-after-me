@@ -16,7 +16,6 @@ CREATE TABLE User (
   password VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   recording_key VARCHAR(10),
-  active_mode_key VARCHAR(10),
   play_mode_key VARCHAR(10)
 );
 -- #############################################################################

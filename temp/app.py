@@ -35,12 +35,12 @@ class Window(QMainWindow):
         self.textbox = QLineEdit(self)
         self.textbox.setGeometry(10, 120, 240, 30)
 
-        button = QPushButton("Save New Profile", self)
-        button.setGeometry(260, 120, 30, 30)
+        button = QPushButton("CREATE", self)
+        button.setGeometry(260, 120, 100, 30)
         button.clicked.connect(self.add_profile_btn_click)
 
         # Set main window size
-        self.setGeometry(100, 50, 500, 500)
+        self.setGeometry(2000, 50, 500, 500)
     # ---------------------------------------------------------------------
     def setup_current_profile(self):
         # Displays current profile to active user
