@@ -5,9 +5,13 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
+from .models import MouseEvent
+
 import json
 
 @login_required
 def homepage_view(request):
-    context = {}
+    context = {
+        "profiles": ["", "", ""]
+    }
     return render(request, "website/homepage.html", context)
