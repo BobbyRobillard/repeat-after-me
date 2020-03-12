@@ -45,7 +45,6 @@ CREATE TABLE Mouse_Event (
   x_position INT NOT NULL,
   y_position INT NOT NULL,
   is_press BOOLEAN NOT NULL,
-  is_move BOOLEAN NOT NULL,
   recording_id INT NOT NULL,
   FOREIGN KEY(recording_id) REFERENCES Recording(recording_id)
 );

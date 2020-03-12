@@ -7,10 +7,9 @@ from django.template.loader import render_to_string
 
 import json
 
-
 @login_required
 def homepage_view(request):
     context = {
         "profiles": ["", "", ""]
     }
-    return render(request, "website/homepage.html", context)
+    return render(request, "macros/homepage.html", context)

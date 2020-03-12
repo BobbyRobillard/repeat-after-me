@@ -1,0 +1,55 @@
+{% extends 'website/base.html' %}
+
+{% load staticfiles %}
+
+<style type="text/css">
+</style>
+
+{% block content %}
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col">
+
+        <form>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Enter new profile name...">
+            <button class="btn btn-success" name="button">Save</button>
+          </div>
+        </form>
+
+        <br>
+
+        <div class="profiles">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for profile in profiles %}
+              <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td>john@example.com</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+      <div class="col">
+        Coming Soon
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+{% endblock js %}
