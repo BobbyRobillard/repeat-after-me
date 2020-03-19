@@ -2,39 +2,65 @@
 
 {% load staticfiles %}
 
-<style type="text/css">
-</style>
+{% block custom_css %}
+  <style type="text/css">
+    input {
+  		border: none !important;
+      padding-left: 10px !important;
+  	}
+
+    #current_profile {
+      background-color: var(--secondary-color) !important;
+      color: white !important;
+      border-top-right-radius: 7px !important;
+      border-top-left-radius: 7px !important;
+    }
+  </style>
+{% endblock custom_css %}
 
 {% block content %}
 <div class="container">
   <div class="jumbotron">
+
     <div class="row">
-
       <div class="col">
-
         <form action="{% url 'macros:add_profile' %}" method="POST">
           {% csrf_token %}
-          {{ profile_form }}
-          <br><br>
-          <button class="btn btn-success" name="button">Save</button>
+          <div class="row">
+            <div class="col-9">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Add Profile
+                  </span>
+                </div>
+                <input type="text" id="id_name" name="name" class="input-lg form-control" placeholder="New profile name...">
+              </div>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-success" name="button">Save</button>
+            </div>
+          </div>
         </form>
-
-        <br>
 
         <div class="profiles">
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Profile Name</th>
-                <th>Interact</th>
+                <th style="border-top-left-radius: 7px;">Profile Name</th>
+                <th class="center" style="border-top-right-radius: 7px;">Interact</th>
               </tr>
             </thead>
             <tbody>
               {% for profile in profiles %}
               <tr>
-                <td class="profile" id="{{ profile.id }}">{{ profile }}</td>
                 <td>
-                  <i href="#" class="fas fa-trash-alt"></i>
+                  <a href="{% url 'macros:set_current_profile' pk=profile.pk %}" style="color:black;">
+                    {{ profile }}
+                  </a>
+                </td>
+                <td class="center">
+                  <i href="{% url 'macros:delete_profile' pk=profile.pk %}" class="fas fa-trash-alt delete-profile"></i>
                   <i class="far fa-edit"></i>
                 </td>
               </tr>
@@ -46,28 +72,37 @@
       </div>
 
       <div class="col">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Recording Name</th>
-              <th>Trigger Key</th>
-              <th>Interact</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for recording in current_profile_recordings %}
-            <tr>
-              <td>{{ recording }}</td>
-              <td>{{ recording.key_code }}</td>
-              <td>
-                <i class="far fa-play"></i>
-                <i class="far fa-edit"></i>
-                <i href="#" class="fas fa-trash-alt"></i>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        {% if current_profile_recordings %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th id="current_profile" colspan="3" class="center">
+                  {{ current_profile }}
+                </th>
+              </tr>
+              <tr>
+                <th>Recording Name</th>
+                <th>Trigger Key</th>
+                <th class="center">Interact</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for recording in current_profile_recordings %}
+              <tr>
+                <td>{{ recording }}</td>
+                <td>{{ recording.key_code }}</td>
+                <td class="center">
+                  <i class="far fa-edit"></i>
+                  <i href="#" class="fas fa-trash-alt"></i>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <h4 class="center" style="padding:20%">THERE ARE NO RECORINGS FOR <br><br><b>{{ current_profile }}</b></h4>
+        {% endif %}
+
       </div>
 
     </div>
@@ -78,8 +113,10 @@
 
 {% block js %}
 <script>
-  $('.profile').click(function() {
-
-  });
+  $('.delete-profile').click(function() {
+    if(confirm("Are you sure you want to delete this profile?")) {
+      window.location.href = $(this).attr('href');
+    }
+  })
 </script>
 {% endblock js %}

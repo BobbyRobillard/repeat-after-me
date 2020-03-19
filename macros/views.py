@@ -9,6 +9,7 @@ from website.views import homepage_view
 
 from .forms import ProfileForm
 from .models import Profile
+from .utils import set_current_profile, delete_profile
 
 import json
 
@@ -19,6 +20,20 @@ def homepage_view(request):
         "profiles": ["", "", ""]
     }
     return render(request, "macros/homepage.html", context)
+
+
+@login_required
+def set_current_profile_view(request, pk):
+    if not set_current_profile(request.user, pk):
+        messages.error(request, "You do not own this profile chief.")
+    return redirect('website:homepage')
+
+
+@login_required
+def delete_profile_view(request, pk):
+    if not delete_profile(request.user, pk):
+        messages.error(request, "You do not own this profile chief.")
+    return redirect('website:homepage')
 
 
 @login_required

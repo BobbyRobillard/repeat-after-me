@@ -29,7 +29,7 @@ class Settings(models.Model):
 
     recording_key = models.CharField(max_length=key_code_length)
     play_mode_key = models.CharField(max_length=key_code_length)
-    current_profile = models.ForeignKey('Profile')
+    current_profile = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
 
 
 class Recording(models.Model):

@@ -13,9 +13,13 @@ import json
 
 @login_required
 def homepage_view(request):
+    current_profile = get_current_profile(request.user)
+    print(str(current_profile))
+
     context = {
         "profiles": get_profiles(request.user),
         "profile_form": ProfileForm(),
-        "current_profile_recordings": get_current_profile(request.user).get_recordings()
+        "current_profile": current_profile,
+        "current_profile_recordings": current_profile.get_recordings()
     }
     return render(request, "website/homepage.html", context)
