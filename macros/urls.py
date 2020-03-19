@@ -8,5 +8,5 @@ app_name = 'macros'
 
 urlpatterns = [
     	# General Page Views
-		url(r'^$', views.homepage_view, name='homepage'),
+		url(r'^add-profile$', views.add_profile, name='add_profile'),
 ]

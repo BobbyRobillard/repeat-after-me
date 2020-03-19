@@ -11,11 +11,11 @@
     <div class="row">
       <div class="col">
 
-        <form>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Enter new profile name...">
-            <button class="btn btn-success" name="button">Save</button>
-          </div>
+        <form action="{% url 'macros:add_profile' %}" method="POST">
+          {% csrf_token %}
+          {{ profile_form }}
+          <br><br>
+          <button class="btn btn-success" name="button">Save</button>
         </form>
 
         <br>
@@ -24,17 +24,18 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Email</th>
+                <th>Profile Name</th>
+                <th>Interact</th>
               </tr>
             </thead>
             <tbody>
               {% for profile in profiles %}
               <tr>
-                <td>John</td>
-                <td>Doe</td>
-                <td>john@example.com</td>
+                <td>{{ profile }}</td>
+                <td>
+                  <i href="#" class="fas fa-trash-alt"></i>
+                  <i class="far fa-edit"></i>
+                </td>
               </tr>
               {% endfor %}
             </tbody>
