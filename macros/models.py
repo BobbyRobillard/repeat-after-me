@@ -11,8 +11,25 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
 
+    def get_recordings(self):
+        return Recording.objects.filter(profile=self)
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=max_name_length)
+
+
+class Settings(models.Model):
+    def __str__(self):
+        return "{0}: settings".format(str(self.user))
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    recording_key = models.CharField(max_length=key_code_length)
+    play_mode_key = models.CharField(max_length=key_code_length)
+    current_profile = models.ForeignKey('Profile')
 
 
 class Recording(models.Model):

@@ -9,6 +9,7 @@
 <div class="container">
   <div class="jumbotron">
     <div class="row">
+
       <div class="col">
 
         <form action="{% url 'macros:add_profile' %}" method="POST">
@@ -31,7 +32,7 @@
             <tbody>
               {% for profile in profiles %}
               <tr>
-                <td>{{ profile }}</td>
+                <td class="profile" id="{{ profile.id }}">{{ profile }}</td>
                 <td>
                   <i href="#" class="fas fa-trash-alt"></i>
                   <i class="far fa-edit"></i>
@@ -40,17 +41,45 @@
               {% endfor %}
             </tbody>
           </table>
-
         </div>
 
       </div>
+
       <div class="col">
-        Coming Soon
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Recording Name</th>
+              <th>Trigger Key</th>
+              <th>Interact</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for recording in current_profile_recordings %}
+            <tr>
+              <td>{{ recording }}</td>
+              <td>{{ recording.key_code }}</td>
+              <td>
+                <i class="far fa-play"></i>
+                <i class="far fa-edit"></i>
+                <i href="#" class="fas fa-trash-alt"></i>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
+
     </div>
+
   </div>
 </div>
 {% endblock content %}
 
 {% block js %}
+<script>
+  $('.profile').click(function() {
+
+  });
+</script>
 {% endblock js %}

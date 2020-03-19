@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
 from macros.forms import ProfileForm
-from macros.utils import get_profiles
+from macros.utils import get_profiles, get_current_profile
 
 import json
 
@@ -15,6 +15,7 @@ import json
 def homepage_view(request):
     context = {
         "profiles": get_profiles(request.user),
-        "profile_form": ProfileForm()
+        "profile_form": ProfileForm(),
+        "current_profile_recordings": get_current_profile(request.user).get_recordings()
     }
     return render(request, "website/homepage.html", context)

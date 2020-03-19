@@ -14,6 +14,14 @@ input {
   width: 100%;
 }
 
+.bg-primary {
+  background-color: #08f;
+}
+
+.fg-white {
+  color: white;
+}
+
 .input-group-text {
   background-color: black;
   color: white;
