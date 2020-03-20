@@ -11,6 +11,15 @@
   weight: 300 !important;
 }
 
+/* Primary font color  */
+.fc-primary {
+  color: var(--primary-color);
+}
+
+.fc-secondary {
+  color: var(--secondary-color);
+}
+
 .input-group-text {
   background-color: var(--secondary-color) !important;
   border: 2px solid var(--secondary-color) !important;

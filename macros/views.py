@@ -9,7 +9,7 @@ from website.views import homepage_view
 
 from .forms import ProfileForm
 from .models import Profile
-from .utils import set_current_profile, delete_profile
+from .utils import set_current_profile, delete_profile, toggle_play_mode
 
 import json
 
@@ -20,6 +20,11 @@ def homepage_view(request):
         "profiles": ["", "", ""]
     }
     return render(request, "macros/homepage.html", context)
+
+
+def toggle_play_mode_view(request, username):
+    toggle_play_mode(username)
+    return redirect('website:homepage')
 
 
 @login_required

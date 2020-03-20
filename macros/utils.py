@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User as User
+
 from .models import Profile, Settings
 
 
@@ -11,6 +13,13 @@ def get_profiles(user):
 
 def get_settings(user):
     return Settings.objects.get(user=user)
+
+
+def toggle_play_mode(username):
+    user = User.objects.get(username=username)
+    settings = get_settings(user)
+    settings.play_mode = not settings.play_mode
+    settings.save()
 
 
 def get_current_profile(user):
