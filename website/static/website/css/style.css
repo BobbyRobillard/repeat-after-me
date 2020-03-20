@@ -6,8 +6,18 @@
   --title-size: 25px;
 }
 
+* {
+  font-family: 'Montserrat', sans-serif;
+  weight: 300 !important;
+}
+
+.input-group-text {
+  background-color: var(--secondary-color) !important;
+  border: 2px solid var(--secondary-color) !important;
+}
+
 .secondary-colors {
-  background-color: var(--color-secondary);
+  background-color: var(--secondary-color);
   color: white;
 }
 
@@ -32,10 +42,6 @@ input {
   color: white;
 }
 
-.navbar-dark, .bg-dark{
-  background-color: black !important;
-}
-
 .fa:hover, .far:hover, .fas:hover {
   cursor: pointer;
 }
@@ -52,11 +58,9 @@ input {
   color: orange;
 }
 
-.fa-plus, .fa-play {
+.fa-plus, .fa-play, .fa-save {
   color: green;
 }
-
-
 
 #logo {
   border-radius: 50%;
@@ -67,9 +71,16 @@ input {
 }
 
 thead {
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
   color: white;
   font-size: 20px;
+}
+
+.btn-success {
+  background-color: var(--primary-color) !important;
+  border: 2px solid white;
+  min-width: 100px !important;
+  max-width: 100% !important;
 }
 
 table, .table {
@@ -89,8 +100,13 @@ input[type="text"], select {
   padding: 5px;
 }
 
+.nav-item {
+  margin-right: 30px;
+}
+
 .nav-link {
-  color: white !important;
+  color: black;
+  font-size: 20px !important;
 }
 
 .nav-link:hover {

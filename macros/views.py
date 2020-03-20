@@ -43,3 +43,8 @@ def add_profile(request):
         if form.is_valid():
             Profile.objects.create(name=form.cleaned_data['name'], user=request.user)
     return redirect('website:homepage')
+
+
+@login_required
+def add_recording(request):
+    return redirect('website:homepage')

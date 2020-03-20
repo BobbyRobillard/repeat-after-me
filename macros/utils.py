@@ -9,8 +9,12 @@ def get_profiles(user):
     return Profile.objects.filter(user=user)
 
 
+def get_settings(user):
+    return Settings.objects.get(user=user)
+
+
 def get_current_profile(user):
-    return Settings.objects.get(user=user).current_profile
+    return get_settings(user).current_profile
 
 
 def delete_profile(user, profile_pk):

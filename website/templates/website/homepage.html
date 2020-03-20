@@ -5,7 +5,7 @@
 {% block custom_css %}
   <style type="text/css">
     input {
-  		border: none !important;
+  		border: 2px solid var(--secondary-color) !important;
       padding-left: 10px !important;
   	}
 
@@ -15,6 +15,28 @@
       border-top-right-radius: 7px !important;
       border-top-left-radius: 7px !important;
     }
+
+    #recording-controls {
+      font-size: 25px;
+      margin: 0px;
+      padding: 0px;
+      min-width: 100px;
+      text-align: right;
+    }
+
+    #recording {
+      margin-top: 50px;
+    }
+
+    .setting {
+      font-weight: bold;
+      font-size: 25px;
+    }
+
+    .setting > i {
+      margin-left: 10px;
+      font-size: 20px;
+    }
   </style>
 {% endblock custom_css %}
 
@@ -22,6 +44,7 @@
 <div class="container">
   <div class="jumbotron">
 
+    <!-- Profiles and current profile display -->
     <div class="row">
       <div class="col">
         <form action="{% url 'macros:add_profile' %}" method="POST">
@@ -31,10 +54,10 @@
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text">
-                    Add Profile
+                    Add New
                   </span>
                 </div>
-                <input type="text" id="id_name" name="name" class="input-lg form-control" placeholder="New profile name...">
+                <input type="text" id="id_name" name="name" class="input-lg form-control" placeholder="Profile name...">
               </div>
             </div>
             <div class="col-2">
@@ -68,7 +91,6 @@
             </tbody>
           </table>
         </div>
-
       </div>
 
       <div class="col">
@@ -83,7 +105,7 @@
               <tr>
                 <th>Recording Name</th>
                 <th>Trigger Key</th>
-                <th class="center">Interact</th>
+                <th>Interact</th>
               </tr>
             </thead>
             <tbody>
@@ -91,7 +113,7 @@
               <tr>
                 <td>{{ recording }}</td>
                 <td>{{ recording.key_code }}</td>
-                <td class="center">
+                <td>
                   <i class="far fa-edit"></i>
                   <i href="#" class="fas fa-trash-alt"></i>
                 </td>
@@ -100,13 +122,71 @@
             </tbody>
           </table>
         {% else %}
-          <h4 class="center" style="padding:20%">THERE ARE NO RECORINGS FOR <br><br><b>{{ current_profile }}</b></h4>
+          <h4 class="center" style="padding-top:10%;padding-left:20%;padding-right:20%;">
+            THERE ARE NO RECORINGS FOR
+            <b style="color:var(--secondary-color);margin-top:35px;">{{ current_profile }}</b>
+          </h4>
         {% endif %}
 
       </div>
 
     </div>
 
+    <!-- Recording management and settings  -->
+    <div id="recording" class="row">
+      <div class="col">
+        <form action="{% url 'macros:add_recording' %}" method="POST">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-9">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    Name
+                  </span>
+                </div>
+                <input type="text" id="id_name" name="name" class="input-lg form-control" placeholder="Recording name...">
+              </div>
+            </div>
+            <div id="recording-controls" class="col-2">
+              <i class="fas fa-save"></i>
+              <i class="far fa-edit"></i>
+              <i href="#" class="fas fa-trash-alt"></i>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="border-top-left-radius: 7px;">Setting</th>
+              <th class="center" style="border-top-right-radius: 7px;">Key</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Recording Start/Stop Key
+              </td>
+              <td class="center setting">
+                {{ settings.recording_key }}
+                <i class="far fa-edit"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Play Mode Key
+              </td>
+              <td class="center setting">
+                {{ settings.play_mode_key }}
+                <i class="far fa-edit"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock content %}
