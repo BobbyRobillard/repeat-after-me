@@ -208,6 +208,21 @@
 
 {% block js %}
 <script>
+  function update_gui_if_needed() {
+    $.get(
+      "{% url 'macros:check_for_updates' %}",
+      function(data, status){
+        if(data['updates_waiting']) {
+          window.location.reload();
+        }
+      }
+    );
+  }
+
+  $(document).ready(function() {
+    setInterval(function(){ update_gui_if_needed(); }, 3000);
+  });
+
   $('.delete-profile').click(function() {
     if(confirm("Are you sure you want to delete this profile?")) {
       window.location.href = $(this).attr('href');
