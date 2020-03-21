@@ -21,7 +21,7 @@ def set_update_needed(user):
     settings.save()
 
 
-def check_for_updates(user):
+def updates_waiting(user):
     settings = get_settings(user)
     if settings.updates_waiting:
         settings.updates_waiting = False

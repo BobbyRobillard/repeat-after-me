@@ -11,7 +11,7 @@ from website.views import homepage_view
 
 from .forms import ProfileForm
 from .models import Profile
-from .utils import set_current_profile, delete_profile, toggle_play_mode, check_for_updates, set_update_needed
+from .utils import set_current_profile, delete_profile, toggle_play_mode, updates_waiting, set_update_needed
 
 import json
 
@@ -32,7 +32,7 @@ def toggle_play_mode_view(request, username):
 
 @login_required
 def check_for_updates_view(request):
-    return JsonResponse({'updates_waiting': check_for_updates(request.user)})
+    return JsonResponse({'updates_waiting': updates_waiting(request.user)})
 
 
 @login_required
