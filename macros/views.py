@@ -68,3 +68,10 @@ def add_profile(request):
 @login_required
 def add_recording(request):
     return redirect('website:homepage')
+
+
+@login_required
+def upload_recording(request, username):
+    user = User.objects.get(username=username)
+    recording_id = request.SESSION['current_recording_id']
+    return redirect('website:homepage')

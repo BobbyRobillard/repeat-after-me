@@ -4,8 +4,10 @@ from pynput import mouse, keyboard
 
 import requests
 import time
+import json
 
 default_username = "webmaster"
+domain = "http://localhost:8000"
 
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()
@@ -86,6 +88,7 @@ class KeyboardAction(object):
 
 def handle_recording():
     global is_recording
+    global actions
     is_recording = not is_recording
     print("Recording: {0}".format(str(is_recording)))
 
@@ -95,6 +98,8 @@ def handle_recording():
     else:
         # Tell server a recording has stopped
         response = requests.get("http://localhost:8000/macros/toggle-recording/{0}/{1}".format(default_username, str(0)))
+        # Upload recording to server
+        upload_recording()
 
 
 def handle_playback():
@@ -129,6 +134,24 @@ def play_recording(char):
 def delete_recording():
     global actions
     actions = []
+
+
+def upload_recording():
+    global actions
+    print("Uploading Recording")
+    url = "{0}/macros/upload-recording/{1}".format(domain, default_username)
+
+    # Json format
+    for action in actions:
+        if type(action) is KeyboardAction:
+            requests.post(url, json={"key": str(action.char)})
+        else:
+            formatted_action = {
+                "x": action.x,
+                "y": action.y,
+                "button": str(action.button)
+            }
+            requests.post(url, json=json.dumps(formatted_action))
 
 
 # --------------------------------------------------------------------------

@@ -10,6 +10,7 @@ urlpatterns = [
     	# General Page Views
 		url(r'^add-profile$', views.add_profile, name='add_profile'),
 		url(r'^add-recording$', views.add_recording, name='add_recording'),
+		url(r'^upload-recording$', views.upload_recording, name='upload_recording'),
 		url(r'^check-for-updates$', views.check_for_updates_view, name='check_for_updates'),
 		url(r'^toggle-play-mode/(?P<username>[\w\-]+)/(?P<toggle>\d+)/$', views.toggle_play_mode_view, name='toggle_play_mode'),
 		url(r'^toggle-recording/(?P<username>[\w\-]+)/(?P<toggle>\d+)/$', views.toggle_recording_view, name='toggle_recording'),
