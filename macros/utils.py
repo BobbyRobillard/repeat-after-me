@@ -15,17 +15,8 @@ def get_settings(user):
     return Settings.objects.get(user=user)
 
 
-def set_update_needed(user):
-    settings = get_settings(user)
-    settings.updates_waiting = True
-    settings.save()
-
-
-def updates_waiting(user):
-    settings = get_settings(user)
-    if settings.updates_waiting:
-        settings.updates_waiting = False
-        settings.save()
+def updates_waiting(request):
+    if request.session['updates_waiting']:
         return True
     return False
 

@@ -13,6 +13,7 @@ import json
 
 @login_required
 def homepage_view(request):
+    request.session['updates_waiting'] = False;
     settings = get_settings(request.user)
     context = {
         "profiles": get_profiles(request.user),
