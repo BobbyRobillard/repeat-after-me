@@ -5,6 +5,8 @@ from pynput import mouse, keyboard
 import requests
 import time
 
+default_username = "webmaster"
+
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()
 
@@ -14,7 +16,7 @@ playback_mode_active = False
 is_recording = False
 
 playback_key = "p"
-recording_key = None
+recording_key = "r"
 
 
 def handle_keyboard_event(key):
@@ -26,7 +28,6 @@ def handle_keyboard_event(key):
 
     try:
         if key.char == playback_key:
-            print("Toggling play mode")
             handle_playback()
 
         else:
@@ -39,7 +40,8 @@ def handle_keyboard_event(key):
                     actions.append(KeyboardAction(key.char))
 
                 else:
-                    play_recording(key.char)
+                    # play_recording(key.char)
+                    pass
 
     except AttributeError:
         print("Special key: {0} pressed".format(key))
@@ -85,21 +87,27 @@ class KeyboardAction(object):
 def handle_recording():
     global is_recording
     is_recording = not is_recording
+    print("Recording: {0}".format(str(is_recording)))
 
     if is_recording:
         # Tell server a recording has started
-        pass
+        response = requests.get("http://localhost:8000/macros/toggle-recording/{0}/{1}".format(default_username, str(1)))
     else:
-        # Tell server a recording has stopped, send recording time to server
-        pass
+        # Tell server a recording has stopped
+        response = requests.get("http://localhost:8000/macros/toggle-recording/{0}/{1}".format(default_username, str(0)))
 
 
 def handle_playback():
     global playback_mode_active
     playback_mode_active = not playback_mode_active
+    print("Playback: {0}".format(str(playback_mode_active)))
 
-    # Tell server to toggle play mode
-    response = requests.get("http://localhost:8000/macros/toggle-play-mode/webmaster")
+    if playback_mode_active:
+        # Tell server to toggle play mode is active
+        response = requests.get("http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(default_username, str(1)))
+    else:
+        # Tell server to toggle play mode is inactive
+        response = requests.get("http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(default_username, str(0)))
 
 
 # TODO: There needs to be a way for a "fail-safe" stop

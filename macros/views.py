@@ -11,7 +11,8 @@ from website.views import homepage_view
 
 from .forms import ProfileForm
 from .models import Profile
-from .utils import set_current_profile, delete_profile, toggle_play_mode, updates_waiting, set_update_needed
+from .utils import (set_current_profile, delete_profile, toggle_play_mode,
+                    updates_waiting, set_update_needed, toggle_recording)
 
 import json
 
@@ -24,8 +25,14 @@ def homepage_view(request):
     return render(request, "macros/homepage.html", context)
 
 
-def toggle_play_mode_view(request, username):
-    toggle_play_mode(username)
+def toggle_play_mode_view(request, username, toggle):
+    toggle_play_mode(username, toggle)
+    set_update_needed(User.objects.get(username=username))
+    return redirect('website:homepage')
+
+
+def toggle_recording_view(request, username, toggle):
+    toggle_recording(username, toggle)
     set_update_needed(User.objects.get(username=username))
     return redirect('website:homepage')
 

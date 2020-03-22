@@ -30,10 +30,27 @@ def updates_waiting(user):
     return False
 
 
-def toggle_play_mode(username):
+def toggle_play_mode(username, toggle):
     user = User.objects.get(username=username)
     settings = get_settings(user)
-    settings.play_mode = not settings.play_mode
+
+    if toggle == "0":
+        settings.play_mode = False
+    elif toggle == "1":
+        settings.play_mode = True
+
+    settings.save()
+
+
+def toggle_recording(username, toggle):
+    user = User.objects.get(username=username)
+    settings = get_settings(user)
+
+    if toggle == "0":
+        settings.is_recording = False
+    elif toggle == "1":
+        settings.is_recording = True
+
     settings.save()
 
 

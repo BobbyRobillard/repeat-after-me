@@ -65,7 +65,15 @@
       <!-- quick recording -->
       <div id="recording-container" class="col">
         <h2>Create Recording</h2>
-        <br>
+        <h4 class="center">You currently are:
+          <span class="fc-primary">
+            {%if settings.is_recording %}
+            Recording
+            {% else %}
+            Not Recording
+            {% endif %}
+          </span>
+        </h4>
         <form action="{% url 'macros:add_recording' %}" method="POST">
           {% csrf_token %}
           <div class="input-group mb-3">
@@ -189,7 +197,7 @@
             <thead>
               <tr>
                 <th id="current_profile" colspan="3" class="center">
-                  {{ current_profile }}
+                  {{ settings.current_profile }}
                 </th>
               </tr>
               <tr>
@@ -214,7 +222,7 @@
         {% else %}
           <h4 class="center" style="padding:20%;">
             THERE ARE NO RECORINGS FOR
-            <b style="color:var(--secondary-color);margin-top:35px;">{{ current_profile }}</b>
+            <b style="color:var(--secondary-color);margin-top:35px;">{{ settings.current_profile }}</b>
           </h4>
         {% endif %}
       </div>
