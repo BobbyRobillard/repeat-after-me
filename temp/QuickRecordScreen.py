@@ -22,7 +22,7 @@ class QuickRecordWindow(QMainWindow):
         self.show()
 
     def open_documentation(self):
-        webbrowser.open('https://68.183.125.253', new=2)
+        webbrowser.open("https://68.183.125.253", new=2)
 
     def open_forum(self):
-        webbrowser.open('https://68.183.125.253', new=2)
+        webbrowser.open("https://68.183.125.253", new=2)

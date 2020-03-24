@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0004_auto_20200319_1820'),
-    ]
+    dependencies = [("macros", "0004_auto_20200319_1820")]
 
     operations = [
         migrations.AddField(
-            model_name='settings',
-            name='play_mode_status',
+            model_name="settings",
+            name="play_mode_status",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

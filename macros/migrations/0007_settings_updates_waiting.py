@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0006_auto_20200320_1405'),
-    ]
+    dependencies = [("macros", "0006_auto_20200320_1405")]
 
     operations = [
         migrations.AddField(
-            model_name='settings',
-            name='updates_waiting',
+            model_name="settings",
+            name="updates_waiting",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

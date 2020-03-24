@@ -4,9 +4,9 @@ from . import views
 
 # Application Routes (URLs)
 
-app_name = 'website'
+app_name = "website"
 
 urlpatterns = [
-    	# General Page Views
-		url(r'^$', views.homepage_view, name='homepage'),
+    # General Page Views
+    url(r"^$", views.homepage_view, name="homepage")
 ]

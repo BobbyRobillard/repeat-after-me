@@ -7,7 +7,7 @@ def setup_navbar(window):
     navbar_buttons_details = [
         [QPushButton("Dashboard", window), window.open_dashboard],
         [QPushButton("Quick Record", window), window.start_quick_recording],
-        [QPushButton("Help", window), window.open_help]
+        [QPushButton("Help", window), window.open_help],
     ]
 
     # Set the location of each button,and bind its on_click event to it.

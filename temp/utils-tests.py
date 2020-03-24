@@ -1,13 +1,22 @@
-from utils import (set_current_profile, get_current_profile, set_recording_key,
-                   get_recording_key, set_play_mode_key, get_play_mode_key, add_profile,
-                   get_profiles, is_recording, start_recording, stop_recording)
+from utils import (
+    set_current_profile,
+    get_current_profile,
+    set_recording_key,
+    get_recording_key,
+    set_play_mode_key,
+    get_play_mode_key,
+    add_profile,
+    get_profiles,
+    is_recording,
+    start_recording,
+    stop_recording,
+)
 
 import unittest
 import utils
 
 
 class UtilsTestCase(unittest.TestCase):
-
     def test_add_profile(self):
         original_count = len(get_profiles())
         add_profile("test1")
@@ -17,7 +26,7 @@ class UtilsTestCase(unittest.TestCase):
 
     def test_set_current_profile(self):
         set_current_profile(2)
-        self.assertEqual(get_current_profile()['profile_id'], 2)
+        self.assertEqual(get_current_profile()["profile_id"], 2)
 
     def test_set_recording_key(self):
         set_recording_key("25")
@@ -36,5 +45,5 @@ class UtilsTestCase(unittest.TestCase):
         self.assertEqual(utils.is_recording, False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

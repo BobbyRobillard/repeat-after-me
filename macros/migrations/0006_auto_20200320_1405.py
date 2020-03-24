@@ -7,14 +7,10 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0005_settings_play_mode_status'),
-    ]
+    dependencies = [("macros", "0005_settings_play_mode_status")]
 
     operations = [
         migrations.RenameField(
-            model_name='settings',
-            old_name='play_mode_status',
-            new_name='play_mode',
-        ),
+            model_name="settings", old_name="play_mode_status", new_name="play_mode"
+        )
     ]

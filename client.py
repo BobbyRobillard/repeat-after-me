@@ -19,7 +19,9 @@ def handle_keyboard_event(key):
 
     # Playback recording
     else:
-        response = requests.get("http://localhost:8000/play-recording/{0}".format(key.char))
+        response = requests.get(
+            "http://localhost:8000/play-recording/{0}".format(key.char)
+        )
         print(response.status_code)
 
 

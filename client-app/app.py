@@ -94,10 +94,18 @@ def handle_recording():
 
     if is_recording:
         # Tell server a recording has started
-        response = requests.get("http://localhost:8000/macros/toggle-recording/{0}/{1}".format(default_username, str(1)))
+        response = requests.get(
+            "http://localhost:8000/macros/toggle-recording/{0}/{1}".format(
+                default_username, str(1)
+            )
+        )
     else:
         # Tell server a recording has stopped
-        response = requests.get("http://localhost:8000/macros/toggle-recording/{0}/{1}".format(default_username, str(0)))
+        response = requests.get(
+            "http://localhost:8000/macros/toggle-recording/{0}/{1}".format(
+                default_username, str(0)
+            )
+        )
         # Upload recording to server
         upload_recording()
 
@@ -109,10 +117,18 @@ def handle_playback():
 
     if playback_mode_active:
         # Tell server to toggle play mode is active
-        response = requests.get("http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(default_username, str(1)))
+        response = requests.get(
+            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(
+                default_username, str(1)
+            )
+        )
     else:
         # Tell server to toggle play mode is inactive
-        response = requests.get("http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(default_username, str(0)))
+        response = requests.get(
+            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(
+                default_username, str(0)
+            )
+        )
 
 
 # TODO: There needs to be a way for a "fail-safe" stop
@@ -149,7 +165,7 @@ def upload_recording():
             formatted_action = {
                 "x": action.x,
                 "y": action.y,
-                "button": str(action.button)
+                "button": str(action.button),
             }
             requests.post(url, json=json.dumps(formatted_action))
 
@@ -162,5 +178,5 @@ mouse_listener = mouse.Listener(on_click=handle_mouse_event)
 keyboard_listener.start()
 mouse_listener.start()
 
-while(True):
+while True:
     pass

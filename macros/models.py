@@ -22,16 +22,13 @@ class Settings(models.Model):
     def __str__(self):
         return "{0}: settings".format(str(self.user))
 
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     recording_key = models.CharField(max_length=key_code_length)
     play_mode_key = models.CharField(max_length=key_code_length)
     play_mode = models.BooleanField(default=False)
     is_recording = models.BooleanField(default=False)
-    current_profile = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True)
+    current_profile = models.ForeignKey("Profile", on_delete=models.SET_NULL, null=True)
 
 
 class Recording(models.Model):
@@ -40,7 +37,7 @@ class Recording(models.Model):
 
     name = models.CharField(max_length=max_name_length)
     key_code = models.CharField(max_length=key_code_length)
-    profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
 
 
 class MouseEvent(models.Model):
@@ -53,7 +50,7 @@ class MouseEvent(models.Model):
     y_pos = models.IntegerField()
     delay_time = models.IntegerField(default=0)
     is_press = models.BooleanField()
-    recording = models.ForeignKey('Recording', on_delete=models.CASCADE)
+    recording = models.ForeignKey("Recording", on_delete=models.CASCADE)
 
 
 class KeyEvent(models.Model):
@@ -63,4 +60,4 @@ class KeyEvent(models.Model):
     key_code = models.CharField(max_length=key_code_length)
     delay_time = models.IntegerField(default=0)
     is_press = models.BooleanField()
-    recording = models.ForeignKey('Recording', on_delete=models.CASCADE)
+    recording = models.ForeignKey("Recording", on_delete=models.CASCADE)

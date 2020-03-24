@@ -7,13 +7,6 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0008_settings_is_recording'),
-    ]
+    dependencies = [("macros", "0008_settings_is_recording")]
 
-    operations = [
-        migrations.RemoveField(
-            model_name='settings',
-            name='updates_waiting',
-        ),
-    ]
+    operations = [migrations.RemoveField(model_name="settings", name="updates_waiting")]

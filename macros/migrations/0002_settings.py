@@ -11,18 +11,38 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('macros', '0001_initial'),
+        ("macros", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Settings',
+            name="Settings",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recording_key', models.CharField(max_length=10)),
-                ('play_mode_key', models.CharField(max_length=10)),
-                ('current_profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='macros.Profile')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, unique=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("recording_key", models.CharField(max_length=10)),
+                ("play_mode_key", models.CharField(max_length=10)),
+                (
+                    "current_profile",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="macros.Profile"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        unique=True,
+                    ),
+                ),
             ],
-        ),
+        )
     ]

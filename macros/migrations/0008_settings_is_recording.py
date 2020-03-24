@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0007_settings_updates_waiting'),
-    ]
+    dependencies = [("macros", "0007_settings_updates_waiting")]
 
     operations = [
         migrations.AddField(
-            model_name='settings',
-            name='is_recording',
+            model_name="settings",
+            name="is_recording",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

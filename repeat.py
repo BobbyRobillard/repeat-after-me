@@ -23,7 +23,7 @@ top = tk.Tk()
 
 output_text = tk.StringVar()
 output = tk.Label(top, textvariable=output_text)
-output.config(bg='white', padx=25, pady=25)
+output.config(bg="white", padx=25, pady=25)
 
 
 def handle_keyboard_event(key):
@@ -61,7 +61,9 @@ def handle_keyboard_event(key):
                     handle_recording()
 
                 elif is_recording:
-                    recordings[len(recordings) - 1].actions.append(KeyboardAction(key.char))
+                    recordings[len(recordings) - 1].actions.append(
+                        KeyboardAction(key.char)
+                    )
 
                 else:
                     play_recording_from_keybind(key.char)
@@ -186,7 +188,9 @@ def delete_recordings():
 
 record_button = tk.Button(top, text="Set Recording Key", command=set_recording_key)
 playback_button = tk.Button(top, text="Set Playback Key", command=set_playback_key)
-delete_recordings_button = tk.Button(top, text="Delete Recordings", command=delete_recordings)
+delete_recordings_button = tk.Button(
+    top, text="Delete Recordings", command=delete_recordings
+)
 
 record_button.pack()
 playback_button.pack()
