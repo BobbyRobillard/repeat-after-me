@@ -11,67 +11,133 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
     operations = [
         migrations.CreateModel(
-            name='KeyEvent',
+            name="KeyEvent",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key_code', models.CharField(max_length=10)),
-                ('delay_time', models.IntegerField(default=0)),
-                ('is_press', models.BooleanField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("key_code", models.CharField(max_length=10)),
+                ("delay_time", models.IntegerField(default=0)),
+                ("is_press", models.BooleanField()),
             ],
         ),
         migrations.CreateModel(
-            name='MouseEvent',
+            name="MouseEvent",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('x_pos', models.IntegerField()),
-                ('y_pos', models.IntegerField()),
-                ('delay_time', models.IntegerField(default=0)),
-                ('is_press', models.BooleanField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("x_pos", models.IntegerField()),
+                ("y_pos", models.IntegerField()),
+                ("delay_time", models.IntegerField(default=0)),
+                ("is_press", models.BooleanField()),
             ],
         ),
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=75)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=75)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Recording',
+            name="Recording",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=75)),
-                ('key_code', models.CharField(max_length=10)),
-                ('profile', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='macros.Profile')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=75)),
+                ("key_code", models.CharField(max_length=10)),
+                (
+                    "profile",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="macros.Profile"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Settings',
+            name="Settings",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recording_key', models.CharField(max_length=10)),
-                ('play_mode_key', models.CharField(max_length=10)),
-                ('play_mode', models.BooleanField(default=False)),
-                ('is_recording', models.BooleanField(default=False)),
-                ('current_profile', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='macros.Profile')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("recording_key", models.CharField(max_length=10)),
+                ("play_mode_key", models.CharField(max_length=10)),
+                ("play_mode", models.BooleanField(default=False)),
+                ("is_recording", models.BooleanField(default=False)),
+                (
+                    "current_profile",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="macros.Profile",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='mouseevent',
-            name='recording',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='macros.Recording'),
+            model_name="mouseevent",
+            name="recording",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="macros.Recording"
+            ),
         ),
         migrations.AddField(
-            model_name='keyevent',
-            name='recording',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='macros.Recording'),
+            model_name="keyevent",
+            name="recording",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="macros.Recording"
+            ),
         ),
     ]

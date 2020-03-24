@@ -7,19 +7,17 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0001_initial'),
-    ]
+    dependencies = [("macros", "0001_initial")]
 
     operations = [
         migrations.AlterField(
-            model_name='keyevent',
-            name='is_press',
+            model_name="keyevent",
+            name="is_press",
             field=models.BooleanField(default=True),
         ),
         migrations.AlterField(
-            model_name='mouseevent',
-            name='is_press',
+            model_name="mouseevent",
+            name="is_press",
             field=models.BooleanField(default=True),
         ),
     ]

@@ -7,19 +7,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0002_auto_20200324_1454'),
-    ]
+    dependencies = [("macros", "0002_auto_20200324_1454")]
 
     operations = [
         migrations.AlterField(
-            model_name='mouseevent',
-            name='x_pos',
-            field=models.IntegerField(default=0),
+            model_name="mouseevent", name="x_pos", field=models.IntegerField(default=0)
         ),
         migrations.AlterField(
-            model_name='mouseevent',
-            name='y_pos',
-            field=models.IntegerField(default=0),
+            model_name="mouseevent", name="y_pos", field=models.IntegerField(default=0)
         ),
     ]
