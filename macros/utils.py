@@ -2,6 +2,8 @@ from django.contrib.auth.models import User as User
 
 from .models import Profile, Settings
 
+from rest_framework.authtoken.models import Token
+
 
 def user_owners_profile(user, profile_pk):
     return Profile.objects.filter(user=user, pk=profile_pk).exists()
@@ -15,8 +17,8 @@ def get_settings(user):
     return Settings.objects.get(user=user)
 
 
-def toggle_play_mode(username, toggle):
-    user = User.objects.get(username=username)
+def toggle_play_mode(token, toggle):
+    user = Token.objects.get(key=token).user
     settings = get_settings(user)
 
     if toggle == "0":
@@ -27,8 +29,8 @@ def toggle_play_mode(username, toggle):
     settings.save()
 
 
-def toggle_recording(username, toggle):
-    user = User.objects.get(username=username)
+def toggle_recording(token, toggle):
+    user = Token.objects.get(key=token).user
     settings = get_settings(user)
 
     if toggle == "0":

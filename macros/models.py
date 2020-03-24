@@ -24,6 +24,7 @@ class Settings(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    auth_token = models.CharField(max_length=150, null=True)
     recording_key = models.CharField(max_length=key_code_length)
     play_mode_key = models.CharField(max_length=key_code_length)
     play_mode = models.BooleanField(default=False)

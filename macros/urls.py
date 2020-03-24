@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 
 from . import views
+from .views import DeleteProfileView
 
 # Application Routes (URLs)
 
@@ -9,6 +10,7 @@ app_name = "macros"
 urlpatterns = [
     # General Page Views
     url(r"^add-profile$", views.add_profile, name="add_profile"),
+    url(r"^get-token$", views.generate_token, name="generate_token"),
     url(r"^add-recording$", views.add_recording, name="add_recording"),
     url(
         r"^download-recording/(?P<key_char>[\w\-]+)/$",
@@ -23,7 +25,7 @@ urlpatterns = [
         name="toggle_play_mode",
     ),
     url(
-        r"^toggle-recording/(?P<username>[\w\-]+)/(?P<toggle>\d+)/$",
+        r"^toggle-recording/(?P<token>[\w\-]+)/(?P<toggle>\d+)/$",
         views.toggle_recording_view,
         name="toggle_recording",
     ),
@@ -35,7 +37,7 @@ urlpatterns = [
     ),
     url(
         r"^delete-profile/(?P<pk>\d+)/$",
-        views.delete_profile_view,
+        views.DeleteProfileView.as_view(),
         name="delete_profile",
     ),
 ]

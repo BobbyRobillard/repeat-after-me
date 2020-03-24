@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User as User
 
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
@@ -8,9 +7,14 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import DeleteView
+
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.parsers import JSONParser
+
+from rest_framework.authtoken.models import Token
 
 from rest_framework.decorators import api_view
 
@@ -35,6 +39,14 @@ import json
 def homepage_view(request):
     context = {"profiles": ["", "", ""]}
     return render(request, "macros/homepage.html", context)
+
+
+def generate_token(request):
+    token = Token.objects.get_or_create(user=request.user)[0]
+    context = {
+        "token": token
+    }
+    return render(request, "macros/token.html", context)
 
 
 def download_recording(request, key_char):
@@ -65,8 +77,8 @@ def toggle_play_mode_view(request, username, toggle):
     return redirect("website:homepage")
 
 
-def toggle_recording_view(request, username, toggle):
-    toggle_recording(username, toggle)
+def toggle_recording_view(request, token, toggle):
+    toggle_recording(token, toggle)
     request.session["updates_waiting"] = True
     return redirect("website:homepage")
 
@@ -129,6 +141,11 @@ def set_current_profile_view(request, pk):
         messages.error(request, "You do not own this profile chief.")
     return redirect("website:homepage")
 
+
+class DeleteProfileView(DeleteView):
+    model = Profile
+    success_url = "/"
+    
 
 @login_required
 def delete_profile_view(request, pk):

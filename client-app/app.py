@@ -8,6 +8,7 @@ import json
 
 default_username = "webmaster"
 domain = "http://localhost:8000"
+token = "61f219504c8e102de0124fa1919836dd2d32d2b6"
 
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()
@@ -119,14 +120,14 @@ def handle_playback():
         # Tell server to toggle play mode is active
         response = requests.get(
             "http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(
-                default_username, str(1)
+                token, str(1)
             )
         )
     else:
         # Tell server to toggle play mode is inactive
         response = requests.get(
             "http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(
-                default_username, str(0)
+                token, str(0)
             )
         )
 
