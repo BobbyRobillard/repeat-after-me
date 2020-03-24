@@ -15,7 +15,7 @@ from website.views import homepage_view
 
 from .forms import ProfileForm
 from .models import Profile, KeyEvent, MouseEvent, Recording
-from .utils import (set_current_profile, delete_profile, toggle_play_mode, toggle_recording)
+from .utils import (get_settings, get_current_profile, delete_profile, toggle_play_mode, toggle_recording)
 
 from macros.serializers import KeyEventSerializer, MouseEventSerializer
 
@@ -30,10 +30,14 @@ def homepage_view(request):
     return render(request, "macros/homepage.html", context)
 
 
-def download_recording(request, pk):
+def download_recording(request, key_char):
     try:
-        key_events = KeyEvent.objects.filter(recording=Recording.objects.get(pk=pk))
-        mouse_events = MouseEvent.objects.filter(recording=Recording.objects.get(pk=pk))
+        recording = Recording.objects.get(
+            key_code=key_char,
+            profile=get_settings(request.user).current_profile
+        )
+        key_events = KeyEvent.objects.filter(recording=recording)
+        mouse_events = MouseEvent.objects.filter(recording=recording)
     except Recording.DoesNotExist:
         return HttpResponse(status=404)
 
