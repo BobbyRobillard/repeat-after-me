@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from . import views
-from .views import DeleteProfileView
+from .views import DeleteProfileView, DeleteRecordingView
 
 # Application Routes (URLs)
 
@@ -39,5 +39,10 @@ urlpatterns = [
         r"^delete-profile/(?P<pk>\d+)/$",
         views.DeleteProfileView.as_view(),
         name="delete_profile",
+    ),
+    url(
+        r"^delete-recording/(?P<pk>\d+)/$",
+        views.DeleteRecordingView.as_view(),
+        name="delete_recording",
     ),
 ]

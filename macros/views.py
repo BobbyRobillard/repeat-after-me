@@ -145,7 +145,12 @@ def set_current_profile_view(request, pk):
 class DeleteProfileView(DeleteView):
     model = Profile
     success_url = "/"
-    
+
+
+class DeleteRecordingView(DeleteView):
+    model = Recording
+    success_url = "/"
+
 
 @login_required
 def delete_profile_view(request, pk):

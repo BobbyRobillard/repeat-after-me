@@ -213,7 +213,7 @@
                 <td>{{ recording.key_code }}</td>
                 <td>
                   <i class="far fa-edit"></i>
-                  <i href="#" class="fas fa-trash-alt"></i>
+                  <i href="{% url 'macros:delete_recording' pk=recording.pk %}" class="fas fa-trash-alt delete-recording"></i>
                 </td>
               </tr>
               {% endfor %}
@@ -263,6 +263,10 @@
   });
 
   $('.delete-profile').click(function() {
+    window.location.href = $(this).attr('href');
+  })
+
+  $('.delete-recording').click(function() {
     window.location.href = $(this).attr('href');
   })
 </script>
