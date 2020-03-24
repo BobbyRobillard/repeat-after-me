@@ -15,12 +15,6 @@ def get_settings(user):
     return Settings.objects.get(user=user)
 
 
-def updates_waiting(request):
-    if request.session['updates_waiting']:
-        return True
-    return False
-
-
 def toggle_play_mode(username, toggle):
     user = User.objects.get(username=username)
     settings = get_settings(user)

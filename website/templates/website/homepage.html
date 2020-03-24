@@ -250,6 +250,7 @@
     $.get(
       "{% url 'macros:check_for_updates' %}",
       function(data, status){
+        console.log(data);
         if(data['updates_waiting']) {
           window.location.reload();
         }
