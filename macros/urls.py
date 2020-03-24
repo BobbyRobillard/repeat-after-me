@@ -27,6 +27,7 @@ urlpatterns = [
         views.toggle_recording_view,
         name="toggle_recording",
     ),
+    url(r"^stop-recording$", views.stop_recording, name="stop_recording"),
     url(
         r"^set-current-profile/(?P<pk>\d+)/$",
         views.set_current_profile_view,

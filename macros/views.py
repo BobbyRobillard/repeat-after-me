@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User as User
 
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
@@ -10,6 +11,8 @@ from django.template.loader import render_to_string
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.parsers import JSONParser
+
+from rest_framework.decorators import api_view
 
 from website.views import homepage_view
 
@@ -66,6 +69,55 @@ def toggle_recording_view(request, username, toggle):
     toggle_recording(username, toggle)
     request.session["updates_waiting"] = True
     return redirect("website:homepage")
+
+
+@csrf_exempt
+@api_view(['GET', 'PUT', 'DELETE'])
+def stop_recording(request):
+    user = User.objects.get(pk=1)
+    new_recording = Recording.objects.create(
+        profile=get_current_profile(user),
+        name="test",
+        key_code="a"
+    )
+
+    # Serialize the incoming recording
+    for json_encoded_event in request.data['key_events']:
+        new_event = KeyEvent.objects.create(recording=new_recording)
+        serializer = KeyEventSerializer(new_event, json_encoded_event)
+        if serializer.is_valid():
+            serializer.save()
+
+    for json_encoded_event in request.data['mouse_events']:
+        new_event = MouseEvent.objects.create(recording=new_recording)
+        serializer = MouseEventSerializer(new_event, json_encoded_event)
+        if serializer.is_valid():
+            serializer.save()
+    # mouse_events_serializer = MouseEventSerializer(
+    #     KeyEvent, request.data['mouse_events'], many=True
+    # )
+    #
+    # # Event error checking
+    # errors_exist = False
+    # errors = {
+    #     "key_event_errors": [],
+    #     "mouse_event_errors": []
+    # }
+    #
+    # if not key_events_serializer.is_valid():
+    #     errors['key_event_errors'] = key_events_serializer.errors
+    #     errors_exist = True
+    #
+    # if not mouse_events_serializer.is_valid():
+    #     errors['mouse_event_errors'] = mouse_events_serializer.errors
+    #     errors_exist = True
+    #
+    # # If errors exist, report them
+    # if errors_exist:
+    #     return JsonResponse(errors, status=400)
+
+    # Everything went good, no errors exist
+    return JsonResponse({"Mood": "Good in the hood!"}, status=200)
 
 
 @login_required

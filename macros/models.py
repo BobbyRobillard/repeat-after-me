@@ -33,7 +33,7 @@ class Settings(models.Model):
 
 class Recording(models.Model):
     def __str__(self):
-        return self.name
+        return "{0} | {1}".format(str(self.profile), self.name)
 
     name = models.CharField(max_length=max_name_length)
     key_code = models.CharField(max_length=key_code_length)
@@ -46,10 +46,10 @@ class MouseEvent(models.Model):
             self.recording.name, self.x_pos, self.y_pos
         )
 
-    x_pos = models.IntegerField()
-    y_pos = models.IntegerField()
+    x_pos = models.IntegerField(default=0)
+    y_pos = models.IntegerField(default=0)
     delay_time = models.IntegerField(default=0)
-    is_press = models.BooleanField()
+    is_press = models.BooleanField(default=True)
     recording = models.ForeignKey("Recording", on_delete=models.CASCADE)
 
 
@@ -59,5 +59,5 @@ class KeyEvent(models.Model):
 
     key_code = models.CharField(max_length=key_code_length)
     delay_time = models.IntegerField(default=0)
-    is_press = models.BooleanField()
+    is_press = models.BooleanField(default=True)
     recording = models.ForeignKey("Recording", on_delete=models.CASCADE)

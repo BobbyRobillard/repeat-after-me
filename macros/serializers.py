@@ -3,6 +3,8 @@ from rest_framework import serializers
 from .models import KeyEvent, MouseEvent
 
 
+
+
 class KeyEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = KeyEvent
