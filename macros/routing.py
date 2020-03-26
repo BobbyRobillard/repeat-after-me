@@ -11,5 +11,5 @@ application = ProtocolTypeRouter({
 
 
 websocket_urlpatterns = [
-    re_path(r'ws/macros/(?P<room_name>\w+)/$', consumers.PlayConsumer),
+    re_path(r'ws/macros/updates/$', consumers.PlayConsumer),
 ]

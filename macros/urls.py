@@ -46,6 +46,5 @@ urlpatterns = [
         views.DeleteRecordingView.as_view(),
         name="delete_recording",
     ),
-    path('<str:room_name>/', views.room, name='room'),
     url(r"^$", views.homepage_view, name="homepage"),
 ]
