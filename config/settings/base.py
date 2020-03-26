@@ -36,6 +36,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 # [Added 'website']
 INSTALLED_APPS = [
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -127,3 +128,6 @@ STATIC_URL = "/static/"
 # Login Settings
 
 LOGIN_URL = "core:login"
+
+# ASGI, Django Channels Setting
+ASGI_APPLICATION = "config.routing.application"

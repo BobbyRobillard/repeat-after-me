@@ -1,6 +1,6 @@
 {% extends 'website/base.html' %}
 
-{% load staticfiles %}
+{% load static %}
 
 {% block custom_css %}
   <style type="text/css">
@@ -251,7 +251,7 @@
       "{% url 'macros:check_for_updates' %}",
       function(data, status){
         console.log(data);
-        if(data['updates_waiting']) {
+        if(data['updates_needed']) {
           window.location.reload();
         }
       }

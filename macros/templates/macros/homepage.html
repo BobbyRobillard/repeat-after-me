@@ -1,55 +1,26 @@
-{% extends 'website/base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Rooms</title>
+</head>
+<body>
+    What chat room would you like to enter?<br>
+    <input id="room-name-input" type="text" size="100"><br>
+    <input id="room-name-submit" type="button" value="Enter">
 
-{% load staticfiles %}
+    <script>
+        document.querySelector('#room-name-input').focus();
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#room-name-submit').click();
+            }
+        };
 
-<style type="text/css">
-</style>
-
-{% block content %}
-<div class="container">
-  <div class="jumbotron">
-    <div class="row">
-      <div class="col">
-
-        <form>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Enter new profile name...">
-            <button class="btn btn-success" name="button">Save</button>
-          </div>
-        </form>
-
-        <br>
-
-        <div class="profiles">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for profile in profiles %}
-              <tr>
-                <td>John</td>
-                <td>Doe</td>
-                <td>john@example.com</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-
-        </div>
-
-      </div>
-      <div class="col">
-        Coming Soon
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock content %}
-
-{% block js %}
-{% endblock js %}
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/macros/' + roomName + '/';
+        };
+    </script>
+</body>
+</html>

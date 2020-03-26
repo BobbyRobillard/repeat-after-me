@@ -30,6 +30,7 @@ def handle_keyboard_event(key):
     global playback_key
 
     try:
+        print(key.char)
         if key.char == playback_key:
             handle_playback()
 
@@ -103,8 +104,8 @@ def handle_recording():
     else:
         # Tell server a recording has stopped
         response = requests.get(
-            "http://localhost:8000/macros/toggle-recording/{0}/{1}".format(
-                default_username, str(0)
+            "{0}/macros/toggle-recording/{1}/{2}".format(
+                domain, token, str(0)
             )
         )
         # Upload recording to server

@@ -37,8 +37,13 @@ import json
 
 @login_required
 def homepage_view(request):
-    context = {"profiles": ["", "", ""]}
-    return render(request, "macros/homepage.html", context)
+    return render(request, "macros/homepage.html")
+
+
+def room(request, room_name):
+    return render(request, 'macros/room.html', {
+        'room_name': room_name
+    })
 
 
 def generate_token(request):
@@ -71,15 +76,13 @@ def download_recording(request, key_char):
     )
 
 
-def toggle_play_mode_view(request, username, toggle):
-    toggle_play_mode(username, toggle)
-    request.session["updates_waiting"] = True
+def toggle_play_mode_view(request, token, toggle):
+    toggle_play_mode(token, toggle)
     return redirect("website:homepage")
 
 
 def toggle_recording_view(request, token, toggle):
     toggle_recording(token, toggle)
-    request.session["updates_waiting"] = True
     return redirect("website:homepage")
 
 
@@ -128,11 +131,7 @@ def stop_recording(request):
 
 @login_required
 def check_for_updates(request):
-    print("STATUS: " + str(request.session["updates_waiting"]))
-    if request.session["updates_waiting"]:
-        request.session["updates_waiting"] = False
-        return JsonResponse({"updates_waiting": True})
-    return JsonResponse({"updates_waiting": False})
+    return JsonResponse({"updates_needed": get_settings(request.user).updates_needed})
 
 
 @login_required

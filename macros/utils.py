@@ -17,6 +17,12 @@ def get_settings(user):
     return Settings.objects.get(user=user)
 
 
+def updates_needed(user):
+    settings = get_settings(user)
+    settings.updates_needed = True
+    settings.save()
+
+
 def toggle_play_mode(token, toggle):
     user = Token.objects.get(key=token).user
     settings = get_settings(user)
@@ -27,6 +33,7 @@ def toggle_play_mode(token, toggle):
         settings.play_mode = True
 
     settings.save()
+    updates_needed(user)
 
 
 def toggle_recording(token, toggle):
@@ -39,6 +46,7 @@ def toggle_recording(token, toggle):
         settings.is_recording = True
 
     settings.save()
+    updates_needed(user)
 
 
 def get_current_profile(user):

@@ -20,7 +20,7 @@ urlpatterns = [
     url(r"^upload-recording$", views.upload_recording, name="upload_recording"),
     url(r"^check-for-updates$", views.check_for_updates, name="check_for_updates"),
     url(
-        r"^toggle-play-mode/(?P<username>[\w\-]+)/(?P<toggle>\d+)/$",
+        r"^toggle-play-mode/(?P<token>[\w\-]+)/(?P<toggle>\d+)/$",
         views.toggle_play_mode_view,
         name="toggle_play_mode",
     ),
@@ -45,4 +45,6 @@ urlpatterns = [
         views.DeleteRecordingView.as_view(),
         name="delete_recording",
     ),
+    url(r"^(?P<room_name>[\w\-]+)/$", views.room, name='room'),
+    url(r"^$", views.homepage_view, name="homepage"),
 ]
