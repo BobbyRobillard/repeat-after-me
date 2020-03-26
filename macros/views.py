@@ -78,12 +78,12 @@ def download_recording(request, key_char):
 
 def toggle_play_mode_view(request, token, toggle):
     toggle_play_mode(token, toggle)
-    return redirect("website:homepage")
+    return JsonResponse({}, status=200)
 
 
 def toggle_recording_view(request, token, toggle):
     toggle_recording(token, toggle)
-    return redirect("website:homepage")
+    return JsonResponse({}, status=200)
 
 
 @csrf_exempt

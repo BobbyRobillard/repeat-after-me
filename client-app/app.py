@@ -97,8 +97,8 @@ def handle_recording():
     if is_recording:
         # Tell server a recording has started
         response = requests.get(
-            "http://localhost:8000/macros/toggle-recording/{0}/{1}".format(
-                default_username, str(1)
+            "{0}/macros/toggle-recording/{1}/{2}".format(
+                domain, token, str(1)
             )
         )
     else:
@@ -155,21 +155,22 @@ def delete_recording():
 
 
 def upload_recording():
-    global actions
-    print("Uploading Recording")
-    url = "{0}/macros/upload-recording/{1}".format(domain, default_username)
-
-    # Json format
-    for action in actions:
-        if type(action) is KeyboardAction:
-            requests.post(url, json={"key": str(action.char)})
-        else:
-            formatted_action = {
-                "x": action.x,
-                "y": action.y,
-                "button": str(action.button),
-            }
-            requests.post(url, json=json.dumps(formatted_action))
+    print("UPLOADING")
+    # global actions
+    # print("Uploading Recording")
+    # url = "{0}/macros/upload-recording/{1}".format(domain, default_username)
+    #
+    # # Json format
+    # for action in actions:
+    #     if type(action) is KeyboardAction:
+    #         requests.post(url, json={"key": str(action.char)})
+    #     else:
+    #         formatted_action = {
+    #             "x": action.x,
+    #             "y": action.y,
+    #             "button": str(action.button),
+    #         }
+    #         requests.post(url, json=json.dumps(formatted_action))
 
 
 # --------------------------------------------------------------------------

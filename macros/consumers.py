@@ -11,6 +11,8 @@ class PlayConsumer(WebsocketConsumer):
         pass
 
     def receive(self, text_data):
+        settings = get_settings(self.scope["user"])
         self.send(text_data=json.dumps({
-            'playMode': get_settings(self.scope["user"]).play_mode
+            'playMode': settings.play_mode,
+            'isRecording': settings.is_recording
         }))

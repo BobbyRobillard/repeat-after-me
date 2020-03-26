@@ -65,14 +65,8 @@
       <!-- quick recording -->
       <div id="recording-container" class="col">
         <h2>Create Recording</h2>
-        <h4 class="center">You currently are:
-          <span class="fc-primary">
-            {%if settings.is_recording %}
-            Recording
-            {% else %}
-            Not Recording
-            {% endif %}
-          </span>
+        <h4 class="center">Recording:
+          <span class="fc-primary" id="isRecording">{{settings.is_recording}}</span>
         </h4>
         <form action="{% url 'macros:add_recording' %}" method="POST">
           {% csrf_token %}
@@ -259,6 +253,7 @@
   playModeSocket.onmessage = function(e) {
       const data = JSON.parse(e.data);
       $('#play-mode').text(data.playMode);
+      $('#isRecording').text(data.isRecording);
   };
 
   playModeSocket.onclose = function(e) {
