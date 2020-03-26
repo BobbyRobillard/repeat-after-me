@@ -8,7 +8,7 @@ import json
 
 default_username = "webmaster"
 domain = "http://localhost:8000"
-token = "61f219504c8e102de0124fa1919836dd2d32d2b6"
+token = "c7ee1c11e81b002251744a4b81660ef9dc221522"
 
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()

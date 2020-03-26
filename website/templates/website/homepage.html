@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block custom_css %}
-  <style type="text/css">
+<style type="text/css">
     input {
   		border: 2px solid var(--secondary-color) !important;
       padding-left: 10px !important;
@@ -53,7 +53,7 @@
     hr {
       margin-top: 50px;
     }
-  </style>
+</style>
 {% endblock custom_css %}
 
 {% block content %}
@@ -117,11 +117,13 @@
                 Play Mode
               </td>
               <td class="center setting">
-                {% if settings.play_mode %}
+                <span id="play-mode">
+                  {% if settings.play_mode %}
                   Active
-                {% else %}
+                  {% else %}
                   Inactive
-                {% endif %}
+                  {% endif %}
+                </span>
               </td>
             </tr>
             <tr>
@@ -246,21 +248,26 @@
 
 {% block js %}
 <script>
-  function update_gui_if_needed() {
-    $.get(
-      "{% url 'macros:check_for_updates' %}",
-      function(data, status){
-        console.log(data);
-        if(data['updates_needed']) {
-          window.location.reload();
-        }
-      }
-    );
-  }
 
-  $(document).ready(function() {
-    setInterval(function(){ update_gui_if_needed(); }, 1000);
-  });
+  const playModeSocket = new WebSocket(
+      'ws://'
+      + 'localhost:8000'
+      + '/ws/macros/'
+      + 'playMode/'
+  );
+
+  playModeSocket.onmessage = function(e) {
+      const data = JSON.parse(e.data);
+      $('#play-mode').text(data.playMode);
+  };
+
+  playModeSocket.onclose = function(e) {
+      console.error('Chat socket closed unexpectedly');
+  };
+
+  setInterval(function() {
+    playModeSocket.send(JSON.stringify({}));
+  }, 250);
 
   $('.delete-profile').click(function() {
     window.location.href = $(this).attr('href');

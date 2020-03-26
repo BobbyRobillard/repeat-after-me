@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+from django.urls import path
 
 from . import views
 from .views import DeleteProfileView, DeleteRecordingView
@@ -45,6 +46,6 @@ urlpatterns = [
         views.DeleteRecordingView.as_view(),
         name="delete_recording",
     ),
-    url(r"^(?P<room_name>[\w\-]+)/$", views.room, name='room'),
+    path('<str:room_name>/', views.room, name='room'),
     url(r"^$", views.homepage_view, name="homepage"),
 ]
