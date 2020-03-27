@@ -2,6 +2,8 @@ from pynput.mouse import Button, Controller as MouseController
 from pynput.keyboard import Controller as KeyboardController
 from pynput import mouse, keyboard
 
+from operator import attrgetter
+
 import requests
 import time
 import json
@@ -44,7 +46,7 @@ def handle_keyboard_event(key):
                     actions.append(KeyboardAction(key.char))
 
                 else:
-                    # play_recording(key.char)
+                    play_recording(key.char)
                     pass
 
     except AttributeError:
@@ -140,10 +142,37 @@ def play_recording(char):
     keyboard_listener.stop()
 
     try:
-        print("Playing recording")
+        response = requests.get(
+            "{0}/macros/download-recording/{1}/{2}".format(
+                domain, token, char
+            )
+        )
+
+        json_data = json.loads(response.text)['events']
+
+        events = sorted(json_data, key=lambda i: i['order_in_recording'])
+
+        for event in events:
+            try:
+                x, y = event['x_pos'], event['y_pos']
+                mouse_controller.position = (x, y)
+                if event['is_press']:
+                    mouse_controller.press(Button.left)
+                else:
+                    mouse_controller.release(Button.left)
+
+            except Exception as e:
+                try:
+                    key = event['key_code']
+                    if event['is_press']:
+                        keyboard_controller.press(key)
+                    else:
+                        keyboard_controller.release(key)
+                except Exception as key_exception:
+                    print(str(key_exception))
 
     except Exception as e:
-        output_text.set("No recording set to key {0}".format(char))
+        print(str(e))
 
     keyboard_listener = keyboard.Listener(on_press=handle_keyboard_event)
     keyboard_listener.start()

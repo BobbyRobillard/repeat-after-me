@@ -37,6 +37,12 @@ class Recording(models.Model):
     def __str__(self):
         return "{0} | {1}".format(str(self.profile), self.name)
 
+    def get_events(self):
+        return {
+            "key_events": KeyEvent.objects.filter(recording=self),
+            "mouse_events": MouseEvent.objects.filter(recording=self)
+        }
+
     name = models.CharField(max_length=max_name_length)
     key_code = models.CharField(max_length=key_code_length)
     profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
@@ -53,6 +59,7 @@ class MouseEvent(models.Model):
     delay_time = models.IntegerField(default=0)
     is_press = models.BooleanField(default=True)
     recording = models.ForeignKey("Recording", on_delete=models.CASCADE)
+    order_in_recording = models.IntegerField()
 
 
 class KeyEvent(models.Model):
@@ -63,3 +70,4 @@ class KeyEvent(models.Model):
     delay_time = models.IntegerField(default=0)
     is_press = models.BooleanField(default=True)
     recording = models.ForeignKey("Recording", on_delete=models.CASCADE)
+    order_in_recording = models.IntegerField()

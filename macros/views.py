@@ -54,26 +54,21 @@ def generate_token(request):
     return render(request, "macros/token.html", context)
 
 
-def download_recording(request, key_char):
+def download_recording(request, token, key_char):
     try:
+        user = Token.objects.get(key=token).user
         recording = Recording.objects.get(
-            key_code=key_char, profile=get_settings(request.user).current_profile
+            key_code=key_char, profile=get_settings(user).current_profile
         )
-        key_events = KeyEvent.objects.filter(recording=recording)
-        mouse_events = MouseEvent.objects.filter(recording=recording)
+        events = recording.get_events()
+
     except Recording.DoesNotExist:
         return HttpResponse(status=404)
 
-    key_event_serializer = KeyEventSerializer(key_events, many=True)
-    mouse_event_serializer = MouseEventSerializer(mouse_events, many=True)
+    key_event_serializer = KeyEventSerializer(events['key_events'], many=True)
+    mouse_event_serializer = MouseEventSerializer(events['mouse_events'], many=True)
 
-    return JsonResponse(
-        {
-            "key_events": key_event_serializer.data,
-            "mouse_events": mouse_event_serializer.data,
-        },
-        safe=False,
-    )
+    return JsonResponse({"events": key_event_serializer.data + mouse_event_serializer.data}, status=200)
 
 
 def toggle_play_mode_view(request, token, toggle):
