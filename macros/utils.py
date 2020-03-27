@@ -36,17 +36,11 @@ def toggle_play_mode(token, toggle):
     updates_needed(user)
 
 
-def toggle_recording(token, toggle):
+def start_recording(token):
     user = Token.objects.get(key=token).user
     settings = get_settings(user)
-
-    if toggle == "0":
-        settings.is_recording = False
-    elif toggle == "1":
-        settings.is_recording = True
-
+    settings.is_recording = True
     settings.save()
-    updates_needed(user)
 
 
 def get_current_profile(user):

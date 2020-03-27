@@ -99,18 +99,12 @@ def handle_recording():
     if is_recording:
         # Tell server a recording has started
         response = requests.get(
-            "{0}/macros/toggle-recording/{1}/{2}".format(
-                domain, token, str(1)
+            "{0}/macros/start-recording/{1}".format(
+                domain, token
             )
         )
     else:
-        # Tell server a recording has stopped
-        response = requests.get(
-            "{0}/macros/toggle-recording/{1}/{2}".format(
-                domain, token, str(0)
-            )
-        )
-        # Upload recording to server
+        # Stop recording and upload recording to server
         upload_recording()
 
 
@@ -122,14 +116,14 @@ def handle_playback():
     if playback_mode_active:
         # Tell server to toggle play mode is active
         response = requests.get(
-            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(
+            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}/".format(
                 token, str(1)
             )
         )
     else:
         # Tell server to toggle play mode is inactive
         response = requests.get(
-            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}".format(
+            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}/".format(
                 token, str(0)
             )
         )
@@ -151,6 +145,8 @@ def play_recording(char):
         json_data = json.loads(response.text)['events']
 
         events = sorted(json_data, key=lambda i: i['order_in_recording'])
+
+        print("PLAYING")
 
         for event in events:
             try:
@@ -184,22 +180,36 @@ def delete_recording():
 
 
 def upload_recording():
-    print("UPLOADING")
-    # global actions
-    # print("Uploading Recording")
-    # url = "{0}/macros/upload-recording/{1}".format(domain, default_username)
-    #
-    # # Json format
-    # for action in actions:
-    #     if type(action) is KeyboardAction:
-    #         requests.post(url, json={"key": str(action.char)})
-    #     else:
-    #         formatted_action = {
-    #             "x": action.x,
-    #             "y": action.y,
-    #             "button": str(action.button),
-    #         }
-    #         requests.post(url, json=json.dumps(formatted_action))
+    global actions
+    print("Uploading Recording")
+    url = "{0}/macros/stop-recording/{1}/".format(domain, token)
+
+    key_events = []
+    mouse_events = []
+
+    order_in_recording = 0
+
+    # Json format
+    for action in actions:
+        if type(action) is KeyboardAction:
+            key_events.append({
+                "key_code": action.char,
+                "delay_time": 0,
+                "order_in_recording": order_in_recording,
+                "is_press": True
+            })
+        else:
+            key_events.append({
+                "x": action.x,
+                "y": action.y,
+                "button": str(action.button),
+                "order_in_recording": order_in_recording,
+                "is_press": True
+            })
+
+        order_in_recording = order_in_recording + 1
+
+    requests.post(url, json={"key_events": key_events, "mouse_events": mouse_events})
 
 
 # --------------------------------------------------------------------------

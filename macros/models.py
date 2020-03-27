@@ -59,7 +59,7 @@ class MouseEvent(models.Model):
     delay_time = models.IntegerField(default=0)
     is_press = models.BooleanField(default=True)
     recording = models.ForeignKey("Recording", on_delete=models.CASCADE)
-    order_in_recording = models.IntegerField()
+    order_in_recording = models.IntegerField(default=(-1))
 
 
 class KeyEvent(models.Model):
@@ -70,4 +70,4 @@ class KeyEvent(models.Model):
     delay_time = models.IntegerField(default=0)
     is_press = models.BooleanField(default=True)
     recording = models.ForeignKey("Recording", on_delete=models.CASCADE)
-    order_in_recording = models.IntegerField()
+    order_in_recording = models.IntegerField(default=(-1))

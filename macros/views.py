@@ -27,7 +27,7 @@ from .utils import (
     get_current_profile,
     delete_profile,
     toggle_play_mode,
-    toggle_recording,
+    start_recording,
 )
 
 from macros.serializers import KeyEventSerializer, MouseEventSerializer
@@ -40,12 +40,6 @@ def homepage_view(request):
     return render(request, "macros/homepage.html")
 
 
-def room(request, room_name):
-    return render(request, 'macros/room.html', {
-        'room_name': room_name
-    })
-
-
 def generate_token(request):
     token = Token.objects.get_or_create(user=request.user)[0]
     context = {
@@ -54,11 +48,53 @@ def generate_token(request):
     return render(request, "macros/token.html", context)
 
 
+def toggle_play_mode_view(request, token, toggle):
+    toggle_play_mode(token, toggle)
+    return JsonResponse({}, status=200)
+
+
+def start_recording_view(request, token):
+    start_recording(token)
+    return JsonResponse({}, status=200)
+
+
+@login_required
+def set_current_profile_view(request, pk):
+    if not set_current_profile(request.user, pk):
+        messages.error(request, "You do not own this profile chief.")
+    return redirect("website:homepage")
+
+
+class DeleteProfileView(DeleteView):
+    model = Profile
+    success_url = "/"
+
+
+class DeleteRecordingView(DeleteView):
+    model = Recording
+    success_url = "/"
+
+
+@login_required
+def add_profile(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            Profile.objects.create(name=form.cleaned_data["name"], user=request.user)
+    return redirect("website:homepage")
+
+
+@login_required
+def add_recording(request):
+    return redirect("website:homepage")
+
+
 def download_recording(request, token, key_char):
     try:
         user = Token.objects.get(key=token).user
         recording = Recording.objects.get(
-            key_code=key_char, profile=get_settings(user).current_profile
+            key_code=key_char,
+            profile=get_settings(user).current_profile
         )
         events = recording.get_events()
 
@@ -71,20 +107,10 @@ def download_recording(request, token, key_char):
     return JsonResponse({"events": key_event_serializer.data + mouse_event_serializer.data}, status=200)
 
 
-def toggle_play_mode_view(request, token, toggle):
-    toggle_play_mode(token, toggle)
-    return JsonResponse({}, status=200)
-
-
-def toggle_recording_view(request, token, toggle):
-    toggle_recording(token, toggle)
-    return JsonResponse({}, status=200)
-
-
 @csrf_exempt
-@api_view(["GET", "PUT", "DELETE"])
-def stop_recording(request):
-    user = User.objects.get(pk=1)
+@api_view(["GET", "POST", "PUT", "DELETE"])
+def stop_recording(request, token):
+    user = Token.objects.get(key=token).user
 
     errors_exist = False
     errors = {"key_event_errors": [], "mouse_event_errors": []}
@@ -92,7 +118,7 @@ def stop_recording(request):
     # Create new recording to save action to.
     # New recordings save to the current profile
     new_recording = Recording.objects.create(
-        profile=get_current_profile(user), name="test", key_code="a"
+        profile=get_current_profile(user), name="test", key_code="b"
     )
 
     # Serialize the incoming recording
@@ -122,53 +148,3 @@ def stop_recording(request):
 
     # Everything went good, no errors exist
     return JsonResponse({"Mood": "Good in the hood!"}, status=200)
-
-
-@login_required
-def check_for_updates(request):
-    return JsonResponse({"updates_needed": get_settings(request.user).updates_needed})
-
-
-@login_required
-def set_current_profile_view(request, pk):
-    if not set_current_profile(request.user, pk):
-        messages.error(request, "You do not own this profile chief.")
-    return redirect("website:homepage")
-
-
-class DeleteProfileView(DeleteView):
-    model = Profile
-    success_url = "/"
-
-
-class DeleteRecordingView(DeleteView):
-    model = Recording
-    success_url = "/"
-
-
-@login_required
-def delete_profile_view(request, pk):
-    if not delete_profile(request.user, pk):
-        messages.error(request, "You do not own this profile chief.")
-    return redirect("website:homepage")
-
-
-@login_required
-def add_profile(request):
-    if request.method == "POST":
-        form = ProfileForm(request.POST)
-        if form.is_valid():
-            Profile.objects.create(name=form.cleaned_data["name"], user=request.user)
-    return redirect("website:homepage")
-
-
-@login_required
-def add_recording(request):
-    return redirect("website:homepage")
-
-
-@login_required
-def upload_recording(request, username):
-    user = User.objects.get(username=username)
-    recording_id = request.session["current_recording_id"]
-    return redirect("website:homepage")
