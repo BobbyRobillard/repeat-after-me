@@ -181,35 +181,37 @@ def delete_recording():
 
 def upload_recording():
     global actions
-    print("Uploading Recording")
-    url = "{0}/macros/stop-recording/{1}/".format(domain, token)
 
-    key_events = []
-    mouse_events = []
+    if len(actions) > 0:
+        url = "{0}/macros/stop-recording/{1}/".format(domain, token)
 
-    order_in_recording = 0
+        key_events = []
+        mouse_events = []
 
-    # Json format
-    for action in actions:
-        if type(action) is KeyboardAction:
-            key_events.append({
-                "key_code": action.char,
-                "delay_time": 0,
-                "order_in_recording": order_in_recording,
-                "is_press": True
-            })
-        else:
-            key_events.append({
-                "x": action.x,
-                "y": action.y,
-                "button": str(action.button),
-                "order_in_recording": order_in_recording,
-                "is_press": True
-            })
+        order_in_recording = 0
 
-        order_in_recording = order_in_recording + 1
+        print("Uploading Recording")
+        # Json format
+        for action in actions:
+            if type(action) is KeyboardAction:
+                key_events.append({
+                    "key_code": action.char,
+                    "delay_time": 0,
+                    "order_in_recording": order_in_recording,
+                    "is_press": True
+                })
+            else:
+                key_events.append({
+                    "x": action.x,
+                    "y": action.y,
+                    "button": str(action.button),
+                    "order_in_recording": order_in_recording,
+                    "is_press": True
+                })
 
-    requests.post(url, json={"key_events": key_events, "mouse_events": mouse_events})
+            order_in_recording = order_in_recording + 1
+
+        requests.post(url, json={"key_events": key_events, "mouse_events": mouse_events})
 
 
 # --------------------------------------------------------------------------
