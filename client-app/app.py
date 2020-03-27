@@ -32,7 +32,6 @@ def handle_keyboard_event(key):
     global playback_key
 
     try:
-        print(key.char)
         if key.char == playback_key:
             handle_playback()
 
@@ -81,12 +80,8 @@ class KeyboardAction(object):
     def __init__(self, char):
         self.char = char
 
-    def __str__(self):
-        return "Keypress: {0}".format(self.char)
-
     def do_action(self):
         global keyboard_controller
-        # print("DOING KEYBOARD ACTION")
         keyboard_controller.type(self.char)
 
 
@@ -145,8 +140,6 @@ def play_recording(char):
         json_data = json.loads(response.text)['events']
 
         events = sorted(json_data, key=lambda i: i['order_in_recording'])
-
-        print("PLAYING")
 
         for event in events:
             try:
