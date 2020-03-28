@@ -1,43 +1,28 @@
-from django.contrib.auth.models import User as User
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+from django.http import JsonResponse, HttpResponse
+
 from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import DeleteView
 
-from rest_framework import viewsets
-from rest_framework import permissions
-from rest_framework.parsers import JSONParser
-
 from rest_framework.authtoken.models import Token
-
 from rest_framework.decorators import api_view
 
 from website.views import homepage_view
 
 from .forms import ProfileForm
 from .models import Profile, KeyEvent, MouseEvent, Recording
+from .serializers import KeyEventSerializer, MouseEventSerializer
 from .utils import (
-    get_settings,
-    get_current_profile,
-    delete_profile,
-    toggle_play_mode,
-    start_recording,
+    get_settings, get_current_profile, delete_profile, toggle_play_mode,
+    start_recording, stop_recording, sync
 )
 
-from macros.serializers import KeyEventSerializer, MouseEventSerializer
-
 import json
-
-
-@login_required
-def homepage_view(request):
-    return render(request, "macros/homepage.html")
 
 
 def generate_token(request):
@@ -53,9 +38,14 @@ def toggle_play_mode_view(request, token, toggle):
     return JsonResponse({}, status=200)
 
 
-def start_recording_view(request, token):
-    start_recording(token)
+def sync_view(request, token):
+    sync(token)
     return JsonResponse({}, status=200)
+
+
+# ------------------------------------------------------------------------------
+# PROFILE RELATED VIEWS
+# ------------------------------------------------------------------------------
 
 
 @login_required
@@ -70,11 +60,6 @@ class DeleteProfileView(DeleteView):
     success_url = "/"
 
 
-class DeleteRecordingView(DeleteView):
-    model = Recording
-    success_url = "/"
-
-
 @login_required
 def add_profile(request):
     if request.method == "POST":
@@ -84,9 +69,19 @@ def add_profile(request):
     return redirect("website:homepage")
 
 
+# ------------------------------------------------------------------------------
+# RECORDING RELATED VIEWS
+# ------------------------------------------------------------------------------
+
+
 @login_required
 def add_recording(request):
     return redirect("website:homepage")
+
+
+class DeleteRecordingView(DeleteView):
+    model = Recording
+    success_url = "/"
 
 
 def download_recording(request, token, key_char):
@@ -107,9 +102,14 @@ def download_recording(request, token, key_char):
     return JsonResponse({"events": key_event_serializer.data + mouse_event_serializer.data}, status=200)
 
 
+def start_recording_view(request, token):
+    start_recording(token)
+    return JsonResponse({}, status=200)
+
+
 @csrf_exempt
 @api_view(["GET", "POST", "PUT", "DELETE"])
-def stop_recording(request, token):
+def stop_recording_view(request, token):
     user = Token.objects.get(key=token).user
 
     errors_exist = False
@@ -146,5 +146,6 @@ def stop_recording(request, token):
     if errors_exist:
         return JsonResponse(errors, status=400)
 
-    # Everything went good, no errors exist
+    # Everything went good, no erros exist
+    stop_recording(user)
     return JsonResponse({"Mood": "Good in the hood!"}, status=200)

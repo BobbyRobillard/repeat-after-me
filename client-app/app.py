@@ -8,6 +8,9 @@ import requests
 import time
 import json
 
+import atexit
+
+
 default_username = "webmaster"
 domain = "http://localhost:8000"
 token = "c7ee1c11e81b002251744a4b81660ef9dc221522"
@@ -207,13 +210,31 @@ def upload_recording():
         requests.post(url, json={"key_events": key_events, "mouse_events": mouse_events})
 
 
+# Sync settings with server
+def sync():
+    print("Syncing With Server")
+    response = requests.get(
+        "http://localhost:8000/macros/sync/{0}/".format(token)
+    )
+    print("Synced!")
+
+
 # --------------------------------------------------------------------------
 
+
+print("Setup Started")
 keyboard_listener = keyboard.Listener(on_press=handle_keyboard_event)
 mouse_listener = mouse.Listener(on_click=handle_mouse_event)
 
 keyboard_listener.start()
 mouse_listener.start()
+
+sync()
+print("Starting App")
+
+
+atexit.register(sync)
+
 
 while True:
     pass

@@ -1,2 +1,0 @@
-#!/bin/bash
-curl -X PUT -H "Content-Type: application/json" -d '{"key_events": [{"key_code": "a", "delay_time": 0, "is_press": true}], "mouse_events": [{"x_pos": 12, "y_pos": 255, "is_press": false, "delay_time": 0}]}' http://127.0.0.1:8000/macros/stop-recording > ../../../Desktop/temp.html

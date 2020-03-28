@@ -36,6 +36,12 @@ def toggle_play_mode(token, toggle):
     updates_needed(user)
 
 
+def stop_recording(user):
+    settings = get_settings(user)
+    settings.is_recording = False
+    settings.save()
+
+
 def start_recording(token):
     user = Token.objects.get(key=token).user
     settings = get_settings(user)
@@ -66,3 +72,11 @@ def set_current_profile(user, profile_pk):
 
 def set_default_profile(user):
     set_current_profile(user, get_profiles(user).first().pk)
+
+
+def sync(token):
+    user = Token.objects.get(key=token).user
+    settings = get_settings(user)
+    settings.is_recording = False
+    settings.play_mode = False
+    settings.save()
