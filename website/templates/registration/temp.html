@@ -1,0 +1,128 @@
+{% extends 'website/base.html' %}
+
+{% block title %} | Login Page {% endblock title %}
+
+{% block navigation %}
+{% endblock navigation %}
+
+
+{% block content %}
+
+<!-- being-recaptcha -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+	function onSubmit(token) {
+		document.getElementById("recaptcha-form").submit();
+	}
+</script>
+<style>
+
+	body {
+		background-color: #eee;
+	}
+
+	.grecaptcha-badge {
+		display: none;
+	}
+
+	#id_username {
+		margin-top: 25px;
+	}
+
+	input {
+		border: none !important;
+		border-bottom: 2px solid #ddd !important;
+		color: #ddd;
+		font-size: 20px !important;
+		font-weight: 300 !important;
+		padding: 0px !important;
+		padding-top: 10px !important;
+		padding-bottom: 10px !important;
+	}
+
+	.card {
+		-webkit-box-shadow: 0px 0px 5px 2px rgba(148,148,148,1);
+		-moz-box-shadow: 0px 0px 5px 2px rgba(148,148,148,1);
+		box-shadow: 0px 0px 5px 2px rgba(148,148,148,1);
+	}
+</style>
+<!-- end-recaptcha -->
+
+
+<div class="center">
+
+	<div class="row">
+		<br /><br />
+		<div class="col-md-6 offset-md-3">
+				{% include 'website/server_messages.html' %}
+		</div>
+	</div>
+	{% if form.errors %}
+	<p>Your username and password didn't match. Please try again.</p>
+	{% endif %}
+
+	<div class="row">
+		<div id="login-container" class="col-sm-8 col-md-6 col-lg-4 offset-sm-2 offset-md-3 offset-lg-4">
+			<!-- Material form login -->
+			<div class="card">
+
+			  <p class="card-header bg-primary fg-white white-text text-center py-4" style="weight:100;font-size:30px;">
+			    Please Login to Continue
+			  </p>
+
+			  <!--Card content-->
+			  <div class="card-body px-lg-5 pt-0">
+
+			    <!-- Form -->
+			    <form id="recaptcha-form" class="text-center" method="POST">
+						{% csrf_token %}
+
+			      <!-- username -->
+			      <div class="md-form">
+			        <input tpye="text" id="id_username" name="username" class="form-control" placeholder="Username">
+			      </div>
+
+						<br>
+
+			      <!-- Password -->
+			      <div class="md-form">
+			        <input type="password" id="id_password" name="password" class="form-control" placeholder="Password">
+							<a href="#">Forgot password?</a>
+			      </div>
+
+						<br>
+			      <!-- Sign in button -->
+						<button class="g-recaptcha btn btn-outline-info btn-rounded btn-block" data-sitekey="{{ recaptcha_site_key }}" data-callback='onSubmit' type="submit">Login</button>
+						<br>
+			      <!-- Register -->
+			      <p>Not a member?
+			        <a href="">Register</a>
+			      </p>
+
+			      <!-- Social login -->
+			      <p>or sign in with:</p>
+			      <a type="button" class="btn-floating btn-fb btn-sm">
+			        <i class="fab fa-facebook-f"></i>
+			      </a>
+			      <a type="button" class="btn-floating btn-tw btn-sm">
+			        <i class="fab fa-twitter"></i>
+			      </a>
+			      <a type="button" class="btn-floating btn-li btn-sm">
+			        <i class="fab fa-linkedin-in"></i>
+			      </a>
+			      <a type="button" class="btn-floating btn-git btn-sm">
+			        <i class="fab fa-github"></i>
+			      </a>
+
+			    </form>
+			    <!-- Form -->
+
+			  </div>
+
+			</div>
+			<!-- Material form login -->
+		</div>
+	</div>
+
+</div>
+{% endblock content %}

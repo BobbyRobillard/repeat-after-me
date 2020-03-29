@@ -1,128 +1,102 @@
-{% extends 'website/base.html' %}
+{% load static %}
 
-{% block title %} | Login Page {% endblock title %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 3 | Log in</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% block navigation %}
-{% endblock navigation %}
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'website/plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static 'website/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'website/dist/css/adminlte.min.css' %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Repeat</b> After Me</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
 
+      <form id="recaptcha-form" action="#" method="post">
+        {% csrf_token %}
 
-{% block content %}
+        <div class="input-group mb-3">
+          <input id="id_username" name="username" type="text" class="form-control" placeholder="Username">
 
-<!-- being-recaptcha -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script>
-	function onSubmit(token) {
-		document.getElementById("recaptcha-form").submit();
-	}
-</script>
-<style>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input id="id_password" name="password" type="password" class="form-control" placeholder="Password">
 
-	body {
-		background-color: #eee;
-	}
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember">
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
 
-	.grecaptcha-badge {
-		display: none;
-	}
+      <div class="social-auth-links text-center mb-3">
+        <p>- OR -</p>
+        <a href="#" class="btn btn-block btn-primary">
+          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+        </a>
+        <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+        </a>
+      </div>
+      <!-- /.social-auth-links -->
 
-	#id_username {
-		margin-top: 25px;
-	}
-
-	input {
-		border: none !important;
-		border-bottom: 2px solid #ddd !important;
-		color: #ddd;
-		font-size: 20px !important;
-		font-weight: 300 !important;
-		padding: 0px !important;
-		padding-top: 10px !important;
-		padding-bottom: 10px !important;
-	}
-
-	.card {
-		-webkit-box-shadow: 0px 0px 5px 2px rgba(148,148,148,1);
-		-moz-box-shadow: 0px 0px 5px 2px rgba(148,148,148,1);
-		box-shadow: 0px 0px 5px 2px rgba(148,148,148,1);
-	}
-</style>
-<!-- end-recaptcha -->
-
-
-<div class="center">
-
-	<div class="row">
-		<br /><br />
-		<div class="col-md-6 offset-md-3">
-				{% include 'website/server_messages.html' %}
-		</div>
-	</div>
-	{% if form.errors %}
-	<p>Your username and password didn't match. Please try again.</p>
-	{% endif %}
-
-	<div class="row">
-		<div id="login-container" class="col-sm-8 col-md-6 col-lg-4 offset-sm-2 offset-md-3 offset-lg-4">
-			<!-- Material form login -->
-			<div class="card">
-
-			  <p class="card-header bg-primary fg-white white-text text-center py-4" style="weight:100;font-size:30px;">
-			    Please Login to Continue
-			  </p>
-
-			  <!--Card content-->
-			  <div class="card-body px-lg-5 pt-0">
-
-			    <!-- Form -->
-			    <form id="recaptcha-form" class="text-center" method="POST">
-						{% csrf_token %}
-
-			      <!-- username -->
-			      <div class="md-form">
-			        <input tpye="text" id="id_username" name="username" class="form-control" placeholder="Username">
-			      </div>
-
-						<br>
-
-			      <!-- Password -->
-			      <div class="md-form">
-			        <input type="password" id="id_password" name="password" class="form-control" placeholder="Password">
-							<a href="#">Forgot password?</a>
-			      </div>
-
-						<br>
-			      <!-- Sign in button -->
-						<button class="g-recaptcha btn btn-outline-info btn-rounded btn-block" data-sitekey="{{ recaptcha_site_key }}" data-callback='onSubmit' type="submit">Login</button>
-						<br>
-			      <!-- Register -->
-			      <p>Not a member?
-			        <a href="">Register</a>
-			      </p>
-
-			      <!-- Social login -->
-			      <p>or sign in with:</p>
-			      <a type="button" class="btn-floating btn-fb btn-sm">
-			        <i class="fab fa-facebook-f"></i>
-			      </a>
-			      <a type="button" class="btn-floating btn-tw btn-sm">
-			        <i class="fab fa-twitter"></i>
-			      </a>
-			      <a type="button" class="btn-floating btn-li btn-sm">
-			        <i class="fab fa-linkedin-in"></i>
-			      </a>
-			      <a type="button" class="btn-floating btn-git btn-sm">
-			        <i class="fab fa-github"></i>
-			      </a>
-
-			    </form>
-			    <!-- Form -->
-
-			  </div>
-
-			</div>
-			<!-- Material form login -->
-		</div>
-	</div>
-
+      <p class="mb-1">
+        <a href="#">I forgot my password</a>
+      </p>
+      <p class="mb-0 center">
+        <a href="#">Register a new membership</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
 </div>
-{% endblock content %}
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<link rel="stylesheet" href="{% static 'website/plugins/jquery/jquery.min.js' %}">
+<!-- Bootstrap 4 -->
+<link rel="stylesheet" href="{% static 'website/plugins/bootstrap/js/bootstrap.bundle.min.js' %}">
+<!-- AdminLTE App -->
+<link rel="stylesheet" href="{% static 'website/dist/js/adminlte.min.js' %}">
+
+</body>
+</html>
