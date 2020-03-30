@@ -1,5 +1,12 @@
 {% extends 'website/base.html' %}
 
+{% block custom_css %}
+div > .alert {
+  margin-top: 25px;
+}
+{% endblock custom_css %}
+
+
 {% block content %}
     <div class="col-12">
       {% include 'website/server_messages.html' %}
