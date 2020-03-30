@@ -1,6 +1,10 @@
 var admin_email = "admin@techandmech.com";
 var csrftoken = getCookie('csrftoken');
 //------------------------------------------------------------------------------
+$('body').on('click', '.delete', function() {
+    window.location.href = $(this).attr('href');
+});
+//------------------------------------------------------------------------------
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {

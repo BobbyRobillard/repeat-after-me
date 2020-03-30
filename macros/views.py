@@ -47,12 +47,23 @@ def sync_view(request, token):
 # PROFILE RELATED VIEWS
 # ------------------------------------------------------------------------------
 
-
 @login_required
-def set_current_profile_view(request, pk):
-    if not set_current_profile(request.user, pk):
-        messages.error(request, "You do not own this profile chief.")
-    return redirect("website:homepage")
+def add_profile(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+        print(str(form))
+        if form.is_valid():
+            print("VALID")
+            Profile.objects.create(
+                name=form.cleaned_data["name"],
+                user=request.user,
+                color=form.cleaned_data["color"]
+            )
+            messages.success(request, "Profile Created")
+            return redirect("website:homepage")
+        else:
+            print("Invalid")
+    return render(request, 'macros/add_profile.html')
 
 
 class DeleteProfileView(DeleteView):
@@ -61,13 +72,10 @@ class DeleteProfileView(DeleteView):
 
 
 @login_required
-def add_profile(request):
-    if request.method == "POST":
-        form = ProfileForm(request.POST)
-        if form.is_valid():
-            Profile.objects.create(name=form.cleaned_data["name"], user=request.user)
+def set_current_profile_view(request, pk):
+    if not set_current_profile(request.user, pk):
+        messages.error(request, "You do not own this profile chief.")
     return redirect("website:homepage")
-
 
 # ------------------------------------------------------------------------------
 # RECORDING RELATED VIEWS
