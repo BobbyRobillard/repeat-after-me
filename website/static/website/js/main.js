@@ -5,6 +5,10 @@ $('body').on('click', '.delete', function() {
     window.location.href = $(this).attr('href');
 });
 //------------------------------------------------------------------------------
+$('body').on('click', '.action-link', function() {
+    window.location.href = $(this).attr('href');
+});
+//------------------------------------------------------------------------------
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {

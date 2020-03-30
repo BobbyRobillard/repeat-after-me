@@ -19,7 +19,7 @@ from .models import Profile, KeyEvent, MouseEvent, Recording
 from .serializers import KeyEventSerializer, MouseEventSerializer
 from .utils import (
     get_settings, get_current_profile, delete_profile, toggle_play_mode,
-    start_recording, stop_recording, sync
+    start_recording, stop_recording, sync, get_profiles, set_current_profile
 )
 
 import json
@@ -49,11 +49,13 @@ def sync_view(request, token):
 
 @login_required
 def add_profile(request):
+    context = {
+        "profiles": get_profiles(request.user),
+        "form": ProfileForm()
+    }
     if request.method == "POST":
         form = ProfileForm(request.POST)
-        print(str(form))
         if form.is_valid():
-            print("VALID")
             Profile.objects.create(
                 name=form.cleaned_data["name"],
                 user=request.user,
@@ -62,8 +64,8 @@ def add_profile(request):
             messages.success(request, "Profile Created")
             return redirect("website:homepage")
         else:
-            print("Invalid")
-    return render(request, 'macros/add_profile.html')
+            messages.error(request, "You never entered a profile name!")
+    return render(request, 'macros/add_profile.html', context)
 
 
 class DeleteProfileView(DeleteView):

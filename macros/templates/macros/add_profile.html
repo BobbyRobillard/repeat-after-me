@@ -35,6 +35,7 @@
 
 {% block content %}
 <div id="add-container" class="col-4 offset-3 center">
+  {% include 'website/server_messages.html' %}
   <h2>ADD A PROFILE</h2>
   <img id="profile-img" src="{% static 'website/images/hippie.png' %}">
 
@@ -55,22 +56,20 @@
     </div>
     <input type='color' name='color-visible' id="color-visible" class="form-control">
   </div>
+  (Click color to change)
   <br><br>
-  <button onClick="save()" class="btn btn-success" name="button">Save New Profile</button>
+  <button id="save" class="btn btn-success" name="button">Save New Profile</button>
 </div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script type="text/javascript">
-  function save() {
-    $('#profile-form').submit();
-  }
-
-  $('#color-visible').change(function() {
+  $('#save').click(function() {
     $('#id_color').val(
       $('#color-visible').val()
     );
+    $('#profile-form').submit();
   });
 </script>
 {% endblock content %}
