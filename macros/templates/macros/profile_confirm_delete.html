@@ -1,4 +1,36 @@
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+{% extends 'website/base.html' %}
+
+{% block custom_css %}
+#delete-container {
+  padding: 25px;
+  background-color: white;
+  margin: 50px;
+  max-width: 400px;
+  text-align: center;
+}
+{% endblock custom_css %}
+
+{% block content %}
+<div id="delete-container" class="col">
+  <form id="delete-form" method="post">{% csrf_token %}
+    <h3>
+      Are you sure you want to delete the profile
+      <span class="fc-primary">{{ object }}</span>
+      and all its recordings?
+    </h3>
+  </form>
+  <br>
+  <button type="button" id="cancel" class="btn btn-danger">Cancel</button>
+  <button type="button" id="confirm" class="btn btn-success">Confirm</button>
+</div>
+
+<script type="text/javascript">
+  $('#cancel').click(function() {
+    window.location.href = "{% url 'website:homepage' %}";
+  });
+
+  $('#confirm').click(function() {
+    $('#delete-form').submit();
+  });
+</script>
+{% endblock content %}

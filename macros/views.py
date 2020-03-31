@@ -72,11 +72,25 @@ class DeleteProfileView(DeleteView):
     model = Profile
     success_url = "/"
 
+    def delete(self, *args, **kwargs):
+        # only sending error message for coloring on client side
+        messages.error(self.request, "Profile Deleted!")
+        return super(DeleteProfileView, self).delete(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profiles'] = get_profiles(self.request.user)
+        return context
+
 
 @login_required
 def set_current_profile_view(request, pk):
     if not set_current_profile(request.user, pk):
         messages.error(request, "You do not own this profile chief.")
+    else:
+        messages.success(request, "Current profile changed to: {0}".format(
+            Profile.objects.get(pk=pk).name
+        ))
     return redirect("website:homepage")
 
 # ------------------------------------------------------------------------------

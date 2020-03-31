@@ -3,7 +3,24 @@
 {% block custom_css %}
 div > .alert {
   margin-top: 25px;
+  text-align: center;
 }
+.edit, .delete {
+  font-size: 25px;
+  margin-right: 5px;
+}
+
+.info-box {
+  background-color: white;
+}
+
+.info-box:hover {
+  cursor: pointer;
+  background-color: #f3f4f5;
+}
+
+
+
 {% endblock custom_css %}
 
 
@@ -15,7 +32,8 @@ div > .alert {
         <button id="add-profile" type="button" class="btn btn-success" name="button">Add Profile</button>
       </a>
       <br>
-      <br>
+      (Click a profile to set it as your current profile)
+      <br><br>
     </div>
     {% for profile in profiles %}
     <div class="col-12 col-sm-6 col-md-3">
@@ -27,8 +45,8 @@ div > .alert {
         <div class="info-box-content">
           <span class="info-box-text">
               {{ profile.name }}
-              <i class="fas fa-pencil-alt edit" style="margin-left:5px;"></i>
-              <i class="fas fa-trash-alt delete" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
+              <i class="fas fa-pencil-alt edit action-link animated item" style="margin-left:5px;"></i>
+              <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
           </span>
           <span class="info-box-number">
             Recordings:
@@ -41,3 +59,28 @@ div > .alert {
     </div>
     {% endfor %}
 {% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+
+  var animationClass = "tada";
+
+  $('.edit').hover(function() {
+    $(this).addClass(animationClass);
+  });
+
+  $('.edit').mouseout(function() {
+    $(this).removeClass(animationClass);
+  });
+
+  // ----------------------------------------------
+
+  $('.delete').hover(function() {
+    $(this).addClass(animationClass);
+  });
+
+  $('.delete').mouseout(function() {
+    $(this).removeClass(animationClass);
+  });
+</script>
+{% endblock js %}

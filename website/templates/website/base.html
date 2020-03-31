@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="{% static 'website/plugins/fontawesome-free/css/all.min.css' %}">
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="{% static 'website/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <!-- Animations -->
+  <link rel="stylesheet" href="{% static 'website/css/animate.css' %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'website/dist/css/adminlte.min.css' %}">
   <!-- overlayScrollbars -->
@@ -43,6 +45,7 @@
 
   {% endblock custom_css %}
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
@@ -360,8 +363,6 @@
   <!-- ./wrapper -->
 
   <!-- jQuery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
   <script src="{% static 'website/js/main.js' %}"></script>
 
 
@@ -387,5 +388,9 @@
 
   <!-- PAGE SCRIPTS -->
   <script src="{% static 'website/dist/js/pages/dashboard2.js' %}"></script>
+
+  <!-- Custom JS -->
+  {% block js %}
+  {% endblock js %}
 </body>
 </html>
