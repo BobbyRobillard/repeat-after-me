@@ -103,7 +103,7 @@ def save_recording(request):
                 is_temp=True
             ).exists():
 
-        messages.error(request, "You have no temporary recording, please record one now!")
+        messages.error(request, "You have no temporary recording! Please record one now, then refresh this page!")
 
     elif request.method == "POST":
         form = RecordingForm(request.POST)
