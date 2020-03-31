@@ -123,7 +123,10 @@ def save_recording(request):
         else:
             messages.error(request, "Invalid name or activation key!")
 
-    return render(request, 'macros/save_recording.html')
+    return render(request, 'macros/save_recording.html', context={
+        "profiles": get_profiles(request.user),
+        "settings": get_settings(request.user)
+    })
 
 
 class DeleteRecordingView(DeleteView):
