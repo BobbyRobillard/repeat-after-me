@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view
 
 from website.views import homepage_view
 
-from .forms import ProfileForm
+from .forms import ProfileForm, RecordingForm
 from .models import Profile, KeyEvent, MouseEvent, Recording
 from .serializers import KeyEventSerializer, MouseEventSerializer
 from .utils import (
@@ -97,10 +97,33 @@ def set_current_profile_view(request, pk):
 # RECORDING RELATED VIEWS
 # ------------------------------------------------------------------------------
 
+def save_recording(request):
+    if not Recording.objects.filter(
+                profile=get_current_profile(request.user),
+                is_temp=True
+            ).exists():
 
-@login_required
-def add_recording(request):
-    return redirect("website:homepage")
+        messages.error(request, "You have no temporary recording, please record one now!")
+
+    elif request.method == "POST":
+        form = RecordingForm(request.POST)
+        if form.is_valid():
+            rec = Recording.objects.get(
+                is_temp=True,
+                profile=get_current_profile(request.user)
+            )
+            rec.name = form.cleaned_data['name']
+            rec.key_code = form.cleaned_data['key_code']
+            rec.is_temp = False
+            rec.save()
+            messages.success(request, "Recording saved to {0}".format(
+                str(get_current_profile(request.user))
+            ))
+            return redirect('website:homepage')
+        else:
+            messages.error(request, "Invalid name or activation key!")
+
+    return render(request, 'macros/save_recording.html')
 
 
 class DeleteRecordingView(DeleteView):
@@ -142,7 +165,10 @@ def stop_recording_view(request, token):
     # Create new recording to save action to.
     # New recordings save to the current profile
     new_recording = Recording.objects.create(
-        profile=get_current_profile(user), name="test", key_code="b"
+        profile=get_current_profile(user),
+        name="temp",
+        is_temp=True,
+        key_code=""
     )
 
     # Serialize the incoming recording

@@ -45,8 +45,9 @@ class Recording(models.Model):
         }
 
     name = models.CharField(max_length=max_name_length)
-    key_code = models.CharField(max_length=key_code_length)
+    key_code = models.CharField(max_length=key_code_length, null=True)
     profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
+    is_temp = models.BooleanField(default=False)
 
 
 class MouseEvent(models.Model):

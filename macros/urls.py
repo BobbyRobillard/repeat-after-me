@@ -12,7 +12,7 @@ urlpatterns = [
     # General Page Views
     url(r"^add-profile$", views.add_profile, name="add_profile"),
     url(r"^get-token$", views.generate_token, name="generate_token"),
-    url(r"^add-recording$", views.add_recording, name="add_recording"),
+    url(r"^save-recording$", views.save_recording, name="save_recording"),
     url(r"^download-recording/(?P<token>[\w\-]+)/(?P<key_char>[\w\-]+)/$", views.download_recording, name="download_recording"),
     url(r"^toggle-play-mode/(?P<token>[\w\-]+)/(?P<toggle>\d+)/$", views.toggle_play_mode_view),
     url(r"^start-recording/(?P<token>[\w\-]+)/$", views.start_recording_view),

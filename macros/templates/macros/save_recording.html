@@ -1,0 +1,64 @@
+{% extends 'website/base.html' %}
+
+{% load static %}
+
+{% block custom_css %}
+  h3 {
+    margin-right: 50px;
+  }
+
+  #profile-img {
+    max-width: 250px;
+    margin: 25px;
+  }
+  #add-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  #add-container > h2 {
+    font-size: 60px;
+  }
+
+  .input-group-prepend > span {
+    background-color: var(--secondary-color) !important;
+    color: white;
+  }
+
+  #id_color {
+    visibility: hidden;
+  }
+{% endblock custom_css %}
+
+{% block content %}
+<div id="add-container" class="col-4 offset-3 center">
+  {% include 'website/server_messages.html' %}
+  <h2>SAVE A RECORDING</h2>
+  <img id="profile-img" src="{% static 'website/images/save.png' %}">
+
+  <form action="{% url 'macros:save_recording' %}" method="POST">
+    {% csrf_token %}
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Recording Name</span>
+      </div>
+      <input type='text' name='name' id="id_name" placeholder="Enter Profile Name..." class="form-control">
+    </div>
+    <br>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Activation Key</span>
+      </div>
+      <input type='text' name='key_code' id="id_key_code" placeholder="Enter Activation Key..." class="form-control">
+    </div>
+    <br>
+    <button id="save" class="btn btn-success" name="button">Save New Profile</button>
+  </form>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+</script>
+{% endblock content %}
