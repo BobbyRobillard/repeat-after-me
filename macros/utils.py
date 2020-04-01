@@ -56,14 +56,6 @@ def get_current_profile(user):
     return get_settings(user).current_profile
 
 
-def delete_profile(user, profile_pk):
-    if user_owners_profile(user, profile_pk):
-        Profile.objects.get(pk=profile_pk).delete()
-        set_default_profile(user)
-        return True
-    return False
-
-
 def set_current_profile(user, profile_pk):
     if user_owners_profile(user, profile_pk):
         user_settings = Settings.objects.get(user=user)

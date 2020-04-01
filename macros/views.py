@@ -2,12 +2,14 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404
 
 from django.shortcuts import render, redirect
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import DeleteView
+
+from django.utils.decorators import method_decorator
 
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
@@ -20,7 +22,6 @@ from .serializers import KeyEventSerializer, MouseEventSerializer
 from .utils import (
     get_settings,
     get_current_profile,
-    delete_profile,
     toggle_play_mode,
     start_recording,
     stop_recording,
@@ -71,6 +72,7 @@ def add_profile(request):
     return render(request, "macros/add_profile.html", context)
 
 
+@method_decorator(login_required, name='dispatch')
 class DeleteProfileView(DeleteView):
     model = Profile
     success_url = "/"
@@ -79,6 +81,8 @@ class DeleteProfileView(DeleteView):
         # Change user's current profile, only if it is the one being deleted
         settings = get_settings(self.request.user)
         object = self.get_object()
+        if not object.user == self.request.user:
+            raise Http404
         try:
             if settings.current_profile.pk == object.pk:
                 first_two = Profile.objects.filter(user=self.request.user)[:2]
@@ -91,10 +95,14 @@ class DeleteProfileView(DeleteView):
 
             # Sending error message for coloring on client side
             messages.error(self.request, "Profile Deleted!")
-        except Exception as e:
-            messages.error(
-                self.request, "You have no profiles to set as your current profile."
-            )
+        except Exception as outer_error:
+            try:
+                settings.current_profile = Profile.objects.get(user=self.request.user)
+                settings.save()
+            except Exception as inner_error:
+                messages.error(
+                    self.request, "You have no profiles to set as your current profile."
+                )
 
         return super(DeleteProfileView, self).delete(*args, **kwargs)
 
