@@ -41,6 +41,80 @@
   <link rel="stylesheet" href="{% static 'website/css/style.css' %}">
 
   <style type="text/css">
+  .settings {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    padding-top: 20px;
+    margin-top: 10px;
+  }
+  /* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.switch-name {
+  position: relative;
+  top: 3px;
+}
   {% block custom_css %}
 
   {% endblock custom_css %}
@@ -336,6 +410,19 @@
 			  <div class="container-fluid">
 			    <!-- Small boxes (Stat box) -->
 			    <div class="row">
+            <div class="col-12 settings">
+              <b class="switch-name" style="margin-right:10px;">Play Mode: </b>
+              <label class="switch">
+                <input id="play-mode" type="checkbox">
+                <span class="slider round"></span>
+              </label>
+              <b class="switch-name" style="margin-right:10px;margin-left: 50px;">Recording: </b>
+              <label class="switch">
+                <input id="recording" type="checkbox">
+                <span class="slider round"></span>
+              </label>
+              <button id="save" type="button" class="btn btn-success" style="margin-left:25px;">Save Recording</button>
+            </div>
 						{% block content %}
 						{% endblock content %}
 			    </div>
@@ -387,6 +474,34 @@
 
   <!-- PAGE SCRIPTS -->
   <script src="{% static 'website/dist/js/pages/dashboard2.js' %}"></script>
+
+  <script type="text/javascript">
+      const playModeSocket = new WebSocket(
+          'ws://'
+          + 'localhost:8000'
+          + '/ws/macros/'
+          + 'updates/'
+      );
+
+      playModeSocket.onmessage = function(e) {
+          const data = JSON.parse(e.data);
+          $("#play-mode").prop('checked', data.playMode);
+          $("#recording").prop('checked', data.isRecording);
+
+      };
+
+      playModeSocket.onclose = function(e) {
+          console.error('Chat socket closed unexpectedly');
+      };
+
+      setInterval(function() {
+        playModeSocket.send(JSON.stringify({}));
+      }, 250);
+
+      $('#save').click(function() {
+        window.location.href = "{% url 'macros:save_recording' %}";
+      });
+  </script>
 
   <!-- Custom JS -->
   {% block js %}
