@@ -26,7 +26,6 @@ div > .alert {
 
 {% block content %}
     <div class="col-12">
-      {% include 'website/server_messages.html' %}
       <span class="m-0 text-dark">Your Profiles</span>
       <a href="{% url 'macros:add_profile' %}">
         <button id="add-profile" type="button" class="btn btn-success" name="button">Add Profile</button>

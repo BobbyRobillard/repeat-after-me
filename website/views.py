@@ -20,6 +20,5 @@ def homepage_view(request):
         "profiles": get_profiles(request.user),
         "profile_form": ProfileForm(),
         "settings": settings,
-        "current_profile_recordings": settings.current_profile.get_recordings(),
     }
     return render(request, "website/homepage.html", context)

@@ -73,8 +73,23 @@ class DeleteProfileView(DeleteView):
     success_url = "/"
 
     def delete(self, *args, **kwargs):
-        # only sending error message for coloring on client side
-        messages.error(self.request, "Profile Deleted!")
+        # Change user's current profile, only if it is the one being deleted
+        settings = get_settings(self.request.user)
+        object = self.get_object()
+        try:
+            if settings.current_profile.pk == object.pk:
+                first_two = Profile.objects.filter(user=self.request.user)[:2]
+                if first_two[0].pk == object.pk:
+                    settings.current_profile = first_two[1]
+                    settings.save()
+                else:
+                    settings.current_profile = first_two[0]
+                    settings.save()
+
+            # Sending error message for coloring on client side
+            messages.error(self.request, "Profile Deleted!")
+        except Exception as e:
+            messages.error(self.request, "You have no profiles to set as your current profile.")
         return super(DeleteProfileView, self).delete(*args, **kwargs)
 
     def get_context_data(self, **kwargs):

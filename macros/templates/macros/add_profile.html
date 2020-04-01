@@ -23,11 +23,6 @@
     font-size: 60px;
   }
 
-  .input-group-prepend > span {
-    background-color: var(--secondary-color) !important;
-    color: white;
-  }
-
   #id_color {
     visibility: hidden;
   }
@@ -35,7 +30,6 @@
 
 {% block content %}
 <div id="add-container" class="col-4 offset-3 center">
-  {% include 'website/server_messages.html' %}
   <h2>ADD A PROFILE</h2>
   <img id="profile-img" src="{% static 'website/images/hippie.png' %}">
 
@@ -58,14 +52,11 @@
   </div>
   (Click color to change)
   <br><br>
-  <button id="save" class="btn btn-success" name="button">Save New Profile</button>
+  <button id="save-new-profile" class="btn btn-success" name="button">Save New Profile</button>
 </div>
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 <script type="text/javascript">
-  $('#save').click(function() {
+  $('#save-new-profile').click(function() {
     $('#id_color').val(
       $('#color-visible').val()
     );
