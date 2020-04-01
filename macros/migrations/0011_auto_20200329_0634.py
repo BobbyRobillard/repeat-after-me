@@ -5,19 +5,14 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0010_profile_color'),
-    ]
+    dependencies = [("macros", "0010_profile_color")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='profile',
-            name='color',
-        ),
+        migrations.RemoveField(model_name="profile", name="color"),
         migrations.AddField(
-            model_name='profile',
-            name='color_code',
-            field=models.CharField(default='000000', max_length=6),
+            model_name="profile",
+            name="color_code",
+            field=models.CharField(default="000000", max_length=6),
             preserve_default=False,
         ),
     ]

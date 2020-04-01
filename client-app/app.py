@@ -96,11 +96,7 @@ def handle_recording():
 
     if is_recording:
         # Tell server a recording has started
-        response = requests.get(
-            "{0}/macros/start-recording/{1}".format(
-                domain, token
-            )
-        )
+        response = requests.get("{0}/macros/start-recording/{1}".format(domain, token))
     else:
         # Stop recording and upload recording to server
         upload_recording()
@@ -135,28 +131,26 @@ def play_recording(char):
 
     try:
         response = requests.get(
-            "{0}/macros/download-recording/{1}/{2}".format(
-                domain, token, char
-            )
+            "{0}/macros/download-recording/{1}/{2}".format(domain, token, char)
         )
 
-        json_data = json.loads(response.text)['events']
+        json_data = json.loads(response.text)["events"]
 
-        events = sorted(json_data, key=lambda i: i['order_in_recording'])
+        events = sorted(json_data, key=lambda i: i["order_in_recording"])
 
         for event in events:
             try:
-                x, y = event['x_pos'], event['y_pos']
+                x, y = event["x_pos"], event["y_pos"]
                 mouse_controller.position = (x, y)
-                if event['is_press']:
+                if event["is_press"]:
                     mouse_controller.press(Button.left)
                 else:
                     mouse_controller.release(Button.left)
 
             except Exception as e:
                 try:
-                    key = event['key_code']
-                    if event['is_press']:
+                    key = event["key_code"]
+                    if event["is_press"]:
                         keyboard_controller.press(key)
                     else:
                         keyboard_controller.release(key)
@@ -190,32 +184,36 @@ def upload_recording():
         # Json format
         for action in actions:
             if type(action) is KeyboardAction:
-                key_events.append({
-                    "key_code": action.char,
-                    "delay_time": 0,
-                    "order_in_recording": order_in_recording,
-                    "is_press": True
-                })
+                key_events.append(
+                    {
+                        "key_code": action.char,
+                        "delay_time": 0,
+                        "order_in_recording": order_in_recording,
+                        "is_press": True,
+                    }
+                )
             else:
-                key_events.append({
-                    "x": action.x,
-                    "y": action.y,
-                    "button": str(action.button),
-                    "order_in_recording": order_in_recording,
-                    "is_press": True
-                })
+                key_events.append(
+                    {
+                        "x": action.x,
+                        "y": action.y,
+                        "button": str(action.button),
+                        "order_in_recording": order_in_recording,
+                        "is_press": True,
+                    }
+                )
 
             order_in_recording = order_in_recording + 1
 
-        requests.post(url, json={"key_events": key_events, "mouse_events": mouse_events})
+        requests.post(
+            url, json={"key_events": key_events, "mouse_events": mouse_events}
+        )
 
 
 # Sync settings with server
 def sync():
     print("Syncing With Server")
-    response = requests.get(
-        "http://localhost:8000/macros/sync/{0}/".format(token)
-    )
+    response = requests.get("http://localhost:8000/macros/sync/{0}/".format(token))
     print("Synced!")
 
 

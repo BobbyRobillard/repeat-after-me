@@ -49,10 +49,7 @@ def start_recording(token):
     settings.save()
 
     # Delete any previous temporary recordings
-    Recording.objects.filter(
-        profile=get_current_profile(user),
-        is_temp=True
-    ).delete()
+    Recording.objects.filter(profile=get_current_profile(user), is_temp=True).delete()
 
 
 def get_current_profile(user):

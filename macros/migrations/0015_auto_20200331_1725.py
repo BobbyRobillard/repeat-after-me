@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0014_recording_is_temp'),
-    ]
+    dependencies = [("macros", "0014_recording_is_temp")]
 
     operations = [
         migrations.AlterField(
-            model_name='recording',
-            name='key_code',
+            model_name="recording",
+            name="key_code",
             field=models.CharField(max_length=10, null=True),
-        ),
+        )
     ]

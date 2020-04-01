@@ -5,15 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0007_mouseevent_order_in_recording'),
-    ]
+    dependencies = [("macros", "0007_mouseevent_order_in_recording")]
 
     operations = [
         migrations.AddField(
-            model_name='keyevent',
-            name='order_in_recording',
+            model_name="keyevent",
+            name="order_in_recording",
             field=models.IntegerField(default=1),
             preserve_default=False,
-        ),
+        )
     ]

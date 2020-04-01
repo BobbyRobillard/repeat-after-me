@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0013_auto_20200331_1103'),
-    ]
+    dependencies = [("macros", "0013_auto_20200331_1103")]
 
     operations = [
         migrations.AddField(
-            model_name='recording',
-            name='is_temp',
+            model_name="recording",
+            name="is_temp",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

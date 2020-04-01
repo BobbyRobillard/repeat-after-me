@@ -18,8 +18,15 @@ from .forms import ProfileForm, RecordingForm
 from .models import Profile, KeyEvent, MouseEvent, Recording
 from .serializers import KeyEventSerializer, MouseEventSerializer
 from .utils import (
-    get_settings, get_current_profile, delete_profile, toggle_play_mode,
-    start_recording, stop_recording, sync, get_profiles, set_current_profile
+    get_settings,
+    get_current_profile,
+    delete_profile,
+    toggle_play_mode,
+    start_recording,
+    stop_recording,
+    sync,
+    get_profiles,
+    set_current_profile,
 )
 
 import json
@@ -27,9 +34,7 @@ import json
 
 def generate_token(request):
     token = Token.objects.get_or_create(user=request.user)[0]
-    context = {
-        "token": token
-    }
+    context = {"token": token}
     return render(request, "macros/token.html", context)
 
 
@@ -47,25 +52,23 @@ def sync_view(request, token):
 # PROFILE RELATED VIEWS
 # ------------------------------------------------------------------------------
 
+
 @login_required
 def add_profile(request):
-    context = {
-        "profiles": get_profiles(request.user),
-        "form": ProfileForm()
-    }
+    context = {"profiles": get_profiles(request.user), "form": ProfileForm()}
     if request.method == "POST":
         form = ProfileForm(request.POST)
         if form.is_valid():
             Profile.objects.create(
                 name=form.cleaned_data["name"],
                 user=request.user,
-                color=form.cleaned_data["color"]
+                color=form.cleaned_data["color"],
             )
             messages.success(request, "Profile Created")
             return redirect("website:homepage")
         else:
             messages.error(request, "You never entered a profile name!")
-    return render(request, 'macros/add_profile.html', context)
+    return render(request, "macros/add_profile.html", context)
 
 
 class DeleteProfileView(DeleteView):
@@ -89,12 +92,15 @@ class DeleteProfileView(DeleteView):
             # Sending error message for coloring on client side
             messages.error(self.request, "Profile Deleted!")
         except Exception as e:
-            messages.error(self.request, "You have no profiles to set as your current profile.")
+            messages.error(
+                self.request, "You have no profiles to set as your current profile."
+            )
+
         return super(DeleteProfileView, self).delete(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profiles'] = get_profiles(self.request.user)
+        context["profiles"] = get_profiles(self.request.user)
         return context
 
 
@@ -103,45 +109,54 @@ def set_current_profile_view(request, pk):
     if not set_current_profile(request.user, pk):
         messages.error(request, "You do not own this profile chief.")
     else:
-        messages.success(request, "Current profile changed to: {0}".format(
-            Profile.objects.get(pk=pk).name
-        ))
+        messages.success(
+            request,
+            "Current profile changed to: {0}".format(Profile.objects.get(pk=pk).name),
+        )
     return redirect("website:homepage")
+
 
 # ------------------------------------------------------------------------------
 # RECORDING RELATED VIEWS
 # ------------------------------------------------------------------------------
 
+
 def save_recording(request):
     if not Recording.objects.filter(
-                profile=get_current_profile(request.user),
-                is_temp=True
-            ).exists():
+        profile=get_current_profile(request.user), is_temp=True
+    ).exists():
 
-        messages.error(request, "You have no temporary recording! Please record one now, then refresh this page!")
+        messages.error(
+            request,
+            "You have no temporary recording! Please record one now, then refresh this page!",
+        )
 
     elif request.method == "POST":
         form = RecordingForm(request.POST)
         if form.is_valid():
             rec = Recording.objects.get(
-                is_temp=True,
-                profile=get_current_profile(request.user)
+                is_temp=True, profile=get_current_profile(request.user)
             )
-            rec.name = form.cleaned_data['name']
-            rec.key_code = form.cleaned_data['key_code']
+            rec.name = form.cleaned_data["name"]
+            rec.key_code = form.cleaned_data["key_code"]
             rec.is_temp = False
             rec.save()
-            messages.success(request, "Recording saved to {0}".format(
-                str(get_current_profile(request.user))
-            ))
-            return redirect('website:homepage')
+            messages.success(
+                request,
+                "Recording saved to {0}".format(str(get_current_profile(request.user))),
+            )
+            return redirect("website:homepage")
         else:
             messages.error(request, "Invalid name or activation key!")
 
-    return render(request, 'macros/save_recording.html', context={
-        "profiles": get_profiles(request.user),
-        "settings": get_settings(request.user)
-    })
+    return render(
+        request,
+        "macros/save_recording.html",
+        context={
+            "profiles": get_profiles(request.user),
+            "settings": get_settings(request.user),
+        },
+    )
 
 
 class DeleteRecordingView(DeleteView):
@@ -153,18 +168,19 @@ def download_recording(request, token, key_char):
     try:
         user = Token.objects.get(key=token).user
         recording = Recording.objects.get(
-            key_code=key_char,
-            profile=get_settings(user).current_profile
+            key_code=key_char, profile=get_settings(user).current_profile
         )
         events = recording.get_events()
 
     except Recording.DoesNotExist:
         return HttpResponse(status=404)
 
-    key_event_serializer = KeyEventSerializer(events['key_events'], many=True)
-    mouse_event_serializer = MouseEventSerializer(events['mouse_events'], many=True)
+    key_event_serializer = KeyEventSerializer(events["key_events"], many=True)
+    mouse_event_serializer = MouseEventSerializer(events["mouse_events"], many=True)
 
-    return JsonResponse({"events": key_event_serializer.data + mouse_event_serializer.data}, status=200)
+    return JsonResponse(
+        {"events": key_event_serializer.data + mouse_event_serializer.data}, status=200
+    )
 
 
 def start_recording_view(request, token):
@@ -183,10 +199,7 @@ def stop_recording_view(request, token):
     # Create new recording to save action to.
     # New recordings save to the current profile
     new_recording = Recording.objects.create(
-        profile=get_current_profile(user),
-        name="temp",
-        is_temp=True,
-        key_code=""
+        profile=get_current_profile(user), name="temp", is_temp=True, key_code=""
     )
 
     # Serialize the incoming recording

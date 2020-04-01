@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0004_settings_auth_token'),
-    ]
+    dependencies = [("macros", "0004_settings_auth_token")]
 
     operations = [
         migrations.AlterField(
-            model_name='settings',
-            name='auth_token',
+            model_name="settings",
+            name="auth_token",
             field=models.CharField(max_length=150, null=True),
-        ),
+        )
     ]

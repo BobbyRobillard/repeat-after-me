@@ -41,7 +41,7 @@ class Recording(models.Model):
     def get_events(self):
         return {
             "key_events": KeyEvent.objects.filter(recording=self),
-            "mouse_events": MouseEvent.objects.filter(recording=self)
+            "mouse_events": MouseEvent.objects.filter(recording=self),
         }
 
     name = models.CharField(max_length=max_name_length)

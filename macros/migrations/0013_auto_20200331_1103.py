@@ -6,14 +6,14 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0012_auto_20200330_1250'),
-    ]
+    dependencies = [("macros", "0012_auto_20200330_1250")]
 
     operations = [
         migrations.AlterField(
-            model_name='recording',
-            name='key_code',
-            field=models.CharField(default=django.db.models.deletion.SET_NULL, max_length=10, null=True),
-        ),
+            model_name="recording",
+            name="key_code",
+            field=models.CharField(
+                default=django.db.models.deletion.SET_NULL, max_length=10, null=True
+            ),
+        )
     ]

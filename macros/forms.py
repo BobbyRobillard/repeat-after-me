@@ -8,8 +8,8 @@ class ProfileForm(forms.Form):
     color = forms.CharField(max_length=7)
 
     def clean_color(self):
-        color = self.cleaned_data['color']
-        return color.replace('#', '')
+        color = self.cleaned_data["color"]
+        return color.replace("#", "")
 
 
 class RecordingForm(forms.Form):
