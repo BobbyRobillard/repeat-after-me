@@ -64,24 +64,6 @@ class CreateProfileView(CreateView):
         return super(CreateProfileView, self).form_valid(form)
 
 
-@login_required
-def add_profile(request):
-    context = {"profiles": get_profiles(request.user), "form": ProfileForm()}
-    if request.method == "POST":
-        form = ProfileForm(request.POST)
-        if form.is_valid():
-            Profile.objects.create(
-                name=form.cleaned_data["name"],
-                user=request.user,
-                color=form.cleaned_data["color"],
-            )
-            messages.success(request, "Profile Created")
-            return redirect("website:homepage")
-        else:
-            messages.error(request, "You never entered a profile name!")
-    return render(request, "macros/add_profile.html", context)
-
-
 @method_decorator(login_required, name="dispatch")
 class DeleteProfileView(DeleteView):
     model = Profile
