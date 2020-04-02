@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.shortcuts import render, redirect
 
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from django.utils.decorators import method_decorator
 
@@ -110,6 +110,18 @@ class DeleteProfileView(DeleteView):
         context = super().get_context_data(**kwargs)
         context["profiles"] = get_profiles(self.request.user)
         return context
+
+
+@method_decorator(login_required, name="dispatch")
+class UpdateProfileView(UpdateView):
+    model = Profile
+    fields = ['name', 'color']
+    success_url = "/"
+
+    def form_valid(self, form):
+        success_message = 'Success! We just sent you an email to confirm'
+        messages.success(self.request, "{0} was updated successfully!".format(self.get_object().name))
+        return super().form_valid(form)
 
 
 @login_required

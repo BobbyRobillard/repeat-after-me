@@ -44,7 +44,7 @@ div > .alert {
         <div class="info-box-content">
           <span class="info-box-text">
               {{ profile.name }}
-              <i class="fas fa-pencil-alt edit action-link animated item" style="margin-left:5px;"></i>
+              <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=profile.pk %}" style="margin-left:5px;"></i>
               <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
           </span>
           <span class="info-box-number">
