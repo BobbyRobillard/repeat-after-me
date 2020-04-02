@@ -72,7 +72,7 @@ def add_profile(request):
     return render(request, "macros/add_profile.html", context)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name="dispatch")
 class DeleteProfileView(DeleteView):
     model = Profile
     success_url = "/"
