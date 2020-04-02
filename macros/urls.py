@@ -2,7 +2,6 @@ from django.conf.urls import url, include
 from django.urls import path
 
 from . import views
-from .views import DeleteProfileView, DeleteRecordingView, UpdateProfileView
 
 # Application Routes (URLs)
 
@@ -10,7 +9,7 @@ app_name = "macros"
 
 urlpatterns = [
     # General Page Views
-    url(r"^add-profile$", views.add_profile, name="add_profile"),
+    url(r"^add-profile$", views.CreateProfileView.as_view(), name="add_profile"),
     url(r"^get-token$", views.generate_token, name="generate_token"),
     url(r"^save-recording$", views.save_recording, name="save_recording"),
     url(

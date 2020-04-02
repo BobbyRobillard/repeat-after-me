@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.shortcuts import render, redirect
 
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import DeleteView, UpdateView
+from django.views.generic.edit import DeleteView, UpdateView, CreateView
 
 from django.utils.decorators import method_decorator
 
@@ -52,6 +52,16 @@ def sync_view(request, token):
 # ------------------------------------------------------------------------------
 # PROFILE RELATED VIEWS
 # ------------------------------------------------------------------------------
+
+@method_decorator(login_required, name="dispatch")
+class CreateProfileView(CreateView):
+    model = Profile
+    fields = ['name', 'color']
+    success_url = "/"
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(CreateProfileView, self).form_valid(form)
 
 
 @login_required
@@ -115,7 +125,8 @@ class DeleteProfileView(DeleteView):
 @method_decorator(login_required, name="dispatch")
 class UpdateProfileView(UpdateView):
     model = Profile
-    fields = ['name', 'color']
+    form_class = ProfileForm
+    template_name_suffix = '_update_form'
     success_url = "/"
 
     def form_valid(self, form):
