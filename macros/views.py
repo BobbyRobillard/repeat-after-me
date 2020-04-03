@@ -56,7 +56,7 @@ def sync_view(request, token):
 @method_decorator(login_required, name="dispatch")
 class CreateProfileView(CreateView):
     model = Profile
-    fields = ['name', 'color']
+    fields = ['name', 'color', 'icon']
     success_url = "/"
 
     def form_valid(self, form):

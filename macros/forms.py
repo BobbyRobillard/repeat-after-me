@@ -6,7 +6,7 @@ from .models import max_name_length, key_code_length, Profile
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['name', 'color']
+        fields = ['name', 'color', 'icon']
 
     def clean_color(self):
         color = self.cleaned_data["color"]

@@ -17,6 +17,7 @@ class Profile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=max_name_length)
     color = models.CharField(max_length=6)
+    icon = models.CharField(max_length=30, default="fas fa-user")
 
 
 class Settings(models.Model):
