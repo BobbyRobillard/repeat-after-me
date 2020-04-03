@@ -70,32 +70,31 @@ class DeleteProfileView(DeleteView):
     success_url = "/"
 
     def delete(self, *args, **kwargs):
-        # Change user's current profile, only if it is the one being deleted
         settings = get_settings(self.request.user)
         object = self.get_object()
+
+        # Make sure profile is owned by current user
         if not object.user == self.request.user:
             raise Http404
+
+        # Change user's current profile, only if it is the one being deleted
         try:
             if settings.current_profile.pk == object.pk:
-                first_two = Profile.objects.filter(user=self.request.user)[:2]
-                if first_two[0].pk == object.pk:
-                    settings.current_profile = first_two[1]
-                    settings.save()
-                else:
-                    settings.current_profile = first_two[0]
-                    settings.save()
-
-            # Sending error message for coloring on client side
-            messages.error(self.request, "Profile Deleted!")
+                profiles = Profile.objects.filter(user=settings.user).exclude(pk=object.pk)[:1]
+                settings.current_profile = profiles[0]
+                settings.save()
         except Exception as outer_error:
+            # Only one profile owned by user
             try:
-                settings.current_profile = Profile.objects.get(user=self.request.user)
+                settings.current_profile = Profile.objects.get(user=settings.user)
                 settings.save()
             except Exception as inner_error:
                 messages.error(
                     self.request, "You have no profiles to set as your current profile."
                 )
 
+        # Sending error message for coloring on client side
+        messages.error(self.request, "Profile Deleted!")
         return super(DeleteProfileView, self).delete(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -146,9 +145,10 @@ def save_recording(request):
 
     elif request.method == "POST":
         form = RecordingForm(request.POST)
+        current_profile = get_current_profile(request.user)
         if form.is_valid():
             rec = Recording.objects.get(
-                is_temp=True, profile=get_current_profile(request.user)
+                is_temp=True, profile=current_profile
             )
             rec.name = form.cleaned_data["name"]
             rec.key_code = form.cleaned_data["key_code"]
@@ -156,7 +156,7 @@ def save_recording(request):
             rec.save()
             messages.success(
                 request,
-                "Recording saved to {0}".format(str(get_current_profile(request.user))),
+                "Recording saved to {0}".format(current_profile)
             )
             return redirect("website:homepage")
         else:
@@ -215,26 +215,23 @@ def stop_recording_view(request, token):
         profile=get_current_profile(user), name="temp", is_temp=True, key_code=""
     )
 
-    # Serialize the incoming recording
+    # Serialize  & save the incoming recording's key events
     for json_encoded_event in request.data["key_events"]:
         new_event = KeyEvent.objects.create(recording=new_recording)
         serializer = KeyEventSerializer(new_event, json_encoded_event)
-        # Event error checking
-        if serializer.is_valid():
-            serializer.save()
-        else:
+        if not serializer.is_valid():
             errors["key_event_errors"].append(serializer.errors)
             errors_exist = True
+        serializer.save()
 
+    # Serialize  & save the incoming recording's mouse events
     for json_encoded_event in request.data["mouse_events"]:
         new_event = MouseEvent.objects.create(recording=new_recording)
         serializer = MouseEventSerializer(new_event, json_encoded_event)
-        # Event error checking
-        if serializer.is_valid():
-            serializer.save()
-        else:
+        if not serializer.is_valid():
             errors["mouse_event_errors"].append(serializer.errors)
             errors_exist = True
+        serializer.save()
 
     # If errors exist, report them
     if errors_exist:
@@ -242,4 +239,4 @@ def stop_recording_view(request, token):
 
     # Everything went good, no erros exist
     stop_recording(user)
-    return JsonResponse({"Mood": "Good in the hood!"}, status=200)
+    return JsonResponse({}, status=200)
