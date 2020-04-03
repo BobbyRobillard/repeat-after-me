@@ -110,15 +110,15 @@ def handle_playback():
     if playback_mode_active:
         # Tell server to toggle play mode is active
         response = requests.get(
-            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}/".format(
-                token, str(1)
+            "{0}/macros/toggle-play-mode/{1}/{2}/".format(
+                domain, token, str(1)
             )
         )
     else:
         # Tell server to toggle play mode is inactive
         response = requests.get(
-            "http://localhost:8000/macros/toggle-play-mode/{0}/{1}/".format(
-                token, str(0)
+            "{0}/macros/toggle-play-mode/{1}/{2}/".format(
+                domain, token, str(0)
             )
         )
 
@@ -173,8 +173,6 @@ def upload_recording():
     global actions
 
     if len(actions) > 0:
-        url = "{0}/macros/stop-recording/{1}/".format(domain, token)
-
         key_events = []
         mouse_events = []
 
@@ -193,7 +191,7 @@ def upload_recording():
                     }
                 )
             else:
-                key_events.append(
+                mouse_events.append(
                     {
                         "x": action.x,
                         "y": action.y,
@@ -205,6 +203,7 @@ def upload_recording():
 
             order_in_recording = order_in_recording + 1
 
+        url = "{0}/macros/stop-recording/{1}/".format(domain, token)
         requests.post(
             url, json={"key_events": key_events, "mouse_events": mouse_events}
         )
@@ -213,7 +212,7 @@ def upload_recording():
 # Sync settings with server
 def sync():
     print("Syncing With Server")
-    response = requests.get("http://localhost:8000/macros/sync/{0}/".format(token))
+    response = requests.get("{0}/macros/sync/{1}/".format(domain, token))
     print("Synced!")
 
 
