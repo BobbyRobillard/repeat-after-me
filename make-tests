@@ -11,7 +11,7 @@ fi
 echo "Done"
 
 echo "Running system tests ..."
-python test.py
+python manage.py test
 echo "Done"
 
 echo "Deactivating virtual enviornment ..."

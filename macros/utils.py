@@ -17,9 +17,14 @@ def get_settings(user):
     return Settings.objects.get(user=user)
 
 
-def toggle_play_mode(token, toggle):
+def get_settings_from_token(token):
     user = Token.objects.get(key=token).user
     settings = get_settings(user)
+    return settings
+
+
+def toggle_play_mode(token, toggle):
+    settings = get_settings_from_token(token)
 
     if toggle == "0":
         settings.play_mode = False
@@ -36,13 +41,15 @@ def stop_recording(user):
 
 
 def start_recording(token):
-    user = Token.objects.get(key=token).user
-    settings = get_settings(user)
+    settings = get_settings_from_token(token)
     settings.is_recording = True
     settings.save()
 
     # Delete any previous temporary recordings
-    Recording.objects.filter(profile=get_current_profile(user), is_temp=True).delete()
+    Recording.objects.filter(
+        profile=get_current_profile(settings.user), 
+        is_temp=True
+    ).delete()
 
 
 def get_current_profile(user):
@@ -63,8 +70,7 @@ def set_default_profile(user):
 
 
 def sync(token):
-    user = Token.objects.get(key=token).user
-    settings = get_settings(user)
+    settings = get_settings_from_token(token)
     settings.is_recording = False
     settings.play_mode = False
     settings.save()
