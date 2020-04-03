@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User as User
-
 from .models import Profile, Settings, Recording
 
 from rest_framework.authtoken.models import Token
@@ -47,7 +45,7 @@ def start_recording(token):
 
     # Delete any previous temporary recordings
     Recording.objects.filter(
-        profile=get_current_profile(settings.user), 
+        profile=get_current_profile(settings.user),
         is_temp=True
     ).delete()
 
