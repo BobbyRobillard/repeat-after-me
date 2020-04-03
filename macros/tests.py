@@ -60,11 +60,26 @@ class ProfileTestCase(TestCase):
     # Try to delete a user's own profile
     def test_delete_owned_profile(self):
         self.c.login(username="user1", password="qzwxec123")
-        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 2}))
+        profiles = get_profiles(self.user)
+        self.assertEqual(len(profiles), 2)
+
+        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 1}))
         profiles = get_profiles(self.user)
 
+        # Redirect to homepage
         self.assertEqual(response.status_code, 302)
+        # Profile was deleted
         self.assertEqual(len(profiles), 1)
+        # New current profile set, since current profile was deleted
+        self.assertEqual(get_settings(self.user).current_profile.pk, 2)
+
+    def test_delete_all_profiles(self):
+        self.c.login(username="user1", password="qzwxec123")
+        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 1}))
+        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 2}))
+
+        # No current profile set, since all were deleted
+        self.assertEqual(get_settings(self.user).current_profile, None)
 
     # Try to delete a profile as an anonymous user
     def test_delete_profile_not_logged_in(self):
