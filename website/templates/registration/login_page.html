@@ -68,6 +68,10 @@
         </div>
       </form>
 
+      <p class="mb-1">
+        <a href="#">I forgot my password</a>
+      </p>
+
       <div class="social-auth-links text-center mb-3">
         <p>- OR -</p>
         <a href="#" class="btn btn-block btn-primary">
@@ -79,11 +83,9 @@
       </div>
       <!-- /.social-auth-links -->
 
-      <p class="mb-1">
-        <a href="#">I forgot my password</a>
-      </p>
+
       <p class="mb-0 center">
-        <a href="#">Register a new membership</a>
+        <a href="{% url 'core:register' %}">Create an account</a>
       </p>
     </div>
     <!-- /.login-card-body -->

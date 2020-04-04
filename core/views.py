@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.auth import (
     login as auth_login,
     authenticate as auth_authenticate,
@@ -7,6 +8,8 @@ from django.contrib.auth import (
 )
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
+
+from .forms import RegisterForm
 
 from .utils import recaptcha_validation
 
@@ -38,3 +41,18 @@ def logout(request):
     auth_logout(request)
     next_page = request.GET.get("next", "website:homepage")
     return redirect(next_page)
+
+
+# Register a new user
+def register(request):
+    # Handle new user signup
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('website:homepage')
+    else:
+        form = RegisterForm()
+
+    # Display page to register
+    return render(request, 'registration/register.html', {"form": form})
