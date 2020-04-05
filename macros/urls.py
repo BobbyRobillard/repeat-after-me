@@ -11,6 +11,7 @@ urlpatterns = [
     # General Page Views
     url(r"^add-profile$", views.CreateProfileView.as_view(), name="add_profile"),
     url(r"^get-token$", views.generate_token, name="generate_token"),
+    url(r"^setup-settings$", views.setup_settings, name="setup_settings"),
     url(r"^save-recording$", views.save_recording, name="save_recording"),
     url(
         r"^download-recording/(?P<token>[\w\-]+)/(?P<key_char>[\w\-]+)/$",

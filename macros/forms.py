@@ -18,3 +18,8 @@ class ProfileForm(forms.ModelForm):
 class RecordingForm(forms.Form):
     name = forms.CharField(max_length=max_name_length)
     key_code = forms.CharField(max_length=key_code_length)
+
+
+class SettingsForm(forms.Form):
+    play_key = forms.CharField(max_length=10)
+    recording_key = forms.CharField(max_length=10)

@@ -16,7 +16,7 @@ from rest_framework.decorators import api_view
 
 from website.views import homepage_view
 
-from .forms import ProfileForm, RecordingForm
+from .forms import ProfileForm, RecordingForm, SettingsForm
 from .models import Profile, KeyEvent, MouseEvent, Recording
 from .serializers import KeyEventSerializer, MouseEventSerializer
 from .utils import (
@@ -31,6 +31,13 @@ from .utils import (
 )
 
 import json
+
+
+def setup_settings(request):
+    context = {
+        "form": SettingsForm()
+    }
+    return render(request, 'macros/setup_settings.html', context)
 
 
 def generate_token(request):

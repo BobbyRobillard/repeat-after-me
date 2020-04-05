@@ -13,7 +13,6 @@ from .forms import RegisterForm
 
 from .utils import recaptcha_validation
 
-# Application Views
 
 # Login
 def login(request):
@@ -50,7 +49,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('website:homepage')
+            return redirect('macros:setup_settings')
     else:
         form = RegisterForm()
 
