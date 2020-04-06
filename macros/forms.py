@@ -17,16 +17,7 @@ class ProfileForm(forms.ModelForm):
 
     def clean_icon(self):
         icon = self.cleaned_data['icon'].lower()
-        title_parts = icon.split(" ")
-
-        if not icon.isalnum():
-            raise forms.ValidationError("That is not a valid icon option.")
-
-        # Font awesome classes only i.e: (far fa-user)
-        if title_parts[0] not in ["fab", "far", "fas"]:
-            raise forms.ValidationError("That is not a valid icon option.")
-
-        if title_parts[1] not in get_possible_icons():
+        if not any(icon == valid_icon for valid_icon in get_possible_icons()):
             raise forms.ValidationError("That is not a valid icon option.")
 
         return icon
