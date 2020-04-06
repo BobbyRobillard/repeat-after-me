@@ -147,6 +147,9 @@ def set_current_profile_view(request, pk):
 
 
 def save_recording(request):
+
+    form = RecordingForm()
+
     if not Recording.objects.filter(
         profile=get_current_profile(request.user), is_temp=True
     ).exists():
@@ -159,6 +162,7 @@ def save_recording(request):
     elif request.method == "POST":
         form = RecordingForm(request.POST)
         current_profile = get_current_profile(request.user)
+        form.user = request.user
         if form.is_valid():
             rec = Recording.objects.get(
                 is_temp=True, profile=current_profile
@@ -172,8 +176,6 @@ def save_recording(request):
                 "Recording saved to {0}".format(current_profile)
             )
             return redirect("website:homepage")
-        else:
-            messages.error(request, "Invalid name or activation key!")
 
     return render(
         request,
@@ -181,6 +183,7 @@ def save_recording(request):
         context={
             "profiles": get_profiles(request.user),
             "settings": get_settings(request.user),
+            "form": form
         },
     )
 

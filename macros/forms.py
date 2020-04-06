@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import max_name_length, key_code_length, Profile
-from .utils import get_possible_icons
+from .utils import get_possible_icons, get_settings
 
 
 class ProfileForm(forms.ModelForm):
@@ -26,6 +26,22 @@ class ProfileForm(forms.ModelForm):
 class RecordingForm(forms.Form):
     name = forms.CharField(max_length=max_name_length)
     key_code = forms.CharField(max_length=key_code_length)
+
+    def clean_key_code(self):
+        key_code = self.cleaned_data['key_code']
+        settings = get_settings(self.user)
+
+        if key_code == settings.play_mode_key:
+            raise forms.ValidationError("Your Play Mode Key is bound to \"{0}\", please select another key!".format(
+                key_code
+            ))
+
+        if key_code == settings.recording_key:
+            raise forms.ValidationError("Your Recording Key is bound to \"{0}\", please select another key!".format(
+                key_code
+            ))
+
+        return key_code
 
 
 class SettingsForm(forms.Form):
