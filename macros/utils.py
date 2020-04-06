@@ -72,3 +72,15 @@ def sync(token):
     settings.is_recording = False
     settings.play_mode = False
     settings.save()
+
+
+def get_possible_icons():
+    return [
+        "fab fa-affiliatetheme", "fas fa-adjust", "fas fs fa-anchor",
+        "fas fa-award", "fas fa-book", "fas fa-broom", "fas fa-bowling-ball",
+        "fab fa-blogger", "fas fa-bone", "fas fa-bahai",
+        "fab fa-avianex", "fab fa-accessible-icon", "fas fa-atom"
+        "fas fa-american-sign-language-interpreting",
+        "fab fa-asymmetrik", "fas fa-baseball-ball", "fas fa-bacon",
+        "far fa-bell", "fas fa-briefcase-medical", "fas fa-burn",
+    ]

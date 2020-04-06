@@ -22,11 +22,15 @@ label {
   padding: 10px;
   background-color: white;
   color: var(--secondary-color);
+  border-radius: 8px;
 }
 
 .profile-icon:hover, profile-icon-active {
   background-color: var(--secondary-color);
   color: white;
+  -webkit-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
+-moz-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
+box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
 }
 {% endblock custom_css %}
 
@@ -38,11 +42,9 @@ label {
         (Click to change color)<input type="color" id="id_color_visible" value="#{{object.color}}">
         <br><br>
         <h3>Select Profile's Icon</h3>
-        <i class="profile-icon fab fa-affiliatetheme"></i>
-        <i class="profile-icon fas fa-adjust"></i>
-        <i class="profile-icon fas fa-anchor"></i>
-        <i class="profile-icon fas fa-award"></i>
-        <i class="profile-icon fas fa-book"></i>
+        {% for icon in icons %}
+        <i class="profile-icon {{icon}}"></i>
+        {% endfor %}
         <br><br>
         <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
     </form>

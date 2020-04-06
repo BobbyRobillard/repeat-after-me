@@ -1,6 +1,7 @@
 from django import forms
 
 from .models import max_name_length, key_code_length, Profile
+from .utils import get_possible_icons
 
 
 class ProfileForm(forms.ModelForm):
@@ -11,8 +12,24 @@ class ProfileForm(forms.ModelForm):
     def clean_color(self):
         color = self.cleaned_data["color"]
         if not color.isalnum():
-            raise forms.ValidationError("Color must be a valid Hexidecimal color code. Use the selector below if you're expieriencing difficulties")
+            raise forms.ValidationError("Color must be a valid hexidecimal color. Use the selector below if you're expieriencing difficulties")
         return color
+
+    def clean_icon(self):
+        icon = self.cleaned_data['icon'].lower()
+        title_parts = icon.split(" ")
+
+        if not icon.isalnum():
+            raise forms.ValidationError("That is not a valid icon option.")
+
+        # Font awesome classes only i.e: (far fa-user)
+        if title_parts[0] not in ["fab", "far", "fas"]:
+            raise forms.ValidationError("That is not a valid icon option.")
+
+        if title_parts[1] not in get_possible_icons():
+            raise forms.ValidationError("That is not a valid icon option.")
+
+        return icon
 
 
 class RecordingForm(forms.Form):

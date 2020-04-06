@@ -28,6 +28,7 @@ from .utils import (
     sync,
     get_profiles,
     set_current_profile,
+    get_possible_icons,
 )
 
 import json
@@ -69,6 +70,11 @@ class CreateProfileView(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(CreateProfileView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["icons"] = get_possible_icons()
+        return context
 
 
 @method_decorator(login_required, name="dispatch")
