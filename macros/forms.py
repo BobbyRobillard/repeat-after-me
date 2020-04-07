@@ -57,5 +57,15 @@ class RecordingForm(forms.Form):
 
 
 class SettingsForm(forms.Form):
-    play_key = forms.CharField(max_length=10)
-    recording_key = forms.CharField(max_length=10)
+    play_key = forms.CharField(max_length=key_code_length)
+    recording_key = forms.CharField(max_length=key_code_length)
+
+    def clean(self):
+        data = self.cleaned_data
+        play_key = self.cleaned_data['play_key']
+        recording_key = self.cleaned_data['recording_key']
+        if play_key == recording_key:
+            raise forms.ValidationError({
+                "play_key": "Play Mode Key can\'t be the same as your Recording Key"
+            })
+        return data

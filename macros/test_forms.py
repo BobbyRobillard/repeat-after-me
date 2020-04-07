@@ -1,9 +1,22 @@
 from django.contrib.auth.models import User, AnonymousUser
 
 from . models import Settings
-from . forms import ProfileForm, RecordingForm
+from . forms import ProfileForm, RecordingForm, SettingsForm
 
 from django.test import TestCase, Client, RequestFactory
+
+
+class SettingsFormTests(TestCase):
+
+    def test_valid_settings(self):
+        form_data = {'play_key': "p", 'recording_key': "r"}
+        form = SettingsForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_settings(self):
+        form_data = {'play_key': "a", 'recording_key': "a"}
+        form = SettingsForm(data=form_data)
+        self.assertFalse(form.is_valid())
 
 
 class ProfileFormTests(TestCase):
