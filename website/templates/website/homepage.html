@@ -20,6 +20,12 @@ div > .alert {
   cursor: pointer;
   background-color: #f3f4f5;
 }
+
+.highlighted {
+  -webkit-box-shadow: 0px 0px 75px 50px rgba(0,136,255,1);
+  -moz-box-shadow: 0px 0px 75px 50px rgba(0,136,255,1);
+  box-shadow: 0px 0px 75px 50px rgba(0,136,255,1);
+}
 {% endblock custom_css %}
 
 
@@ -129,7 +135,7 @@ div > .alert {
         {
             items_to_highlight: ["add-profile"],
             step_title: "PROFILES ARE KEY",
-            text_to_display: "Profiles let you group your Macros. Get started by adding a profile!",
+            text_to_display: "Profiles let you group your Macros. Add a profile anytime from your dashboard, or the left sidebar!",
             image_src: "{% static 'website/images/profile.png' %}"
         },
         {
@@ -199,8 +205,9 @@ div > .alert {
       function highlight() {
         var objects = steps[current_step].items_to_highlight;
         for(i=0; i < objects.length; i++) {
-          $('#' + objects[i]).css('background', 'white');
-          $('#' + objects[i]).css('color', 'red');
+          $('#' + objects[i]).addClass('highlighted');
+          $('#' + objects[i]).addClass('animated');
+          $('#' + objects[i]).addClass('bounce');
         }
       }
 
