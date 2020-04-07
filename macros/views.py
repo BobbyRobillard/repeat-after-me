@@ -124,6 +124,11 @@ class UpdateProfileView(UpdateView):
     template_name_suffix = "_update_form"
     success_url = "/"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profiles"] = get_profiles(self.request.user)
+        return context
+
     def form_valid(self, form):
         success_message = "Success! We just sent you an email to confirm"
         messages.success(

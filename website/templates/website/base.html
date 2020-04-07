@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Repeat After Me</title>
+  <link rel="icon" href="{% static 'website/images/ram-logo.gif' %}">
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -351,7 +352,7 @@
             </li>
             {% for profile in profiles %}
               <li class="nav-item">
-                <a href="{% url 'macros:add_profile' %}" class="nav-link">
+                <a href="{% url 'macros:update_profile' pk=profile.pk %}" class="nav-link">
                   <i class="nav-icon fas fa-user"></i>
                   <p>
                     {{ profile }}
@@ -448,9 +449,6 @@
   <script src="{% static 'website/plugins/raphael/raphael.min.js' %}"></script>
   <script src="{% static 'website/plugins/jquery-mapael/jquery.mapael.min.js' %}"></script>
   <script src="{% static 'website/plugins/jquery-mapael/maps/usa_states.min.js' %}"></script>
-  <!-- ChartJS -->
-  <script src="{% static 'website/plugins/chart.js/Chart.min.js' %}"></script>
-
   <!-- PAGE SCRIPTS -->
   <script src="{% static 'website/dist/js/pages/dashboard2.js' %}"></script>
 
