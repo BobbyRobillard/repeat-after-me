@@ -31,6 +31,7 @@ class Settings(models.Model):
     play_mode_key = models.CharField(max_length=key_code_length)
     play_mode = models.BooleanField(default=False)
     is_recording = models.BooleanField(default=False)
+    offer_tutorial = models.BooleanField(default=True)
     current_profile = models.ForeignKey("Profile", on_delete=models.SET_NULL, null=True)
 
 

@@ -1,5 +1,7 @@
 {% extends 'website/base.html' %}
 
+{% load static %}
+
 {% block custom_css %}
 div > .alert {
   margin-top: 25px;
@@ -54,95 +56,172 @@ div > .alert {
       <!-- /.info-box -->
     </div>
     {% endfor %}
+
+    <div class="modal fade" id="tutorial-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+      <div class="modal-dialog modal-notify modal-info" role="document">
+        <!--Content-->
+        <div class="modal-content text-center">
+
+          <!--Body-->
+          <div class="modal-body">
+            <br>
+            <h2 id="step-title"></h2>
+            <br>
+            <img id="modal-img" class="animated rotateIn mb-4" style="max-width:150px;">
+            <p id="tutorial-text">
+
+            </p>
+          </div>
+
+          <!--Footer-->
+          <div class="modal-footer flex-center text-center">
+            <a onClick="quit_tutorial()" style="margin-right: 10px;cursor:pointer;">Quit Tutorial</a>
+            <a id="prev-btn" onClick="previous_step()" type="button" class="btn btn-outline-danger waves-effect">Prev</a>
+            <a id="next-btn" onClick="next_step()" class="btn btn-success">Next</a>
+          </div>
+        </div>
+        <!--/.Content-->
+      </div>
+    </div>
 {% endblock content %}
 
 {% block js %}
-<script type="text/javascript">
+  <script type="text/javascript">
 
-  // ----------------------------------------------
-  // Dynamic Interface Graphics
-  // ----------------------------------------------
+      // ----------------------------------------------
+      // Dynamic Interface Graphics
+      // ----------------------------------------------
 
-  var animationClass = "tada";
+      var animationClass = "tada";
 
-  $('.edit').hover(function() {
-    $(this).addClass(animationClass);
-  });
+      $('.edit').hover(function() {
+        $(this).addClass(animationClass);
+      });
 
-  $('.edit').mouseout(function() {
-    $(this).removeClass(animationClass);
-  });
+      $('.edit').mouseout(function() {
+        $(this).removeClass(animationClass);
+      });
 
-  // ----------------------------------------------
+      // ----------------------------------------------
 
-  $('.delete').hover(function() {
-    $(this).addClass(animationClass);
-  });
+      $('.delete').hover(function() {
+        $(this).addClass(animationClass);
+      });
 
-  $('.delete').mouseout(function() {
-    $(this).removeClass(animationClass);
-  });
+      $('.delete').mouseout(function() {
+        $(this).removeClass(animationClass);
+      });
 
-  // ----------------------------------------------
-  // Interactive Tutorial
-  // ----------------------------------------------
+      // ----------------------------------------------
+      // Interactive Tutorial
+      // ----------------------------------------------
 
-  var current_step = -1;
-  var steps = [
-    { // Step #1
-        items_to_highlight: ["add-profile"],
-        text_to_display: "Welcome to the tutorial! Profiles let you group your Macros. Let's get started by adding a profile!",
-    },
-    { // Step #2
-        items_to_highlight: ["dashboard"],
-        text_to_display: "Your probably going to want to be able to find your profiles, you can do that in these places!",
-    },
-    { // Step #3
-        items_to_highlight: [],
-        text_to_display: "In order to play macros you need to set a current profile. Lets do that now!",
-    },
-    { // Step #4
-        items_to_highlight: ["token"],
-        text_to_display: "Next, you'll want to enter your Desktop token into the software downloaded. Find it here!",
-    },
-    { // Step #5
-        items_to_highlight: [],
-        text_to_display: "Lets try creating your first recording! Click 'Save Recording' and follow the steps that pop up.",
-    },
-    { // Step #6
-        items_to_highlight: ["settings"],
-        text_to_display: "Finally, if you ever want to update your settings you can do so here!",
-    }
-  ];
+      var current_step = 0;
+      var steps = [
+        {
+            items_to_highlight: [],
+            step_title: "Hi I'm Bob",
+            text_to_display: ("<h3>WELCOME TO MY TUTORIAL</h3><br>I'm an elite coding monkey who works with the Repeat After Me guys." +
+                              " I've put together this tutorial to help you learn the basic of our awesome software." +
+                              "<br><br><h4>Click next to get started!</h4>"),
+            image_src: "{% static 'website/images/monkey.png' %}"
+        },
+        {
+            items_to_highlight: ["add-profile"],
+            step_title: "PROFILES ARE KEY",
+            text_to_display: "Profiles let you group your Macros. Get started by adding a profile!",
+            image_src: "{% static 'website/images/profile.png' %}"
+        },
+        {
+            items_to_highlight: ["dashboard"],
+            step_title: "VIEW YOUR PROFILES",
+            text_to_display: "Your probably going to want to be able to find your profiles, you can do that in these places!",
+            image_src: "{% static 'website/images/profile.png' %}"
+        },
+        {
+            items_to_highlight: [],
+            step_title: "SET YOUR CURRENT PROFILE",
+            text_to_display: ("In order to play macros you need to set a current profile." +
+                             "<br>View your profiles and click on one to set it as your current profile!"),
+            image_src: "{% static 'website/images/current-profile.png' %}"
+        },
+        {
+            items_to_highlight: ["token"],
+            step_title: "CONNECT YOUR COMPUTER",
+            text_to_display: "Next, you'll want to enter your Desktop token into the software downloaded." +
+                             " This token is what allows us to uniquely identify your computer." +
+                             "<br><br>KEEP IT A SECRET.<br><br>You can find yours where the screen is highlighted!",
+            image_src: "{% static 'website/images/token.png' %}"
+        },
+        {
+            items_to_highlight: ["settings"],
+            step_title: "CHANGE YOUR SETTINGS",
+            text_to_display: "Finally, if you ever want to update your settings you can do so here!",
+            image_src: "{% static 'website/images/settings.png' %}"
+        },
+        {
+            items_to_highlight: [],
+            step_title: "CREATE YOUR FIRST RECORDING",
+            text_to_display: ("You're almost done. Lets try creating your first recording!<br>Click 'Save a Recording' and follow the steps that pop up." +
+                              "<br><br><a href=\"{% url 'macros:save_recording' %}\" class='btn btn-success' type='button'>Save a Recording</a>"),
+            image_src: "{% static 'website/images/record.png' %}"
+        },
+      ];
 
-  function highlight(objects) {
-    for(i=0; i < objects.length; i++) {
-      $('#' + objects[i]).css('background', 'white');
-      $('#' + objects[i]).css('color', 'red');
-    }
-  }
+      function restart() {
+        current_step = 1;
+      }
 
-  function restart() {
-    step_number = 1;
-  }
+      function next_step() {
+        highlight();
+        update_tutorial_modal();
+        if(current_step == (steps.length - 1)) {
+          $('#next-btn').css('display', 'none');
+        } else if(current_step > 0) {
+          $('#prev-btn').css('display', 'inline');
+        } else {
+          $('#prev-btn').css('display', 'none');
+        }
+        current_step += 1;
+      }
 
-  function next_step() {
-    step_number += 1;
-    highlight(steps[step_number].items_to_highlight)
-    alert(step[step_number].text_to_display)
-  }
+      function previous_step() {
+        highlight();
+        update_tutorial_modal();
+        if(current_step > 0) {
+          $('#prev-btn').css('display', 'inline');
+        } else {
+          $('#prev-btn').css('display', 'none');
+        }
+        current_step -= 1;
+      }
 
-  function previous_step() {
-    step_number -= 1;
-    highlight(steps[step_number].items_to_highlight)
-    alert(step[step_number].text_to_display)
-  }
+      function highlight() {
+        var objects = steps[current_step].items_to_highlight;
+        for(i=0; i < objects.length; i++) {
+          $('#' + objects[i]).css('background', 'white');
+          $('#' + objects[i]).css('color', 'red');
+        }
+      }
 
-  $(document).ready(function() {
-    if("{{settings.offer_tutorial}}" == "True") {
-      // Start tutorial for the user
-      next_step()
-    }
-  });
-</script>
+      function update_tutorial_modal() {
+        $('#step-title').html(steps[current_step].step_title);
+        $('#tutorial-text').html(steps[current_step].text_to_display);
+        $('#modal-img').attr('src', steps[current_step].image_src);
+      }
+
+      function quit_tutorial() {
+        if(confirm("The tutorial won't show anymore after this. Are you sure you want to quit it?")) {
+          window.location.href = "{% url 'macros:quit_tutorial' %}";
+        }
+      }
+
+      $(document).ready(function() {
+        if("{{settings.offer_tutorial}}" == "True") {
+          // Start tutorial for the user
+          next_step();
+          $('#tutorial-modal').modal('show');
+        }
+      });
+  </script>
 {% endblock js %}

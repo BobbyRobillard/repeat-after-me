@@ -45,6 +45,17 @@ def generate_token(request):
     return render(request, "macros/token.html", context)
 
 
+@login_required
+def quit_tutorial(request):
+    try:
+        settings = get_settings(request.user)
+        settings.offer_tutorial = False
+        settings.save()
+    except Exception as e:
+        print(str(e))
+    return redirect('website:homepage')
+
+
 def toggle_play_mode_view(request, token, toggle):
     toggle_play_mode(token, toggle)
     return JsonResponse({}, status=200)
