@@ -59,6 +59,10 @@ div > .alert {
 {% block js %}
 <script type="text/javascript">
 
+  // ----------------------------------------------
+  // Dynamic Interface Graphics
+  // ----------------------------------------------
+
   var animationClass = "tada";
 
   $('.edit').hover(function() {
@@ -77,6 +81,68 @@ div > .alert {
 
   $('.delete').mouseout(function() {
     $(this).removeClass(animationClass);
+  });
+
+  // ----------------------------------------------
+  // Interactive Tutorial
+  // ----------------------------------------------
+
+  var current_step = -1;
+  var steps = [
+    { // Step #1
+        items_to_highlight: ["add-profile"],
+        text_to_display: "Welcome to the tutorial! Profiles let you group your Macros. Let's get started by adding a profile!",
+    },
+    { // Step #2
+        items_to_highlight: ["dashboard"],
+        text_to_display: "Your probably going to want to be able to find your profiles, you can do that in these places!",
+    },
+    { // Step #3
+        items_to_highlight: [],
+        text_to_display: "In order to play macros you need to set a current profile. Lets do that now!",
+    },
+    { // Step #4
+        items_to_highlight: ["token"],
+        text_to_display: "Next, you'll want to enter your Desktop token into the software downloaded. Find it here!",
+    },
+    { // Step #5
+        items_to_highlight: [],
+        text_to_display: "Lets try creating your first recording! Click 'Save Recording' and follow the steps that pop up.",
+    },
+    { // Step #6
+        items_to_highlight: ["settings"],
+        text_to_display: "Finally, if you ever want to update your settings you can do so here!",
+    }
+  ];
+
+  function highlight(objects) {
+    for(i=0; i < objects.length; i++) {
+      $('#' + objects[i]).css('background', 'white');
+      $('#' + objects[i]).css('color', 'red');
+    }
+  }
+
+  function restart() {
+    step_number = 1;
+  }
+
+  function next_step() {
+    step_number += 1;
+    highlight(steps[step_number].items_to_highlight)
+    alert(step[step_number].text_to_display)
+  }
+
+  function previous_step() {
+    step_number -= 1;
+    highlight(steps[step_number].items_to_highlight)
+    alert(step[step_number].text_to_display)
+  }
+
+  $(document).ready(function() {
+    if("{{settings.offer_tutorial}}" == "True") {
+      // Start tutorial for the user
+      next_step()
+    }
   });
 </script>
 {% endblock js %}

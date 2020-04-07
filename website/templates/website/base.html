@@ -275,7 +275,7 @@
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item has-treeview menu-open">
-              <a href="{% url 'website:homepage' %}" class="nav-link active">
+              <a id="dashboard" href="{% url 'website:homepage' %}" class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Dashboard
@@ -302,7 +302,7 @@
             </li>
             <li class="nav-item">
               <a href="{% url 'macros:generate_token' %}" class="nav-link">
-                <i class="nav-icon fas fa-coins"></i>
+                <i id="token" class="nav-icon fas fa-coins"></i>
                 <p>
                   Desktop Token
                   <i class="fas fa-angle-right right"></i>
@@ -310,7 +310,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a id="settings" href="#" class="nav-link">
                 <i class="nav-icon fas fa-cogs"></i>
                 <p>
                   Settings
