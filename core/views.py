@@ -49,9 +49,9 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('macros:setup_settings')
+            return redirect("macros:setup_settings")
     else:
         form = RegisterForm()
 
     # Display page to register
-    return render(request, 'registration/register.html', {"form": form})
+    return render(request, "registration/register.html", {"form": form})

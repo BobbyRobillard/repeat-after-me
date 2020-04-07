@@ -35,10 +35,8 @@ import json
 
 
 def setup_settings(request):
-    context = {
-        "form": SettingsForm()
-    }
-    return render(request, 'macros/setup_settings.html', context)
+    context = {"form": SettingsForm()}
+    return render(request, "macros/setup_settings.html", context)
 
 
 def generate_token(request):
@@ -61,10 +59,11 @@ def sync_view(request, token):
 # PROFILE RELATED VIEWS
 # ------------------------------------------------------------------------------
 
+
 @method_decorator(login_required, name="dispatch")
 class CreateProfileView(CreateView):
     model = Profile
-    fields = ['name', 'color', 'icon']
+    fields = ["name", "color", "icon"]
     success_url = "/"
 
     def form_valid(self, form):
@@ -93,7 +92,9 @@ class DeleteProfileView(DeleteView):
         # Change user's current profile, only if it is the one being deleted
         try:
             if settings.current_profile.pk == object.pk:
-                profiles = Profile.objects.filter(user=settings.user).exclude(pk=object.pk)[:1]
+                profiles = Profile.objects.filter(user=settings.user).exclude(
+                    pk=object.pk
+                )[:1]
                 settings.current_profile = profiles[0]
                 settings.save()
         except Exception as outer_error:
@@ -120,12 +121,14 @@ class DeleteProfileView(DeleteView):
 class UpdateProfileView(UpdateView):
     model = Profile
     form_class = ProfileForm
-    template_name_suffix = '_update_form'
+    template_name_suffix = "_update_form"
     success_url = "/"
 
     def form_valid(self, form):
-        success_message = 'Success! We just sent you an email to confirm'
-        messages.success(self.request, "{0} was updated successfully!".format(self.get_object().name))
+        success_message = "Success! We just sent you an email to confirm"
+        messages.success(
+            self.request, "{0} was updated successfully!".format(self.get_object().name)
+        )
         return super().form_valid(form)
 
 
@@ -164,17 +167,12 @@ def save_recording(request):
         current_profile = get_current_profile(request.user)
         form.user = request.user
         if form.is_valid():
-            rec = Recording.objects.get(
-                is_temp=True, profile=current_profile
-            )
+            rec = Recording.objects.get(is_temp=True, profile=current_profile)
             rec.name = form.cleaned_data["name"]
             rec.key_code = form.cleaned_data["key_code"]
             rec.is_temp = False
             rec.save()
-            messages.success(
-                request,
-                "Recording saved to {0}".format(current_profile)
-            )
+            messages.success(request, "Recording saved to {0}".format(current_profile))
             return redirect("website:homepage")
 
     return render(
@@ -183,7 +181,7 @@ def save_recording(request):
         context={
             "profiles": get_profiles(request.user),
             "settings": get_settings(request.user),
-            "form": form
+            "form": form,
         },
     )
 

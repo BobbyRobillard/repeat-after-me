@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('macros', '0017_profile_icon'),
-    ]
+    dependencies = [("macros", "0017_profile_icon")]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='icon',
-            field=models.CharField(default='fas fa-user', max_length=30),
-        ),
+            model_name="profile",
+            name="icon",
+            field=models.CharField(default="fas fa-user", max_length=30),
+        )
     ]

@@ -110,16 +110,12 @@ def handle_playback():
     if playback_mode_active:
         # Tell server to toggle play mode is active
         response = requests.get(
-            "{0}/macros/toggle-play-mode/{1}/{2}/".format(
-                domain, token, str(1)
-            )
+            "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(1))
         )
     else:
         # Tell server to toggle play mode is inactive
         response = requests.get(
-            "{0}/macros/toggle-play-mode/{1}/{2}/".format(
-                domain, token, str(0)
-            )
+            "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(0))
         )
 
 

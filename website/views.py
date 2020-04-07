@@ -10,7 +10,7 @@ def homepage_view(request):
     try:
         settings = get_settings(request.user)
     except Exception as e:
-        return redirect('macros:setup_settings')
+        return redirect("macros:setup_settings")
     settings.updates_needed = False
     settings.save()
     context = {
