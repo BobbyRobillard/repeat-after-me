@@ -3,6 +3,14 @@ from .models import Profile, Settings, Recording
 from rest_framework.authtoken.models import Token
 
 
+def name_is_valid(name):
+    valid_single_chars = ["-", ",", "_", ".", " ", "'"]
+    for char in name:
+        if not (char.isalnum() or (char in valid_single_chars)):
+            return False
+    return True
+
+
 def user_owners_profile(user, profile_pk):
     return Profile.objects.filter(user=user, pk=profile_pk).exists()
 

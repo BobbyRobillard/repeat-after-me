@@ -1,13 +1,19 @@
 from django import forms
 
 from .models import max_name_length, key_code_length, Profile
-from .utils import get_possible_icons, get_settings
+from .utils import get_possible_icons, get_settings, name_is_valid
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['name', 'color', 'icon']
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if not name_is_valid(name):
+            raise forms.ValidationError("Names can only contain letters, numbers, spaces, and the following characters - , _ .")
+        return name
 
     def clean_color(self):
         color = self.cleaned_data["color"]
@@ -26,6 +32,12 @@ class ProfileForm(forms.ModelForm):
 class RecordingForm(forms.Form):
     name = forms.CharField(max_length=max_name_length)
     key_code = forms.CharField(max_length=key_code_length)
+
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if not name_is_valid(name):
+            raise forms.ValidationError("Names can only contain letters, numbers, spaces, and the following characters - , _ .")
+        return name
 
     def clean_key_code(self):
         key_code = self.cleaned_data['key_code']
