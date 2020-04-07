@@ -33,7 +33,7 @@ div > .alert {
     <div class="col-12">
       <span class="m-0 text-dark">Your Profiles</span>
       <a href="{% url 'macros:add_profile' %}">
-        <button id="add-profile" type="button" class="btn btn-success" name="button">Add Profile</button>
+        <button type="button" class="btn btn-success step1" name="button">Add Profile</button>
       </a>
       <br>
       (Click a profile to set it as your current profile)
@@ -93,6 +93,17 @@ div > .alert {
 
 {% block js %}
   <script type="text/javascript">
+      // ----------------------------------------------
+      // Document startup
+      // ----------------------------------------------
+
+      $(document).ready(function() {
+        if("{{settings.offer_tutorial}}" == "True") {
+          // Start tutorial for the user
+          next_step();
+          $('#tutorial-modal').modal('show');
+        }
+      });
 
       // ----------------------------------------------
       // Dynamic Interface Graphics
@@ -125,7 +136,6 @@ div > .alert {
       var current_step = 0;
       var steps = [
         {
-            items_to_highlight: [],
             step_title: "Hi I'm Bob",
             text_to_display: ("<h3>WELCOME TO MY TUTORIAL</h3><br>I'm an elite coding monkey who works with the Repeat After Me guys." +
                               " I've put together this tutorial to help you learn the basic of our awesome software." +
@@ -133,26 +143,22 @@ div > .alert {
             image_src: "{% static 'website/images/monkey.png' %}"
         },
         {
-            items_to_highlight: ["add-profile"],
             step_title: "PROFILES ARE KEY",
             text_to_display: "Profiles let you group your Macros. Add a profile anytime from your dashboard, or the left sidebar!",
             image_src: "{% static 'website/images/profile.png' %}"
         },
         {
-            items_to_highlight: ["dashboard"],
             step_title: "VIEW YOUR PROFILES",
             text_to_display: "Your probably going to want to be able to find your profiles, you can do that in these places!",
             image_src: "{% static 'website/images/profile.png' %}"
         },
         {
-            items_to_highlight: [],
             step_title: "SET YOUR CURRENT PROFILE",
             text_to_display: ("In order to play macros you need to set a current profile." +
                              "<br>View your profiles and click on one to set it as your current profile!"),
             image_src: "{% static 'website/images/current-profile.png' %}"
         },
         {
-            items_to_highlight: ["token"],
             step_title: "CONNECT YOUR COMPUTER",
             text_to_display: "Next, you'll want to enter your Desktop token into the software downloaded." +
                              " This token is what allows us to uniquely identify your computer." +
@@ -160,23 +166,17 @@ div > .alert {
             image_src: "{% static 'website/images/token.png' %}"
         },
         {
-            items_to_highlight: ["settings"],
             step_title: "CHANGE YOUR SETTINGS",
             text_to_display: "Finally, if you ever want to update your settings you can do so here!",
             image_src: "{% static 'website/images/settings.png' %}"
         },
         {
-            items_to_highlight: [],
             step_title: "CREATE YOUR FIRST RECORDING",
             text_to_display: ("You're almost done. Lets try creating your first recording!<br>Click 'Save a Recording' and follow the steps that pop up." +
                               "<br><br><a href=\"{% url 'macros:save_recording' %}\" class='btn btn-success' type='button'>Save a Recording</a>"),
             image_src: "{% static 'website/images/record.png' %}"
         },
       ];
-
-      function restart() {
-        current_step = 1;
-      }
 
       function next_step() {
         highlight();
@@ -203,12 +203,12 @@ div > .alert {
       }
 
       function highlight() {
-        var objects = steps[current_step].items_to_highlight;
-        for(i=0; i < objects.length; i++) {
-          $('#' + objects[i]).addClass('highlighted');
-          $('#' + objects[i]).addClass('animated');
-          $('#' + objects[i]).addClass('bounce');
-        }
+        $('.highlighted').each(function() {
+          $(this).removeClass('highlighted');
+        });
+        $('.step' + (current_step)).each(function() {
+          $(this).addClass('highlighted animated bounce');
+        });
       }
 
       function update_tutorial_modal() {
@@ -223,12 +223,5 @@ div > .alert {
         }
       }
 
-      $(document).ready(function() {
-        if("{{settings.offer_tutorial}}" == "True") {
-          // Start tutorial for the user
-          next_step();
-          $('#tutorial-modal').modal('show');
-        }
-      });
   </script>
 {% endblock js %}

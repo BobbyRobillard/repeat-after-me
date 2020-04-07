@@ -275,11 +275,11 @@
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item has-treeview menu-open">
-              <a id="dashboard" href="{% url 'website:homepage' %}" class="nav-link active">
+              <a href="{% url 'website:homepage' %}" class="nav-link">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
+                <p id="dashboard">
                   Dashboard
-                  <i class="right fas fa-angle-down"></i>
+                  <i class="right fas fa-angle-down step2"></i>
                 </p>
               </a>
             </li>
@@ -294,7 +294,7 @@
             </li>
             <li class="nav-item">
               <a href="{% url 'macros:save_recording' %}" class="nav-link">
-                <i class="nav-icon fas fa-play-circle"></i>
+                <i class="nav-icon fas fa-play-circle step6"></i>
                 <p>
                   Save Recording
                 </p>
@@ -305,7 +305,7 @@
                 <i id="token" class="nav-icon fas fa-coins"></i>
                 <p>
                   Desktop Token
-                  <i class="fas fa-angle-right right"></i>
+                  <i class="fas fa-angle-right right step4"></i>
                 </p>
               </a>
             </li>
@@ -314,7 +314,7 @@
                 <i class="nav-icon fas fa-cogs"></i>
                 <p>
                   Settings
-                  <i class="fas fa-angle-right right"></i>
+                  <i class="fas fa-angle-right right step5"></i>
                 </p>
               </a>
             </li>
@@ -336,10 +336,10 @@
                 </p>
               </a>
             </li>
-            <li class="nav-header">
+            <li class="nav-header" id="sidebar-profile-container">
               PROFILES
               <a href="{% url 'macros:add_profile' %}">
-                <i href="" class="fas fa-plus"></i>
+                <i class="fas fa-plus step1 step2"></i>
               </a>
             </li>
             {% for profile in profiles %}
