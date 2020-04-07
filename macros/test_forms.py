@@ -80,7 +80,11 @@ class ProfileFormTests(TestCase):
             self.assertTrue(form.is_valid())
 
     def test_valid_name(self):
-        invalid_names = ["@james", "/\\+=`~<>?|*\"", "tom!", "mary_jenkins[][]"]
+        invalid_names = [
+            "", "@james", "/", "\\", "©",
+            "+", "=", "`", "~", "<", ">", "?", "|",
+            "*", "tom!", "mary[", "[", "]", ")", "(",
+        ]
         for name in invalid_names:
             form_data = {
                 'icon': self.valid_icon,
