@@ -61,15 +61,6 @@ const Plugins = [
     from: 'node_modules/bootstrap-slider/dist/css',
     to  : 'plugins/bootstrap-slider/css'
   },
-  // Bootstrap Colorpicker
-  {
-    from: 'node_modules/bootstrap-colorpicker/dist/js',
-    to  : 'plugins/bootstrap-colorpicker/js'
-  },
-  {
-    from: 'node_modules/bootstrap-colorpicker/dist/css',
-    to  : 'plugins/bootstrap-colorpicker/css'
-  },
   // Tempusdominus Bootstrap 4
   {
     from: 'node_modules/tempusdominus-bootstrap-4/build/js',
