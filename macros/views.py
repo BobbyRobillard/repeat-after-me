@@ -97,6 +97,7 @@ class CreateProfileView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["icons"] = get_possible_icons()
+        context["profiles"] = get_profiles(self.request.user)
         return context
 
 

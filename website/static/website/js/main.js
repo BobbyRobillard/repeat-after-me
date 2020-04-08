@@ -7,12 +7,6 @@ $('body').on('click', '.action-link', function(e) {
     window.location.href = $(this).attr('href');
 });
 //------------------------------------------------------------------------------
-// For items that direct a user to the "save a recording" page
-//------------------------------------------------------------------------------
-$('.save').click(function() {
-  window.location.href = "{% url 'macros:save_recording' %}";
-});
-//------------------------------------------------------------------------------
 // Real Time Updates Bar
 //------------------------------------------------------------------------------
 const playModeSocket = new WebSocket(

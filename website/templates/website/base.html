@@ -395,7 +395,7 @@
                 <input id="recording" type="checkbox">
                 <span class="slider round"></span>
               </label>
-              <button type="button" class="btn btn-success save" style="margin-left:25px;">Save Recording</button>
+              <button type="button" class="btn btn-success action-link" href="{% url 'macros:save_recording' %}" style="margin-left:25px;">Save Recording</button>
             </div>
 
             {% include 'website/server_messages.html' %}
@@ -513,15 +513,14 @@
   <!-- <script src="{% static 'website/dist/js/demo.js' %}"></script> -->
 
   <!-- PAGE PLUGINS -->
-  <!-- <script src="{% static 'website/plugins/jquery-mousewheel/jquery.mousewheel.js' %}"></script> -->
-  <!-- <script src="{% static 'website/plugins/raphael/raphael.min.js' %}"></script> -->
-  <!-- <script src="{% static 'website/plugins/jquery-mapael/jquery.mapael.min.js' %}"></script> -->
-  <!-- <script src="{% static 'website/plugins/jquery-mapael/maps/usa_states.min.js' %}"></script> -->
   <!-- PAGE SCRIPTS -->
   <script src="{% static 'website/dist/js/pages/dashboard2.js' %}"></script>
   <!-- Custom JS -->
   <script src="{% static 'website/js/main.js' %}"></script>
   <script type="text/javascript">
+      //------------------------------------------------------------------------------
+      // Determine Whether to Show Social Promotion or Tutorial to User
+      //------------------------------------------------------------------------------
       $(document).ready(function() {
         if("{{settings.offer_tutorial}}" == "True") {
           // Start tutorial for the user
@@ -543,7 +542,7 @@
             step_title: "Hi I'm Bob",
             text_to_display: ("<h3>WELCOME TO MY TUTORIAL</h3><br>I'm an elite coding monkey who works with the Repeat After Me guys." +
                               " I've put together this tutorial to help you learn the basic of our awesome software." +
-                              "<br><br><h4 class='highlighted-minimal'>Look for things highlighted like this!</h4>"),
+                              "<br><br><span class='highlighted-minimal'>Look for things highlighted like this!</span>"),
             image_src: "{% static 'website/images/monkey.png' %}"
         },
         {
