@@ -51,6 +51,7 @@ def quit_tutorial(request):
     try:
         settings = get_settings(request.user)
         settings.offer_tutorial = False
+        settings.show_social_sharing = True
         settings.save()
     except Exception as e:
         print(str(e))

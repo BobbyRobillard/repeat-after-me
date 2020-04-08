@@ -39,6 +39,15 @@
   margin-left: 15px;
 }
 
+.heading {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  width: 100%;
+  font-size: 35px;
+}
+
 .update-container {
   background-color: white;
   padding: 25px;
