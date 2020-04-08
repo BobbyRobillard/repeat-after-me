@@ -109,6 +109,7 @@ class SettingsTestCase(TestCase):
         settings = get_settings(self.user)
         self.assertEqual(settings.play_mode, False)
         self.assertEqual(settings.is_recording, False)
+        self.assertEqual(settings.offer_tutorial, True)
 
     def test_toggle_play_mode(self):
         toggle_play_mode(self.token.key, "1")
