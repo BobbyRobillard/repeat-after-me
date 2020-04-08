@@ -39,7 +39,7 @@
   <form action="{% url 'macros:save_recording' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button id="save" class="btn btn-success" name="button">Save New Recording</button>
+    <button class="btn btn-success" name="button">Save New Recording</button>
   </form>
 </div>
 
