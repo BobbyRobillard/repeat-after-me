@@ -59,3 +59,15 @@
 .modal-header {
   text-align: center !important;
 }
+
+.highlighted {
+  -webkit-box-shadow: 0px 0px 75px 50px rgba(0,136,255,1);
+  -moz-box-shadow: 0px 0px 75px 50px rgba(0,136,255,1);
+  box-shadow: 0px 0px 75px 50px rgba(0,136,255,1);
+}
+
+.highlighted-minimal {
+  -webkit-box-shadow: 0px 0px 15px 10px rgba(0,136,255,1);
+  -moz-box-shadow: 0px 0px 15px 10px rgba(0,136,255,1);
+  box-shadow: 0px 0px 15px 10px rgba(0,136,255,1);
+}
