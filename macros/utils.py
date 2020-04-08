@@ -1,3 +1,5 @@
+from django.http import JsonResponse, HttpResponse, Http404
+
 from .models import Profile, Settings, Recording
 
 from rest_framework.authtoken.models import Token
@@ -63,11 +65,11 @@ def get_current_profile(user):
 
 def set_current_profile(user, profile_pk):
     if user_owners_profile(user, profile_pk):
-        user_settings = Settings.objects.get(user=user)
-        user_settings.current_profile = Profile.objects.get(pk=profile_pk)
-        user_settings.save()
-        return True
-    return False
+        settings = Settings.objects.get(user=user)
+        settings.current_profile = Profile.objects.get(pk=profile_pk)
+        settings.save()
+    else:
+        raise Http404
 
 
 def set_default_profile(user):

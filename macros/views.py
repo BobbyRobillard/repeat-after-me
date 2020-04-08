@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse, HttpResponse
 
 from django.shortcuts import render, redirect
 
@@ -29,6 +29,7 @@ from .utils import (
     get_profiles,
     set_current_profile,
     get_possible_icons,
+    Http404
 )
 
 import json
@@ -107,17 +108,12 @@ class DeleteProfileView(DeleteView):
                 settings.current_profile = profile
                 settings.save()
         except Exception as outer_error:
-            # Only one profile owned by user
-            try:
-                settings.current_profile = Profile.objects.get(user=settings.user)
-                settings.save()
-            except Exception as inner_error:
-                messages.error(
-                    self.request, "You have no profiles to set as your current profile."
-                )
+            messages.error(
+                self.request,
+                "You have no profiles to set as your current profile."
+            )
 
-        # Sending error message for coloring on client side
-        messages.error(self.request, "Profile Deleted!")
+        messages.success(self.request, "Profile Deleted!")
         return super(DeleteProfileView, self).delete(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -139,22 +135,24 @@ class UpdateProfileView(UpdateView):
         return context
 
     def form_valid(self, form):
-        success_message = "Success! We just sent you an email to confirm"
         messages.success(
-            self.request, "{0} was updated successfully!".format(self.get_object().name)
+            self.request,
+            "{0} was updated successfully!".format(
+                self.get_object().name
+            )
         )
         return super().form_valid(form)
 
 
 @login_required
 def set_current_profile_view(request, pk):
-    if not set_current_profile(request.user, pk):
-        messages.error(request, "You do not own this profile chief.")
-    else:
-        messages.success(
-            request,
-            "Current profile changed to: {0}".format(Profile.objects.get(pk=pk).name),
+    set_current_profile(request.user, pk)
+    messages.success(
+        request,
+        "Current profile changed to: {0}".format(
+            Profile.objects.get(pk=pk).name
         )
+    )
     return redirect("website:homepage")
 
 

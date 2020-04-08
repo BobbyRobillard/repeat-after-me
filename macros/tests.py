@@ -57,6 +57,11 @@ class ProfileTestCase(TestCase):
         current_profile_name = get_current_profile(self.user).name
         self.assertEqual(current_profile_name, "test2")
 
+    def test_set_invalid_current_profile(self):
+        self.c.login(username="user1", password="qzwxec123")
+        response = self.c.post(reverse("macros:set_current_profile", kwargs={"pk": 3}))
+        self.assertEqual(response.status_code, 404)
+
     # Try to delete a user's own profile
     def test_delete_owned_profile(self):
         self.c.login(username="user1", password="qzwxec123")
@@ -76,7 +81,9 @@ class ProfileTestCase(TestCase):
     def test_delete_all_profiles(self):
         self.c.login(username="user1", password="qzwxec123")
         response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 1}))
+        self.assertEqual(response.status_code, 302)
         response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 2}))
+        self.assertEqual(response.status_code, 302)
 
         # No current profile set, since all were deleted
         self.assertEqual(get_settings(self.user).current_profile, None)
@@ -86,16 +93,20 @@ class ProfileTestCase(TestCase):
     def test_delete_profile_not_logged_in(self):
         response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 2}))
         profiles = get_profiles(self.user)
+        self.assertEqual(len(profiles), 2)
 
+        # Redirected to login
         self.assertEqual(response.status_code, 302)
+        # No profile deleted
         self.assertEqual(len(profiles), 2)
 
     # Try to delete another user's profile
     def test_delete_unowned_profile(self):
         self.c.login(username="user2", password="qzwxec123")
-        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 1}))
         profiles = get_profiles(self.user)
+        self.assertEqual(len(profiles), 2)
 
+        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(len(profiles), 2)
 
