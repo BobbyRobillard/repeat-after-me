@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, AnonymousUser
 
 from .models import Settings
 from .forms import ProfileForm, RecordingForm, SettingsForm
+from .utils import create_default_testing_profile, user1_username, user1_password
 
 from django.test import TestCase, Client, RequestFactory
 
@@ -158,10 +159,8 @@ class ProfileFormTests(TestCase):
 
 class RecordingFormTests(TestCase):
     def setUp(self):
+        self = create_default_testing_profile(self)
         self.valid_name = "test recording"
-        self.user = User.objects.create_user(username="user1", password="qzwxec123")
-
-        Settings.objects.create(recording_key="r", play_mode_key="p", user=self.user)
 
     def test_valid_recording_key(self):
         for valid_key in ["a", "1", "@"]:

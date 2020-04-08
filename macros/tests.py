@@ -11,6 +11,9 @@ from .utils import (
     toggle_play_mode,
     start_recording,
     stop_recording,
+    create_default_testing_profile,
+    user1_username,
+    user1_password,
 )
 from .views import DeleteProfileView
 
@@ -21,26 +24,18 @@ from rest_framework.authtoken.models import Token
 
 class ProfileTestCase(TestCase):
     def setUp(self):
-        self.c = Client()
-        self.user = User.objects.create_user(username="user1", password="qzwxec123")
+        self = create_default_testing_profile(self)
+
         self.other_user = User.objects.create_user(
-            username="user2", password="qzwxec123"
+            username="user2", password=user1_password
         )
-        profile = Profile.objects.create(name="test1", user=self.user)
         profile2 = Profile.objects.create(name="test2", user=self.user)
         profile3 = Profile.objects.create(name="test3", user=self.other_user)
 
         Settings.objects.create(
             recording_key="r",
             play_mode_key="p",
-            current_profile=profile,
-            user=self.user,
-        )
-
-        Settings.objects.create(
-            recording_key="r",
-            play_mode_key="p",
-            current_profile=profile,
+            current_profile=profile3,
             user=self.other_user,
         )
 
@@ -58,13 +53,13 @@ class ProfileTestCase(TestCase):
         self.assertEqual(current_profile_name, "test2")
 
     def test_set_invalid_current_profile(self):
-        self.c.login(username="user1", password="qzwxec123")
+        self.c.login(username=user1_username, password=user1_password)
         response = self.c.post(reverse("macros:set_current_profile", kwargs={"pk": 3}))
         self.assertEqual(response.status_code, 404)
 
     # Try to delete a user's own profile
     def test_delete_owned_profile(self):
-        self.c.login(username="user1", password="qzwxec123")
+        self.c.login(username=user1_username, password=user1_password)
         profiles = get_profiles(self.user)
         self.assertEqual(len(profiles), 2)
 
@@ -79,7 +74,7 @@ class ProfileTestCase(TestCase):
         self.assertEqual(get_settings(self.user).current_profile.pk, 2)
 
     def test_delete_all_profiles(self):
-        self.c.login(username="user1", password="qzwxec123")
+        self.c.login(username=user1_username, password=user1_password)
         response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 1}))
         self.assertEqual(response.status_code, 302)
         response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 2}))
@@ -113,9 +108,8 @@ class ProfileTestCase(TestCase):
 
 class SettingsTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="user1", password="qzwxec123")
+        self = create_default_testing_profile(self)
         self.token = Token.objects.create(user=self.user)
-        Settings.objects.create(recording_key="r", play_mode_key="p", user=self.user)
 
     def test_get_settings(self):
         settings = get_settings(self.user)

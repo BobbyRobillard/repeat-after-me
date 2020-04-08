@@ -36,7 +36,7 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # No Password1
-        data['username'] = 'test1'
-        data['password1'] = ''
+        data["username"] = "test1"
+        data["password1"] = ""
         response = self.c.post(reverse("core:register"), data)
         self.assertEqual(response.status_code, 200)

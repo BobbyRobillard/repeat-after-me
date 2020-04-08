@@ -1,8 +1,15 @@
 from django.http import JsonResponse, HttpResponse, Http404
 
-from .models import Profile, Settings, Recording
+from django.test import TestCase, Client, RequestFactory
+from django.contrib.auth.models import User, AnonymousUser
 
 from rest_framework.authtoken.models import Token
+
+from .models import Profile, Settings, Recording
+
+
+user1_username = "user1"
+user1_password = "qzwxec123"
 
 
 def name_is_valid(name):
@@ -26,7 +33,11 @@ def get_settings(user):
 
 
 def get_settings_from_token(token):
-    user = Token.objects.get(key=token).user
+    try:
+        user = Token.objects.get(key=token).user
+    except Exception as e:
+        raise Http404
+
     settings = get_settings(user)
     return settings
 
@@ -105,3 +116,18 @@ def get_possible_icons():
         "fas fa-briefcase-medical",
         "fas fa-burn",
     ]
+
+
+def create_default_testing_profile(test_object):
+    test_object.c = Client()
+    test_object.user = User.objects.create_user(
+        username=user1_username, password=user1_password
+    )
+    test_object.profile = Profile.objects.create(name="test1", user=test_object.user)
+    Settings.objects.create(
+        recording_key="r",
+        play_mode_key="p",
+        current_profile=test_object.profile,
+        user=test_object.user,
+    )
+    return test_object

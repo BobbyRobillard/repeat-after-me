@@ -29,7 +29,7 @@ from .utils import (
     get_profiles,
     set_current_profile,
     get_possible_icons,
-    Http404
+    Http404,
 )
 
 import json
@@ -54,7 +54,7 @@ def quit_tutorial(request):
         settings.save()
     except Exception as e:
         print(str(e))
-    return redirect('website:homepage')
+    return redirect("website:homepage")
 
 
 def toggle_play_mode_view(request, token, toggle):
@@ -109,8 +109,7 @@ class DeleteProfileView(DeleteView):
                 settings.save()
         except Exception as outer_error:
             messages.error(
-                self.request,
-                "You have no profiles to set as your current profile."
+                self.request, "You have no profiles to set as your current profile."
             )
 
         messages.success(self.request, "Profile Deleted!")
@@ -136,10 +135,7 @@ class UpdateProfileView(UpdateView):
 
     def form_valid(self, form):
         messages.success(
-            self.request,
-            "{0} was updated successfully!".format(
-                self.get_object().name
-            )
+            self.request, "{0} was updated successfully!".format(self.get_object().name)
         )
         return super().form_valid(form)
 
@@ -149,9 +145,7 @@ def set_current_profile_view(request, pk):
     set_current_profile(request.user, pk)
     messages.success(
         request,
-        "Current profile changed to: {0}".format(
-            Profile.objects.get(pk=pk).name
-        )
+        "Current profile changed to: {0}".format(Profile.objects.get(pk=pk).name),
     )
     return redirect("website:homepage")
 
@@ -223,7 +217,10 @@ def download_recording(request, token, key_char):
 
 
 def start_recording_view(request, token):
-    start_recording(token)
+    try:
+        start_recording(token)
+    except Exception as e:
+        return JsonResponse({"errors": "Invalid token"}, status=404)
     return JsonResponse({}, status=200)
 
 
