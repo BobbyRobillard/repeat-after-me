@@ -12,6 +12,7 @@ urlpatterns = [
     url(r"^add-profile$", views.CreateProfileView.as_view(), name="add_profile"),
     url(r"^get-token$", views.generate_token, name="generate_token"),
     url(r"^quit-tutorial$", views.quit_tutorial, name="quit_tutorial"),
+    url(r"^stop-showing-sharing$", views.stop_showing_sharing, name="stop_showing_sharing"),
     url(r"^setup-settings$", views.setup_settings, name="setup_settings"),
     url(r"^save-recording$", views.save_recording, name="save_recording"),
     url(

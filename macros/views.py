@@ -40,6 +40,17 @@ def setup_settings(request):
     return render(request, "macros/setup_settings.html", context)
 
 
+@login_required
+def stop_showing_sharing(request):
+    try:
+        settings = get_settings(request.user)
+        settings.show_social_sharing = False
+        settings.save()
+    except Exception as e:
+        return redirect('macros:setup_settings')
+    return redirect('website:homepage')
+
+
 def generate_token(request):
     token = Token.objects.get_or_create(user=request.user)[0]
     context = {"token": token}

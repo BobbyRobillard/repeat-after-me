@@ -136,3 +136,23 @@ class SettingsTestCase(TestCase):
         stop_recording(self.user)
         settings = get_settings(self.user)
         self.assertEqual(settings.is_recording, False)
+
+    def test_show_social_disable(self):
+        self.c.login(username=user1_username, password=user1_password)
+        response = self.c.post(reverse("macros:stop_showing_sharing"))
+        settings = get_settings(self.user)
+        settings.show_social_sharing = False
+        settings.save()
+        self.assertEqual(settings.show_social_sharing, False)
+        self.assertEqual(response.status_code, 302)
+
+    def test_quit_tutorial(self):
+        # Tutorial should show by default
+        self.c.login(username=user1_username, password=user1_password)
+        settings = get_settings(self.user)
+        self.assertEqual(settings.offer_tutorial, True)
+
+        response = self.c.post(reverse("macros:quit_tutorial"))
+        settings = get_settings(self.user)
+        self.assertEqual(settings.offer_tutorial, False)
+        self.assertEqual(response.status_code, 302)
