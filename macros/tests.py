@@ -80,6 +80,7 @@ class ProfileTestCase(TestCase):
 
         # No current profile set, since all were deleted
         self.assertEqual(get_settings(self.user).current_profile, None)
+        self.assertEqual(len(get_profiles(self.user)), 0)
 
     # Try to delete a profile as an anonymous user
     def test_delete_profile_not_logged_in(self):

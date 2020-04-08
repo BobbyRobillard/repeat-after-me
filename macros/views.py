@@ -103,10 +103,8 @@ class DeleteProfileView(DeleteView):
         # Change user's current profile, only if it is the one being deleted
         try:
             if settings.current_profile.pk == object.pk:
-                profiles = Profile.objects.filter(user=settings.user).exclude(
-                    pk=object.pk
-                )[:1]
-                settings.current_profile = profiles[0]
+                profile = get_profiles(settings.user).exclude(pk=object.pk).first()
+                settings.current_profile = profile
                 settings.save()
         except Exception as outer_error:
             # Only one profile owned by user
