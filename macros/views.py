@@ -290,7 +290,7 @@ def stop_recording_view(request, token):
         profile=get_current_profile(settings.user),
         is_temp=True
     ).delete()
-    
+
     new_recording = Recording.objects.create(
         profile=get_current_profile(user),
         name="temp",
