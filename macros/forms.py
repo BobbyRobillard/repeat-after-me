@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import max_name_length, key_code_length, Profile
+from .models import max_name_length, key_code_length, Profile, Settings
 from .utils import get_possible_icons, get_settings, name_is_valid
 
 
@@ -66,16 +66,26 @@ class RecordingForm(forms.Form):
         return key_code
 
 
-class SettingsForm(forms.Form):
-    play_key = forms.CharField(max_length=key_code_length)
-    recording_key = forms.CharField(max_length=key_code_length)
+class SettingsForm(forms.ModelForm):
+    class Meta:
+        model = Settings
+        fields = ["play_mode_key", "recording_key", "quick_play_key"]
 
     def clean(self):
         data = self.cleaned_data
-        play_key = self.cleaned_data["play_key"]
+        play_mode_key = self.cleaned_data["play_mode_key"]
         recording_key = self.cleaned_data["recording_key"]
-        if play_key == recording_key:
+        quick_play_key = self.cleaned_data["quick_play_key"]
+        if play_mode_key == recording_key:
             raise forms.ValidationError(
-                {"play_key": "Play Mode Key can't be the same as your Recording Key"}
+                {"play_mode_key": "Play Mode Key can't be the same as your Recording Key"}
+            )
+        if quick_play_key == recording_key:
+            raise forms.ValidationError(
+                {"quick_play_key": "Quick Play Key can't be the same as your Recording Key"}
+            )
+        if quick_play_key == play_mode_key:
+            raise forms.ValidationError(
+                {"quick_play_key": "Quick Play Key can't be the same as your Play Mode Key"}
             )
         return data

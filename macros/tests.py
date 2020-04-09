@@ -156,3 +156,16 @@ class SettingsTestCase(TestCase):
         settings = get_settings(self.user)
         self.assertEqual(settings.offer_tutorial, False)
         self.assertEqual(response.status_code, 302)
+
+    def test_setup_settings(self):
+        data = {
+            "play_mode_key": "r",
+            "recording_key": "a",
+            "quick_play_key": "s",
+        }
+        response = self.c.post(reverse("macros:setup_settings"), data)
+        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(self.settings.play_mode_key, "r")
+        self.assertEqual(self.settings.recording_key, "a")
+        self.assertEqual(self.settings.quick_play_key, "s")

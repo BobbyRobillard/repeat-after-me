@@ -35,8 +35,32 @@ from .utils import (
 import json
 
 
+@login_required
 def setup_settings(request):
-    context = {"form": SettingsForm()}
+    context = {}
+    try:
+        settings = get_settings(request.user)
+        context['settings'] = settings
+        form = SettingsForm(instance=settings)
+    except Exception as e:
+        form = SettingsForm()
+
+    if request.method == "POST":
+        try:
+            form = SettingsForm(instance=settings, request.POST)
+            if form.is_valid():
+                form.save()
+
+        except Exception as e:
+            settings = Settings.objects.create(
+                user=request.user,
+                recording_key=form.cleaned_data['recording_key'],
+                play_mode_key=form.cleaned_data['play_mode_key'],
+                quick_play_key=form.cleaned_data['quick_play_key'],
+            )
+
+    context['form'] = form
+    context['profiles'] = get_profiles(request.user)
     return render(request, "macros/setup_settings.html", context)
 
 

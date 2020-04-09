@@ -124,9 +124,10 @@ def create_default_testing_profile(test_object):
         username=user1_username, password=user1_password
     )
     test_object.profile = Profile.objects.create(name="test1", user=test_object.user)
-    Settings.objects.create(
+    test_object.settings = Settings.objects.create(
         recording_key="r",
         play_mode_key="p",
+        quick_play_key="a",
         current_profile=test_object.profile,
         user=test_object.user,
     )

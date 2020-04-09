@@ -1,11 +1,25 @@
 {% extends 'website/base.html' %}
 
 {% block content %}
-<div class="col">
+<div class="col-4 update-container">
     <form action="{% url 'macros:setup_settings' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" class="btn btn-success" value="Save Settings">
     </form>
+</div>
+<div class="col-4 update-container">
+  <ul>
+    <li>
+      <h4><b>Play Key:</b> This allows you to play back macros, and enable/disable the ability to record.</h4>
+    </li>
+    <li>
+      <h4><b>Recording Key:</b> This allows you to stop/start recordings. Play mode must be active to toggle recording.</h4>
+    </li>
+    <li>
+      <h4><b>Quick Play Key:</b> This allows you to play back a recording you have just recently created but not saved.</h4>
+    </li>
+  </ul>
+
 </div>
 {% endblock content%}
