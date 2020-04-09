@@ -30,6 +30,7 @@ from .utils import (
     get_profiles,
     set_current_profile,
     get_possible_icons,
+    get_settings_from_token,
     Http404,
 )
 
@@ -282,8 +283,19 @@ def stop_recording_view(request, token):
 
     # Create new recording to save action to.
     # New recordings save to the current profile
+    # Delete temp recordings from user
+    settings = get_settings_from_token(token)
+
+    Recording.objects.filter(
+        profile=get_current_profile(settings.user),
+        is_temp=True
+    ).delete()
+    
     new_recording = Recording.objects.create(
-        profile=get_current_profile(user), name="temp", is_temp=True, key_code=""
+        profile=get_current_profile(user),
+        name="temp",
+        is_temp=True,
+        key_code=settings.quick_play_key
     )
 
     # Serialize  & save the incoming recording's key events
