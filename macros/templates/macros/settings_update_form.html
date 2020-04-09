@@ -1,0 +1,31 @@
+{% extends 'website/base.html' %}
+
+{% load static %}
+
+{% block custom_css %}
+
+{% endblock custom_css %}
+
+{% block content %}
+  <div class="col-4 update-container">
+    <h2>Update Your Settings</h2>
+    <br>
+    <form id="profile_update_form" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
+    </form>
+  </div>
+  <div class="col-4 update-container">
+    <ul>
+      <li>
+        <h4><b>Play Key:</b> This allows you to play back macros, and enable/disable the ability to record.</h4>
+      </li>
+      <li>
+        <h4><b>Recording Key:</b> This allows you to stop/start recordings. Play mode must be active to toggle recording.</h4>
+      </li>
+      <li>
+        <h4><b>Quick Play Key:</b> This allows you to play back a recording you have just recently created but not saved.</h4>
+      </li>
+    </ul>
+  </div>
+{% endblock content %}

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from django.http import JsonResponse, HttpResponse
+from django.urls import reverse
 
 from django.shortcuts import render, redirect
 
@@ -17,7 +18,7 @@ from rest_framework.decorators import api_view
 from website.views import homepage_view
 
 from .forms import ProfileForm, RecordingForm, SettingsForm
-from .models import Profile, KeyEvent, MouseEvent, Recording
+from .models import Profile, KeyEvent, MouseEvent, Recording, Settings
 from .serializers import KeyEventSerializer, MouseEventSerializer
 from .utils import (
     get_settings,
@@ -35,33 +36,43 @@ from .utils import (
 import json
 
 
-@login_required
-def setup_settings(request):
-    context = {}
-    try:
-        settings = get_settings(request.user)
-        context['settings'] = settings
-        form = SettingsForm(instance=settings)
-    except Exception as e:
-        form = SettingsForm()
+@method_decorator(login_required, name="dispatch")
+class CreateSettingsView(CreateView):
+    model = Settings
+    form_class = SettingsForm
+    success_url = "/"
 
-    if request.method == "POST":
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        messages.success(self.request, "Settings were created successfully!")
+        return super(CreateSettingsView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profiles"] = get_profiles(self.request.user)
         try:
-            form = SettingsForm(instance=settings, request.POST)
-            if form.is_valid():
-                form.save()
-
+            # Pass incase user has settings so front-end can redirect
+            context["settings"] = get_settings(self.request.user)
         except Exception as e:
-            settings = Settings.objects.create(
-                user=request.user,
-                recording_key=form.cleaned_data['recording_key'],
-                play_mode_key=form.cleaned_data['play_mode_key'],
-                quick_play_key=form.cleaned_data['quick_play_key'],
-            )
+            context["username"] = self.request.user.username
+        return context
 
-    context['form'] = form
-    context['profiles'] = get_profiles(request.user)
-    return render(request, "macros/setup_settings.html", context)
+
+@method_decorator(login_required, name="dispatch")
+class UpdateSettingsView(UpdateView):
+    model = Settings
+    form_class = SettingsForm
+    template_name_suffix = "_update_form"
+    success_url = "/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profiles"] = get_profiles(self.request.user)
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, "Settings were updated successfully!")
+        return super().form_valid(form)
 
 
 @login_required
