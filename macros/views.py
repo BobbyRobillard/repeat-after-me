@@ -288,7 +288,10 @@ def download_recording(request, token, key_char):
 
 def start_recording_view(request, token):
     try:
-        start_recording(token)
+        if get_settings_from_token(token).play_mode:
+            start_recording(token)
+        else:
+            return JsonResponse({"errors": "Play mode is not active"}, status=404)
     except Exception as e:
         return JsonResponse({"errors": "Invalid token"}, status=404)
     return JsonResponse({}, status=200)

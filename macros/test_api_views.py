@@ -28,7 +28,15 @@ class TestAPI_General(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_valid_token(self):
+        self.settings.play_mode = True
+        self.settings.save()
         response = self.c.get(
             reverse("macros:start_recording", kwargs={"token": self.token})
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_start_recording_with_play_mode_inactive(self):
+        response = self.c.get(
+            reverse("macros:start_recording", kwargs={"token": self.token})
+        )
+        self.assertEqual(response.status_code, 404)
