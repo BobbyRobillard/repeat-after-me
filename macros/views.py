@@ -260,6 +260,12 @@ class DeleteRecordingView(DeleteView):
     model = Recording
     success_url = "/"
 
+    def get_object(self, *args, **kwargs):
+        obj = super(DeleteRecordingView, self).get_object(*args, **kwargs)
+        if not obj.profile.user == self.request.user:
+            raise Http404
+        return obj
+
 
 def download_recording(request, token, key_char):
     try:

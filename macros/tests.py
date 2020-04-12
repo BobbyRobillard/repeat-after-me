@@ -223,3 +223,25 @@ class UnauthorizedSettingsAccessTestCase(TestCase):
         self.assertNotEqual(get_settings(self.user).recording_key, "b")
         self.assertNotEqual(get_settings(self.user).quick_play_key, "c")
         self.assertEqual(response.status_code, 404)
+
+
+class UnauthorizedRecordingAccessTestCase(TestCase):
+    def setUp(self):
+        self = create_default_testing_profile(self)
+        self.recording = Recording.objects.create(
+            name="test", key_code="k", profile=self.profile
+        )
+
+        self.other_user = User.objects.create_user(
+            username="user2", password=user1_password
+        )
+
+    def test_update_unowned_settings(self):
+        self.c.login(username="user2", password=user1_password)
+
+        # Try to delete a recording owned by user1
+        self.assertEqual(len(self.profile.get_recordings()), 1)
+        response = self.c.post(reverse("macros:delete_recording", kwargs={"pk": self.recording.pk}))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(len(self.profile.get_recordings()), 1)
