@@ -9,12 +9,24 @@ from django.test import TestCase, Client, RequestFactory
 
 class SettingsFormTests(TestCase):
     def test_valid_settings(self):
-        form_data = {"play_key": "p", "recording_key": "r"}
+        form_data = {"play_mode_key": "p", "recording_key": "r", "quick_play_key": "a"}
         form = SettingsForm(data=form_data)
         self.assertTrue(form.is_valid())
 
     def test_invalid_settings(self):
-        form_data = {"play_key": "a", "recording_key": "a"}
+        form_data = {"play_mode_key": "a", "recording_key": "a", "quick_play_key": "a"}
+        form = SettingsForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+        form_data = {"play_mode_key": "a", "recording_key": "a", "quick_play_key": "b"}
+        form = SettingsForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+        form_data = {"play_mode_key": "a", "recording_key": "b", "quick_play_key": "a"}
+        form = SettingsForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+        form_data = {"play_mode_key": "a", "recording_key": "b", "quick_play_key": "b"}
         form = SettingsForm(data=form_data)
         self.assertFalse(form.is_valid())
 

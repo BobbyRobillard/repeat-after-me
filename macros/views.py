@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
 
+from django.http import JsonResponse, HttpResponse, Http404
+
 from django.shortcuts import render, redirect
 
 from django.views.decorators.csrf import csrf_exempt
@@ -65,6 +67,12 @@ class UpdateSettingsView(UpdateView):
     form_class = SettingsForm
     template_name_suffix = "_update_form"
     success_url = "/"
+
+    def get_object(self, *args, **kwargs):
+        obj = super(UpdateSettingsView, self).get_object(*args, **kwargs)
+        if not obj.user == self.request.user:
+            raise Http404
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -142,16 +150,17 @@ class DeleteProfileView(DeleteView):
     model = Profile
     success_url = "/"
 
-    def delete(self, *args, **kwargs):
-        settings = get_settings(self.request.user)
-        object = self.get_object()
-
-        # Make sure profile is owned by current user
-        if not object.user == self.request.user:
+    def get_object(self, *args, **kwargs):
+        obj = super(DeleteProfileView, self).get_object(*args, **kwargs)
+        if not obj.user == self.request.user:
             raise Http404
+        return obj
 
+    def delete(self, *args, **kwargs):
+        object = self.get_object()
         # Change user's current profile, only if it is the one being deleted
         try:
+            settings = get_settings(self.request.user)
             if settings.current_profile.pk == object.pk:
                 profile = get_profiles(settings.user).exclude(pk=object.pk).first()
                 settings.current_profile = profile
@@ -181,6 +190,12 @@ class UpdateProfileView(UpdateView):
         context = super().get_context_data(**kwargs)
         context["profiles"] = get_profiles(self.request.user)
         return context
+
+    def get_object(self, *args, **kwargs):
+        obj = super(UpdateProfileView, self).get_object(*args, **kwargs)
+        if not obj.user == self.request.user:
+            raise Http404
+        return obj
 
     def form_valid(self, form):
         messages.success(

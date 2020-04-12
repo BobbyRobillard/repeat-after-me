@@ -84,32 +84,61 @@ class ProfileTestCase(TestCase):
         self.assertEqual(get_settings(self.user).current_profile, None)
         self.assertEqual(len(get_profiles(self.user)), 0)
 
+
+class UnauthorizedProfileAccessTestCase(TestCase):
+    def setUp(self):
+        self = create_default_testing_profile(self)
+
+        self.other_user = User.objects.create_user(
+            username="user2", password=user1_password
+        )
+
     # Try to delete a profile as an anonymous user
     def test_delete_profile_not_logged_in(self):
         response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 2}))
         profiles = get_profiles(self.user)
-        self.assertEqual(len(profiles), 2)
+        self.assertEqual(len(profiles), 1)
 
         # Redirected to login
         self.assertEqual(response.status_code, 302)
         # No profile deleted
-        self.assertEqual(len(profiles), 2)
+        self.assertEqual(len(profiles), 1)
 
     # Try to delete another user's profile
     def test_delete_unowned_profile(self):
         self.c.login(username="user2", password="qzwxec123")
         profiles = get_profiles(self.user)
-        self.assertEqual(len(profiles), 2)
+        self.assertEqual(len(profiles), 1)
 
-        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": 1}))
+        response = self.c.post(reverse("macros:delete_profile", kwargs={"pk": profiles.first().pk}))
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(len(profiles), 2)
+        self.assertEqual(len(profiles), 1)
+
+    def test_update_unowned_profile(self):
+        # Login user who doesn't own a profile
+        self.c.login(username="user2", password=user1_password)
+        profiles = get_profiles(self.user)
+        self.assertEqual(len(profiles), 1)
+
+        # Try to delete the profile owned by user1
+        response = self.c.post(reverse("macros:update_profile", kwargs={"pk": profiles.first().pk}), {
+            "name": "test",
+            "color": "0088ff",
+            "icon": "fas fa-user",
+        })
+
+        self.assertEqual(response.status_code, 404)
+        # No profile was deleted
+        self.assertEqual(len(profiles), 1)
 
 
 class SettingsTestCase(TestCase):
     def setUp(self):
         self = create_default_testing_profile(self)
         self.token = Token.objects.create(user=self.user)
+        self.other_user = User.objects.create_user(
+            username="user2", password=user1_password
+        )
 
     def test_get_settings(self):
         settings = get_settings(self.user)
@@ -163,9 +192,34 @@ class SettingsTestCase(TestCase):
             "recording_key": "a",
             "quick_play_key": "s",
         }
+        self.c.login(username="user2", password=user1_password)
         response = self.c.post(reverse("macros:setup_settings"), data)
         self.assertEqual(response.status_code, 302)
 
-        self.assertEqual(self.settings.play_mode_key, "r")
-        self.assertEqual(self.settings.recording_key, "a")
-        self.assertEqual(self.settings.quick_play_key, "s")
+        self.assertEqual(get_settings(self.other_user).play_mode_key, "r")
+        self.assertEqual(get_settings(self.other_user).recording_key, "a")
+        self.assertEqual(get_settings(self.other_user).quick_play_key, "s")
+
+
+class UnauthorizedSettingsAccessTestCase(TestCase):
+    def setUp(self):
+        self = create_default_testing_profile(self)
+
+        self.other_user = User.objects.create_user(
+            username="user2", password=user1_password
+        )
+
+    def test_update_unowned_settings(self):
+        self.c.login(username="user2", password=user1_password)
+
+        # Try to update the settings owned by user1
+        response = self.c.post(reverse("macros:update_settings", kwargs={"pk": self.settings.pk}), {
+            "play_mode_key": "a",
+            "recording_key": "b",
+            "quick_play_key": "c",
+        })
+
+        self.assertNotEqual(get_settings(self.user).play_mode_key, "a")
+        self.assertNotEqual(get_settings(self.user).recording_key, "b")
+        self.assertNotEqual(get_settings(self.user).quick_play_key, "c")
+        self.assertEqual(response.status_code, 404)
