@@ -19,7 +19,7 @@ class TestAPI_General(TestCase):
         # Successful generation
         self.assertEqual(response.status_code, 200)
 
-        self.token = Token.objects.get(user=self.user)
+        self.token = Token.objects.get(user=self.user).key
 
     def test_invalid_token(self):
         response = self.c.get(

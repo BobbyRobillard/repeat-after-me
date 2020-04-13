@@ -1,6 +1,10 @@
 from django.urls import reverse
 
+from django.contrib.auth.models import User
+
 from django.test import TestCase, Client
+
+from macros.utils import get_settings
 
 
 class RegistrationTestCase(TestCase):
@@ -20,6 +24,14 @@ class RegistrationTestCase(TestCase):
         # Redirected to homepage on sucessful signup
         self.assertEqual(response.status_code, 302)
 
+        settings = get_settings(User.objects.get(username="test"))
+
+        # Make sure settings were created with the proper default values
+        self.assertTrue(settings is not None)
+        self.assertEqual(settings.recording_key, "r")
+        self.assertEqual(settings.play_mode_key, "p")
+        self.assertEqual(settings.quick_play_key, "a")
+
     def test_invalid_registration(self):
         data = {
             "username": "test",
@@ -36,7 +48,6 @@ class RegistrationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # No Password1
-        data["username"] = "test1"
         data["password1"] = ""
         response = self.c.post(reverse("core:register"), data)
         self.assertEqual(response.status_code, 200)

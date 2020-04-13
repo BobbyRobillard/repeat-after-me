@@ -40,28 +40,6 @@ import json
 
 
 @method_decorator(login_required, name="dispatch")
-class CreateSettingsView(CreateView):
-    model = Settings
-    form_class = SettingsForm
-    success_url = "/"
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        messages.success(self.request, "Settings were created successfully!")
-        return super(CreateSettingsView, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["profiles"] = get_profiles(self.request.user)
-        try:
-            # Pass incase user has settings so front-end can redirect
-            context["settings"] = get_settings(self.request.user)
-        except Exception as e:
-            context["username"] = self.request.user.username
-        return context
-
-
-@method_decorator(login_required, name="dispatch")
 class UpdateSettingsView(UpdateView):
     model = Settings
     form_class = SettingsForm
@@ -86,18 +64,19 @@ class UpdateSettingsView(UpdateView):
 
 @login_required
 def stop_showing_sharing(request):
-    try:
-        settings = get_settings(request.user)
-        settings.show_social_sharing = False
-        settings.save()
-    except Exception as e:
-        return redirect('macros:setup_settings')
+    settings = get_settings(request.user)
+    settings.show_social_sharing = False
+    settings.save()
     return redirect('website:homepage')
 
 
 def generate_token(request):
     token = Token.objects.get_or_create(user=request.user)[0]
-    context = {"token": token}
+    context = {
+        "token": token,
+        "profiles": get_profiles(request.user),
+        "settings": get_settings(request.user)
+    }
     return render(request, "macros/token.html", context)
 
 
@@ -142,6 +121,7 @@ class CreateProfileView(CreateView):
         context = super().get_context_data(**kwargs)
         context["icons"] = get_possible_icons()
         context["profiles"] = get_profiles(self.request.user)
+        context["settings"] = get_settings(self.request.user)
         return context
 
 

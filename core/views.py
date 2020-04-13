@@ -13,6 +13,8 @@ from .forms import RegisterForm
 
 from .utils import recaptcha_validation
 
+from macros.models import Settings
+
 
 # Login
 def login(request):
@@ -49,7 +51,9 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("macros:setup_settings")
+            user = User.objects.get(username=form.cleaned_data['username'])
+            Settings.objects.create(user=user)
+            return redirect("website:homepage")
     else:
         form = RegisterForm()
 

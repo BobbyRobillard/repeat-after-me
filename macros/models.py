@@ -25,11 +25,10 @@ class Settings(models.Model):
         return "{0}: settings".format(str(self.user))
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
     auth_token = models.CharField(max_length=150, null=True)
-    recording_key = models.CharField(max_length=key_code_length)
-    play_mode_key = models.CharField(max_length=key_code_length)
-    quick_play_key = models.CharField(max_length=key_code_length)
+    recording_key = models.CharField(max_length=key_code_length, default="r")
+    play_mode_key = models.CharField(max_length=key_code_length, default="p")
+    quick_play_key = models.CharField(max_length=key_code_length, default="a")
     play_mode = models.BooleanField(default=False)
     is_recording = models.BooleanField(default=False)
     offer_tutorial = models.BooleanField(default=True)

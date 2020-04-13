@@ -13,7 +13,6 @@ urlpatterns = [
     url(r"^get-token$", views.generate_token, name="generate_token"),
     url(r"^quit-tutorial$", views.quit_tutorial, name="quit_tutorial"),
     url(r"^stop-showing-sharing$", views.stop_showing_sharing, name="stop_showing_sharing"),
-    url(r"^setup-settings$", views.CreateSettingsView.as_view(), name="setup_settings"),
     url(r"^update-settings/(?P<pk>\d+)/$", views.UpdateSettingsView.as_view(), name="update_settings"),
     url(r"^save-recording$", views.save_recording, name="save_recording"),
     url(

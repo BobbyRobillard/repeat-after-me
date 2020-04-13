@@ -186,20 +186,6 @@ class SettingsTestCase(TestCase):
         self.assertEqual(settings.offer_tutorial, False)
         self.assertEqual(response.status_code, 302)
 
-    def test_setup_settings(self):
-        data = {
-            "play_mode_key": "r",
-            "recording_key": "a",
-            "quick_play_key": "s",
-        }
-        self.c.login(username="user2", password=user1_password)
-        response = self.c.post(reverse("macros:setup_settings"), data)
-        self.assertEqual(response.status_code, 302)
-
-        self.assertEqual(get_settings(self.other_user).play_mode_key, "r")
-        self.assertEqual(get_settings(self.other_user).recording_key, "a")
-        self.assertEqual(get_settings(self.other_user).quick_play_key, "s")
-
 
 class UnauthorizedSettingsAccessTestCase(TestCase):
     def setUp(self):
