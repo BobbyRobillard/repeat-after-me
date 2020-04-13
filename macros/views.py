@@ -156,6 +156,7 @@ class DeleteProfileView(DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["profiles"] = get_profiles(self.request.user)
+        context["settings"] = get_settings(self.request.user)
         return context
 
 
@@ -169,6 +170,7 @@ class UpdateProfileView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["profiles"] = get_profiles(self.request.user)
+        context["settings"] = get_settings(self.request.user)
         return context
 
     def get_object(self, *args, **kwargs):
@@ -246,6 +248,12 @@ class DeleteRecordingView(DeleteView):
             raise Http404
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profiles"] = get_profiles(self.request.user)
+        context["settings"] = get_settings(self.request.user)
+        return context
+
 
 def download_recording(request, token, key_char):
     try:
@@ -260,6 +268,9 @@ def download_recording(request, token, key_char):
 
     key_event_serializer = KeyEventSerializer(events["key_events"], many=True)
     mouse_event_serializer = MouseEventSerializer(events["mouse_events"], many=True)
+
+    print(key_event_serializer.data)
+    print(mouse_event_serializer.data)
 
     return JsonResponse(
         {"events": key_event_serializer.data + mouse_event_serializer.data}, status=200
@@ -285,16 +296,16 @@ def stop_recording_view(request, token):
     errors_exist = False
     errors = {"key_event_errors": [], "mouse_event_errors": []}
 
-    # Create new recording to save action to.
-    # New recordings save to the current profile
-    # Delete temp recordings from user
     settings = get_settings_from_token(token)
 
+    # Delete temp recordings
     Recording.objects.filter(
         profile=get_current_profile(settings.user),
         is_temp=True
     ).delete()
 
+    # Create new recording to save actions to.
+    # New recordings save to the current profile
     new_recording = Recording.objects.create(
         profile=get_current_profile(user),
         name="temp",

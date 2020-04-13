@@ -135,23 +135,16 @@ def play_recording(char):
         events = sorted(json_data, key=lambda i: i["order_in_recording"])
 
         for event in events:
+            print(event)
             try:
-                x, y = event["x_pos"], event["y_pos"]
-                mouse_controller.position = (x, y)
-                if event["is_press"]:
-                    mouse_controller.press(Button.left)
-                else:
-                    mouse_controller.release(Button.left)
-
+                mouse_controller.position = (event["x_pos"], event["y_pos"])
+                mouse_controller.click(Button.left)
             except Exception as e:
                 try:
-                    key = event["key_code"]
-                    if event["is_press"]:
-                        keyboard_controller.press(key)
-                    else:
-                        keyboard_controller.release(key)
+                    keyboard_controller.type(event["key_code"])
                 except Exception as key_exception:
                     print(str(key_exception))
+            time.sleep(1)
 
     except Exception as e:
         print(str(e))
@@ -189,11 +182,12 @@ def upload_recording():
             else:
                 mouse_events.append(
                     {
-                        "x": action.x,
-                        "y": action.y,
+                        "x_pos": action.x,
+                        "y_pos": action.y,
+                        "delay_time": 0,
+                        "is_press": True,
                         "button": str(action.button),
                         "order_in_recording": order_in_recording,
-                        "is_press": True,
                     }
                 )
 
@@ -203,6 +197,7 @@ def upload_recording():
         requests.post(
             url, json={"key_events": key_events, "mouse_events": mouse_events}
         )
+        actions = []
 
 
 # Sync settings with server
