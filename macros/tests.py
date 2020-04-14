@@ -84,6 +84,11 @@ class ProfileTestCase(TestCase):
         self.assertEqual(get_settings(self.user).current_profile, None)
         self.assertEqual(len(get_profiles(self.user)), 0)
 
+    def test_hex_color_conversion(self):
+        profile = get_profiles(self.user).first()
+        result = profile.get_converted_hex_color()
+        self.assertEqual(result, 'rgba(0,0,0,.2)')
+
 
 class UnauthorizedProfileAccessTestCase(TestCase):
     def setUp(self):

@@ -16,12 +16,12 @@ class Profile(models.Model):
 
     def get_converted_hex_color(self):
         rgb = tuple(int(self.color[i:i+2], 16) for i in (0, 2, 4))
-        return 'rgba({0},{1},{2}, .2)'.format(rgb[0], rgb[1], rgb[2])
+        return 'rgba({0},{1},{2},.2)'.format(rgb[0], rgb[1], rgb[2])
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=max_name_length)
-    color = models.CharField(max_length=6)
-    icon = models.CharField(max_length=30)
+    color = models.CharField(max_length=6, default="000000")
+    icon = models.CharField(max_length=30, default="fas fa-user")
 
 
 class Settings(models.Model):
