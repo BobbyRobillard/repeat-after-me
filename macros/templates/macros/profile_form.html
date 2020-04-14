@@ -5,15 +5,18 @@
 {% block custom_css %}
 input[type=text] {
   width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  color: #ccc;
+}
+input[type=color] {
+  width: 25px;
+  height: 25px;
+  border-radius:50%;
+  padding: 4px;
 }
 label {
-  display: none;
-}
-
-#id_icon {
   display: none;
 }
 
@@ -29,59 +32,156 @@ label {
   background-color: var(--secondary-color);
   color: white;
   -webkit-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
--moz-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
+  -moz-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
+  box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
+}
+
+#id_color, #id_color_visible, #id_icon {
+  display: none;
+}
+
+.color-option {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  padding: 2px 8px 2px 8px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+#color-selector-toggle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  padding: 0px 4px 0px 4px;
+}
+
+#icon-choice {
+  padding: 20px 25px 20px 25px;
+  font-size: 75px;
+  border: 2px solid #ccc;
+  color: #ccc;
+  border-radius: 50%;
+}
+
+#icon-choice-text {
+  font-size: 12px;
+}
+
+h5, #color-container {
+  text-align: left;
+}
+
+.modal-icon {
+  font-size: 30px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.modal-icon:hover {
+  color: #08f;
 }
 {% endblock custom_css %}
 
 {% block content %}
-  <div class="col-md-4 col-xl-3 update-container">
-    <h2>Create A New Profile <span style="color:#{{object.color}}">{{ object.name }}</span></h2>
-    <form id="profile_update_form" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        (Click to change color)<input type="color" id="id_color_visible" value="#{{object.color}}">
-        <br><br>
-        <h3>Select Profile's Icon</h3>
-        {% for icon in icons %}
-        <i class="profile-icon {{icon}}"></i>
-        {% endfor %}
-        <br><br>
-        <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
-    </form>
+  <div class="col-md-4 col-xl-3 offset-md-3 offset-lg-4 outter">
+    <h2 class="text-center">Create A New Profile <span style="color:#{{object.color}}">{{ object.name }}</span></h2>
+    <div class="row">
+      <div class="col update-container text-center">
+        <form id="profile_update_form" method="post">{% csrf_token %}
+          <span id="icon-choice-container">
+            <i class="fas fa-plus" id="icon-choice"></i><br>
+          </span>
+          <span id="icon-choice-text">(click to change icon)</span>
+          <h5>Profile Name</h5>
+          {{ form.as_p }}
+          <h5>Profile Color</h5>
+          <div id="color-container">
+            {% for color in default_colors %}
+              <span class="color-option" style="background-color:{{color}};color:{{color}};" id="{{color}}">+</span>
+            {% endfor %}
+            <span class="btn btn-default" id="color-selector-toggle">+</span>
+          </div>
+          <input type="color" id="id_color_visible">
+          <br>
+          <button id="update_profile" type="submit" class="btn btn-success full-width" name="button">Save Profile</button>
+        </form>
+      </div>
+    </div>
   </div>
 
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('#id_color').val(
-      $(this).val().replace("#", "")
-    );
+  <!-- /.control-sidebar -->
+  <div class="modal fade" id="icons-modal" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-notify modal-info" role="document">
+      <!--Content-->
+      <div class="modal-content text-center">
 
-    $('#id_name').attr('placeholder', "Enter a profile name...")
-    $('#id_color').attr('placeholder', "Enter a profile color...")
-  });
+        <!--Header-->
+        <div class="modal-header" style="margin:0px;!important;padding:0px;!important">
+          <p id="step-title" class="heading">
+            <strong>Select an Icon</strong>
+          </p>
+        </div>
 
-  $('#id_color_visible').change(function() {
-    $('#id_color').val(
-      $('#id_color_visible').val().replace('#', '')
-    );
-  });
+        <!--Body-->
+        <div class="modal-body">
+          {% for icon in icons %}
+          <i class="{{ icon }} modal-icon"></i>
+          {% endfor %}
+        </div>
+      </div>
+      <!--/.Content-->
+    </div>
+  </div>
 
-  $('.profile-icon').click(function() {
-    // Remove active property from all other profile icons
-    $('.profile-icon').each(function() {
-      $(this).css('color', 'var(--secondary-color)');
-      $(this).css('background', 'white');
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#id_name').attr('placeholder', "Enter a profile name...")
     });
-
-    // Only set the current one to active
-    $(this).css('background', 'var(--secondary-color)');
-    $(this).css('color', 'white');
-
-    var classList = $(this)[0].classList;
-
-    var icon_class = classList[1] + " " + classList[2];
-    // Set the value of hidden icon field
-    $('#id_icon').val(icon_class);
-  });
-</script>
+    // -------------------------------------------------------------------------
+    $('#icon-choice').click(function() {
+      $('#icons-modal').modal('show');
+    });
+    // -------------------------------------------------------------------------
+    $('#color-selector-toggle').click(function() {
+      $('#id_color_visible').click();
+    });
+    // -------------------------------------------------------------------------
+    $('#id_color_visible').change(function() {
+      var new_color = $(this).val();
+      $('#id_color').val(new_color.replace("#", ""));
+      $('#icon-choice').css('color', new_color);
+      $('#icon-choice').css('border', "2px solid " + new_color);
+      $('#icon-choice').css('background-color', convertHex(new_color, .2));
+    });
+    // -------------------------------------------------------------------------
+    function convertHex(hex, opacity){
+      return 'rgba(' + parseInt(hex.slice(-6, -4), 16)
+            + ',' + parseInt(hex.slice(-4, -2), 16)
+            + ',' + parseInt(hex.slice(-2), 16)
+            +',' + opacity + ')';
+    }
+    // -------------------------------------------------------------------------
+    $('.color-option').click(function() {
+      var new_color = $(this).attr('id');
+      $('#id_color').val(new_color.replace("#", ""));
+      $('#icon-choice').css('color', new_color);
+      $('#icon-choice').css('border', "2px solid " + new_color);
+      $('#icon-choice').css('background-color', convertHex(new_color, .2));
+    });
+    // -------------------------------------------------------------------------
+    $('.modal-icon').click(function() {
+      var classList = $(this)[0].classList;
+      var desired_classes = "";
+      for(var i=0; i < classList.length - 1; i++) {
+        $('#icon-choice').addClass(classList[i]);
+        desired_classes += (classList[i] + " ");
+      }
+      desired_classes.trim();
+      $('#icon-choice-container').html(
+        "<i id='icon-choice' class='" + desired_classes + "'></i><br>"
+      );
+      $('#id_icon').val(desired_classes);
+    });
+  </script>
 {% endblock content %}
