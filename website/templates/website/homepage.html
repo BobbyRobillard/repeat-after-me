@@ -34,10 +34,11 @@ div > .alert {
       <br><br>
     </div>
     {% for profile in profiles %}
+
     <div class="col-12 col-sm-6 col-md-3">
       <div class="info-box action-link" href="{% url 'macros:set_current_profile' pk=profile.pk %}">
-        <span class="info-box-icon bg-info elevation-1" style="background-color: #{{ profile.color }} !important;">
-          <i class="{{ profile.icon }}"></i>
+        <span class="info-box-icon bg-info elevation-1" style="background-color: {{profile.get_converted_hex_color}} !important;">
+          <i class="{{ profile.icon }}" style="color: #{{ profile.color }};"></i>
         </span>
 
         <div class="info-box-content">

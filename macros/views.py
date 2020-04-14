@@ -123,11 +123,11 @@ class CreateProfileView(CreateView):
         context["profiles"] = get_profiles(self.request.user)
         context["settings"] = get_settings(self.request.user)
         context["default_colors"] = [
-            "#F44336",
-            "#795548",
+            "#eb2f06",
+            "#fa983a",
             "#FFEB3B",
-            "#CDDC39",
-            "#00BCD4",
+            "#78e08f",
+            "#82ccdd",
             "#0088ff",
             "#673AB7",
             "#E91E63",

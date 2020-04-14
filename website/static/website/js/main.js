@@ -31,3 +31,12 @@ setInterval(function() {
   playModeSocket.send(JSON.stringify({}));
 }, 250);
 //------------------------------------------------------------------------------
+// Convert Hex Color to opacity
+//------------------------------------------------------------------------------
+function convertHex(hex, opacity){
+  return 'rgba(' + parseInt(hex.slice(-6, -4), 16)
+        + ',' + parseInt(hex.slice(-4, -2), 16)
+        + ',' + parseInt(hex.slice(-2), 16)
+        +',' + opacity + ')';
+}
+//------------------------------------------------------------------------------

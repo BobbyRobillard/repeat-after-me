@@ -8,7 +8,6 @@ input[type=text] {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  color: #ccc;
 }
 input[type=color] {
   width: 25px;
@@ -18,22 +17,6 @@ input[type=color] {
 }
 label {
   display: none;
-}
-
-.profile-icon {
-  font-size: 50px;
-  padding: 10px;
-  background-color: white;
-  color: var(--secondary-color);
-  border-radius: 8px;
-}
-
-.profile-icon:hover, profile-icon-active {
-  background-color: var(--secondary-color);
-  color: white;
-  -webkit-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
-  -moz-box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
-  box-shadow: 0px 0px 10px 4px rgba(189,189,189,1);
 }
 
 #id_color, #id_color_visible, #id_icon {
@@ -58,7 +41,7 @@ label {
 
 #icon-choice {
   padding: 20px 25px 20px 25px;
-  font-size: 75px;
+  font-size: 50px;
   border: 2px solid #ccc;
   color: #ccc;
   border-radius: 50%;
@@ -74,12 +57,17 @@ h5, #color-container {
 
 .modal-icon {
   font-size: 30px;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .modal-icon:hover {
   color: #08f;
+}
+
+#icon-choice-container {
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
 }
 {% endblock custom_css %}
 
@@ -89,10 +77,10 @@ h5, #color-container {
     <div class="row">
       <div class="col update-container text-center">
         <form id="profile_update_form" method="post">{% csrf_token %}
-          <span id="icon-choice-container">
+          <div id="icon-choice-container">
             <i class="fas fa-plus" id="icon-choice"></i><br>
-          </span>
-          <span id="icon-choice-text">(click to change icon)</span>
+            <span id="icon-choice-text">(click to change icon)</span>
+          </div>
           <h5>Profile Name</h5>
           {{ form.as_p }}
           <h5>Profile Color</h5>
@@ -135,11 +123,14 @@ h5, #color-container {
   </div>
 
   <script type="text/javascript">
+
+    var current_color = "ccc";
+
     $(document).ready(function() {
       $('#id_name').attr('placeholder', "Enter a profile name...")
     });
     // -------------------------------------------------------------------------
-    $('#icon-choice').click(function() {
+    $('body').on('click', '#icon-choice', function() {
       $('#icons-modal').modal('show');
     });
     // -------------------------------------------------------------------------
@@ -155,15 +146,9 @@ h5, #color-container {
       $('#icon-choice').css('background-color', convertHex(new_color, .2));
     });
     // -------------------------------------------------------------------------
-    function convertHex(hex, opacity){
-      return 'rgba(' + parseInt(hex.slice(-6, -4), 16)
-            + ',' + parseInt(hex.slice(-4, -2), 16)
-            + ',' + parseInt(hex.slice(-2), 16)
-            +',' + opacity + ')';
-    }
-    // -------------------------------------------------------------------------
     $('.color-option').click(function() {
       var new_color = $(this).attr('id');
+      current_color = new_color;
       $('#id_color').val(new_color.replace("#", ""));
       $('#icon-choice').css('color', new_color);
       $('#icon-choice').css('border', "2px solid " + new_color);
@@ -179,9 +164,13 @@ h5, #color-container {
       }
       desired_classes.trim();
       $('#icon-choice-container').html(
-        "<i id='icon-choice' class='" + desired_classes + "'></i><br>"
+        "<i id='icon-choice' class='" + desired_classes + "'></i><br><span id='icon-choice-text'>(click to change icon)</span>"
       );
       $('#id_icon').val(desired_classes);
+      $('#icons-modal').modal('hide');
+      $('#icon-choice').css('color', current_color);
+      $('#icon-choice').css('border', "2px solid " + current_color);
+      $('#icon-choice').css('background-color', convertHex(current_color, .2));
     });
   </script>
 {% endblock content %}
