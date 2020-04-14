@@ -105,7 +105,6 @@ def get_possible_icons():
         "fas fa-bowling-ball",
         "fab fa-blogger",
         "fas fa-bone",
-        "fas fa-bahai",
         "fab fa-avianex",
         "fab fa-accessible-icon",
         "fas fa-atom" "fas fa-american-sign-language-interpreting",

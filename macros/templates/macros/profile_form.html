@@ -60,8 +60,7 @@ h5, #color-container {
 
 .modal-icon {
   font-size: 30px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .modal-icon:hover {
@@ -115,10 +114,14 @@ h5, #color-container {
         </div>
 
         <!--Body-->
-        <div class="modal-body">
+        <div class="modal-body" style="padding-right:25px;">
+          <div class="row">
           {% for icon in icons %}
-          <i class="{{ icon }} modal-icon"></i>
+            <div class="col-2">
+              <i class="{{ icon }} modal-icon"></i>
+            </div>
           {% endfor %}
+          </div>
         </div>
       </div>
       <!--/.Content-->
