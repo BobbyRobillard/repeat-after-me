@@ -1,0 +1,12 @@
+[
+{
+    "model": "macros.profile",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "name": "Modern Warfare",
+        "color": "000000",
+        "icon": "fas fa-user"
+    }
+}
+]

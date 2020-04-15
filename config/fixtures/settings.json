@@ -1,0 +1,17 @@
+[
+{
+    "model": "macros.settings",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "recording_key": "r",
+        "play_mode_key": "p",
+        "quick_play_key": "a",
+        "play_mode": false,
+        "is_recording": false,
+        "offer_tutorial": true,
+        "show_social_sharing": false,
+        "current_profile": 1
+    }
+}
+]

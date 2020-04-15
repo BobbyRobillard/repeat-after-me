@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo
+echo "*************************************************"
+echo "This script deletes and recreates fixtures for the devenv!"
+echo "*************************************************"
+echo
+
+read -p "Are you sure you want to continue? (yes/no) "
+if [ "$REPLY" != "yes" ]; then
+  exit 0
+fi
+echo
+
+source ~/venv/bin/activate
+rm -rf /vagrant/config/fixtures/*
+python manage.py dumpdata auth.User --indent 4 > /vagrant/config/fixtures/users.json
+python manage.py dumpdata macros.Settings --indent 4 > /vagrant/config/fixtures/settings.json
+python manage.py dumpdata macros.Profile --indent 4 > /vagrant/config/fixtures/profiles.json
+deactivate
