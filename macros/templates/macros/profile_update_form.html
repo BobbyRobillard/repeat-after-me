@@ -13,9 +13,7 @@ label {
 {% endblock custom_css %}
 
 {% block content %}
-<div class="col-md-4 col-xl-3 update-container">
-  <h2>Details For <span id="span-colored" style="color:#{{object.color}}">{{ object.name }}</span></h2>
-  <br>
+<div class="col-md-4 col-xl-3 offset-md-1 update-container">
   <form id="profile_update_form" method="post">{% csrf_token %}
       {{ form.as_p }}
       (Click to change color)<input type="color" id="id_color_visible" value="#{{object.color}}">
@@ -23,7 +21,7 @@ label {
       <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
   </form>
 </div>
-<div class="col-md-7 col-xl-8 update-container">
+<div class="col-md-7 col-xl-5 offset-md-1 update-container">
   <h2>Recordings</h2>
   <table class="table table-striped table-dark table-hover">
       <thead>
@@ -36,7 +34,7 @@ label {
       <tbody>
         {% for recording in object.get_recordings %}
         <tr>
-          <th scope="row">{{ recording.name }}</th>
+          <th>{{ recording.name }}</th>
           <td>{{ recording.key_code }}</td>
           <td>
             <i class="fas fa-pencil-alt edit action-link animated item" href="#" style="margin-left:5px;"></i>

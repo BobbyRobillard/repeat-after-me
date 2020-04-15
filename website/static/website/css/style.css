@@ -1,7 +1,7 @@
 :root {
   --main-color: black;
   --secondary-color: #0088ff;
-  --primary-color: #fd6c53;
+  --primary-color: #08f;
   --container-corner-radius: 10px;
 }
 
@@ -12,6 +12,18 @@
 
 .fc-secondary {
   color: var(--secondary-color);
+}
+
+.black {
+  background-color: black;
+}
+
+.thin {
+  font-weight: 200 !important;
+}
+
+.white-text {
+  color: white;
 }
 
 .secondary-colors {

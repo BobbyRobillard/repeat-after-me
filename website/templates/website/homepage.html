@@ -20,10 +20,58 @@ div > .alert {
   cursor: pointer;
   background-color: #f3f4f5;
 }
+
+tbody > tr > td {
+  background-color: white;
+}
+
+table {
+  -webkit-box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);
+  -moz-box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);
+  box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);r
+}
 {% endblock custom_css %}
 
 
 {% block content %}
+
+    <div class="col-12">
+      <span class="m-0 text-dark">
+        Current Profile: <span class="fc-primary thin">{{settings.current_profile}}</span>
+        <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=settings.current_profile.pk %}" style="margin-left:5px;"></i>
+        <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=settings.current_profile.pk %}"></i>
+      </span>
+      <div class="row">
+        <div class="col-md-7">
+          <table class="table">
+            <thead class="black white-text">
+              <tr>
+                <th>Recording Name</th>
+                <th>Activation Key</th>
+                <th>Interact</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for recording in settings.current_profile.get_recordings %}
+                <tr>
+                  <th>{{ recording.name }}</th>
+                  <td>{{ recording.key_code }}</td>
+                  <td>
+                    <i class="fas fa-pencil-alt edit action-link animated item" href="#" style="margin-left:5px;"></i>
+                    <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_recording' pk=recording.pk %}"></i>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3">You have no recordings saved to this profile.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr>
+    </div>
     <div class="col-12">
       <span class="m-0 text-dark">Your Profiles</span>
       <a href="{% url 'macros:add_profile' %}">

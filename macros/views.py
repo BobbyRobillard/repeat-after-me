@@ -199,10 +199,6 @@ class UpdateProfileView(UpdateView):
 @login_required
 def set_current_profile_view(request, pk):
     set_current_profile(request.user, pk)
-    messages.success(
-        request,
-        "Current profile changed to: {0}".format(Profile.objects.get(pk=pk).name),
-    )
     return redirect("website:homepage")
 
 
