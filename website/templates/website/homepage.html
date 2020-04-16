@@ -34,7 +34,6 @@ table {
 
 
 {% block content %}
-
     <div class="col-12">
       <span class="m-0 text-dark">
         Current Profile: <span class="fc-primary thin">{{settings.current_profile}}</span>
@@ -53,18 +52,18 @@ table {
             </thead>
             <tbody>
               {% for recording in settings.current_profile.get_recordings %}
-                <tr>
-                  <th>{{ recording.name }}</th>
-                  <td>{{ recording.key_code }}</td>
-                  <td>
-                    <i class="fas fa-pencil-alt edit action-link animated item" href="#" style="margin-left:5px;"></i>
-                    <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_recording' pk=recording.pk %}"></i>
-                  </td>
-                </tr>
+              <tr>
+                <th>{{ recording.name }}</th>
+                <td>{{ recording.key_code }}</td>
+                <td>
+                  <i class="fas fa-pencil-alt edit action-link animated item" href="#" style="margin-left:5px;"></i>
+                  <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_recording' pk=recording.pk %}"></i>
+                </td>
+              </tr>
               {% empty %}
-                <tr>
-                  <td colspan="3">You have no recordings saved to this profile.</td>
-                </tr>
+              <tr>
+                <td colspan="3">You have no recordings saved to this profile.</td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -82,7 +81,6 @@ table {
       <br><br>
     </div>
     {% for profile in profiles %}
-
     <div class="col-12 col-sm-6 col-md-3">
       <div class="info-box action-link" href="{% url 'macros:set_current_profile' pk=profile.pk %}">
         <span class="info-box-icon bg-info elevation-1" style="background-color: {{profile.get_converted_hex_color}} !important;">
@@ -91,9 +89,9 @@ table {
 
         <div class="info-box-content">
           <span class="info-box-text">
-              {{ profile.name }}
-              <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=profile.pk %}" style="margin-left:5px;"></i>
-              <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
+            {{ profile.name }}
+            <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=profile.pk %}" style="margin-left:5px;"></i>
+            <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
           </span>
           <span class="info-box-number">
             Recordings:
