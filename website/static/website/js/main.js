@@ -26,10 +26,6 @@ playModeSocket.onmessage = function(e) {
 playModeSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
 };
-
-setInterval(function() {
-  playModeSocket.send(JSON.stringify({}));
-}, 250);
 //------------------------------------------------------------------------------
 // Convert Hex Color to opacity
 //------------------------------------------------------------------------------

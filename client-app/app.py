@@ -13,7 +13,7 @@ import atexit
 
 default_username = "webmaster"
 domain = "http://localhost:8000"
-token = "c7ee1c11e81b002251744a4b81660ef9dc221522"
+token = "ac72977141e060ff46fa1efc8472afb8687d90fd"
 
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()

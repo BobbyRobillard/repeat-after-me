@@ -7,6 +7,9 @@ from rest_framework.authtoken.models import Token
 
 from .models import Profile, Settings, Recording
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 
 user1_username = "user1"
 user1_password = "qzwxec123"
@@ -51,6 +54,9 @@ def toggle_play_mode(token, toggle):
         settings.play_mode = True
 
     settings.save()
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.send)("test", {"type": "chat.update_settings"})
 
 
 def stop_recording(user):
