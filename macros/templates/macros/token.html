@@ -1,10 +1,23 @@
 {% extends 'website/base.html' %}
 
 {% block content %}
-<div class="col">
-  <h1><b>CONNECT TO YOUR DESKTOP</b></h1>
-  <br>
-  <h2><b>Token</b>: {{ token }}</h2>
-  <h3 style="font-weight:200">(We recommend not sharing this with anyone)</h3>
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <h1><b>CONNECT TO YOUR DESKTOP</b></h1>
+      <br>
+      <h4><b>Token</b>: {{ token }}</h4>
+
+      <br>
+      <h5 style="font-weight:200;">(We recommend not sharing this with anyone)</h5>
+      <br>
+
+      <p>
+        This token is what allows the softare you installed to your computer to talk to this web application.
+        <br><br>
+        <b> Run the Repeat After Me program</b> on your computer and <b>enter this token into it</b>.
+      </p>
+    </div>
+  </div>
 </div>
 {% endblock content %}
