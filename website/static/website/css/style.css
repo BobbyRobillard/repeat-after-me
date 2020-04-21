@@ -39,12 +39,8 @@
   background-color: white;
 }
 
-.delete {
-  color: red;
-}
-
-.edit {
-  color: orange;
+.delete, .edit {
+  color: #595959;
 }
 
 #id_color_visible {
@@ -58,17 +54,6 @@
   text-align: center;
   width: 100%;
   font-size: 35px;
-}
-
-.update-container {
-  background-color: white;
-  padding: 20px 15px 20px 15px;
-  border-radius: 5px;
-  -webkit-box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);
-  -moz-box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);
-  box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);
-  margin-top: 25px;
-  margin-bottom: 50px;
 }
 
 .outter {
@@ -105,4 +90,21 @@
   padding: 10px;
   margin-top: 25px;
   color: #08f;
+}
+
+.card {
+  padding: 25px;
+}
+
+.text-right  {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.key-code {
+  padding: 3px 8px 3px 8px;
+  background-color: #eee;
 }

@@ -8,101 +8,100 @@ div > .alert {
   text-align: center;
 }
 .edit, .delete {
-  font-size: 25px;
-  margin-right: 5px;
-}
-
-.info-box {
-  background-color: white;
-}
-
-.info-box:hover {
-  cursor: pointer;
-  background-color: #f3f4f5;
+  font-size: 15px;
+  margin-right: 3px;
 }
 
 tbody > tr > td {
   background-color: white;
 }
 
-table {
-  -webkit-box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);
-  -moz-box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);
-  box-shadow: 0px 0px 3px 1px rgba(220,220,220,1);r
+.main {
+  padding:20px;
+  background-color: {{settings.current_profile.get_converted_hex_color}};
+  color: #{{settings.current_profile.color}};
+  font-size: 28px;
+  border-radius: 50%;
+}
+
+h6 {
+  color: #aaa;
+  font-size: 90%;
 }
 {% endblock custom_css %}
 
-
 {% block content %}
-    <div class="col-12">
-      <span class="m-0 text-dark">
-        Current Profile: <span class="fc-primary thin">{{settings.current_profile}}</span>
-        <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=settings.current_profile.pk %}" style="margin-left:5px;"></i>
-        <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=settings.current_profile.pk %}"></i>
-      </span>
-      <div class="row">
-        <div class="col-md-7">
-          <table class="table">
-            <thead class="black white-text">
-              <tr>
-                <th>Recording Name</th>
-                <th>Activation Key</th>
-                <th>Interact</th>
-              </tr>
-            </thead>
-            <tbody>
+    <div class="row">
+      <div class="col-12">
+        <div class="card" style="padding-bottom:15px;">
+          <span>
+            <i class="{{ settings.current_profile.icon }} main"></i>
+            <text style="font-weight:600;font-size:28px;margin-left:15px;">{{ settings.current_profile }}</text>
+            <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=settings.current_profile.pk %}" style="margin-left:5px;"></i>
+            <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=settings.current_profile.pk %}"></i>
+          </span>
+          <br>
+          <div class="row">
+            <div class="col-9">
+              <h6>RECORDINGS</h6>
+              <hr>
+                {% for recording in settings.current_profile.get_recordings %}
+                  <div class="row" style="margin-bottom:10px;">
+                    <div class="col-9">
+                      {{ recording.name }}
+                    </div>
+                    <div class="col text-right">
+                      <i class="fas fa-pencil-alt edit action-link animated item text-right" href="{% url 'macros:update_profile' pk=settings.current_profile.pk %}" style="margin-left:5px;"></i>
+                      <i class="fas fa-trash-alt delete action-link animated item text-right" href="{% url 'macros:delete_profile' pk=settings.current_profile.pk %}"></i>
+                    </div>
+                  </div>
+                {% empty %}
+                <div class="row" style="margin-bottom:10px;">
+                  <div class="col">
+                    There are no recordings saved to this profile
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col">
+              <h6>ACTIVATION</h6>
+              <hr>
               {% for recording in settings.current_profile.get_recordings %}
-              <tr>
-                <th>{{ recording.name }}</th>
-                <td>{{ recording.key_code }}</td>
-                <td>
-                  <i class="fas fa-pencil-alt edit action-link animated item" href="#" style="margin-left:5px;"></i>
-                  <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_recording' pk=recording.pk %}"></i>
-                </td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="3">You have no recordings saved to this profile.</td>
-              </tr>
+              <div class="row" style="margin-bottom:10px;">
+                <div class="col">
+                  <text class="key-code">{{ recording.key_code }}</text>
+                </div>
+              </div>
               {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <hr>
-    </div>
-    <div class="col-12">
-      <span class="m-0 text-dark">Your Profiles</span>
-      <a href="{% url 'macros:add_profile' %}">
-        <button type="button" class="btn btn-success step1" name="button">Add Profile</button>
-      </a>
-      <br>
-      (Click a profile to set it as your current profile)
-      <br><br>
-    </div>
-    {% for profile in profiles %}
-    <div class="col-12 col-sm-6 col-md-3">
-      <div class="info-box action-link" href="{% url 'macros:set_current_profile' pk=profile.pk %}">
-        <span class="info-box-icon bg-info elevation-1" style="background-color: {{profile.get_converted_hex_color}} !important;">
-          <i class="{{ profile.icon }}" style="color: #{{ profile.color }};"></i>
-        </span>
+            </div>
+          </div>
 
-        <div class="info-box-content">
-          <span class="info-box-text">
-            {{ profile.name }}
-            <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=profile.pk %}" style="margin-left:5px;"></i>
-            <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
-          </span>
-          <span class="info-box-number">
-            Recordings:
-            <small>{{ profile.get_recordings|length }}</small>
-          </span>
         </div>
-        <!-- /.info-box-content -->
       </div>
-      <!-- /.info-box -->
+      {% for profile in profiles %}
+      <div class="col-12 col-sm-6 col-md-4">
+        <div class="info-box action-link" href="{% url 'macros:set_current_profile' pk=profile.pk %}">
+          <span class="info-box-icon bg-info elevation-1" style="background-color: {{profile.get_converted_hex_color}} !important;">
+            <i class="{{ profile.icon }}" style="color: #{{ profile.color }};"></i>
+          </span>
+
+          <div class="info-box-content">
+            <span class="info-box-text">
+              {{ profile.name }}
+              <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=profile.pk %}" style="margin-left:5px;"></i>
+              <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
+            </span>
+            <span class="info-box-number">
+              Recordings:
+              <small>{{ profile.get_recordings|length }}</small>
+            </span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
 {% endblock content %}
 
 {% block js %}

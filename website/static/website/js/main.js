@@ -11,7 +11,7 @@ $('body').on('click', '.action-link', function(e) {
 //------------------------------------------------------------------------------
 const playModeSocket = new WebSocket(
     'ws://'
-    + 'localhost:8000'
+    + '192.168.50.201:8000'
     + '/ws/macros/'
     + 'updates/'
 );

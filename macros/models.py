@@ -12,7 +12,7 @@ class Profile(models.Model):
         return self.name
 
     def get_recordings(self):
-        return Recording.objects.filter(profile=self)
+        return Recording.objects.filter(profile=self).order_by('name')
 
     def get_converted_hex_color(self):
         rgb = tuple(int(self.color[i:i+2], 16) for i in (0, 2, 4))
