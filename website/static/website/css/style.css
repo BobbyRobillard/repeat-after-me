@@ -35,6 +35,29 @@
   cursor: pointer;
 }
 
+h6 {
+  color: #aaa;
+  font-size: 90%;
+}
+
+.edit, .delete {
+  font-size: 15px;
+  margin-right: 3px;
+}
+
+.delete-large {
+  color: red;
+  font-size: 25px;
+  margin-left: 10px;
+  position: relative;
+  top: 3px;
+}
+
+div > .alert {
+  margin-top: 12px;
+  text-align: center;
+}
+
 .white {
   background-color: white;
 }
@@ -60,11 +83,8 @@
   margin-top: 50px;
 }
 
-.update-container > input[type=text] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
+.info-box-number {
+  font-weight: 400 !important;
 }
 
 .full-width {

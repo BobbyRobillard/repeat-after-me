@@ -4,7 +4,7 @@
 
 {% block custom_css %}
 input[type=text] {
-  width: 100%;
+  width: 300px;
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -70,13 +70,27 @@ h5, #color-container {
   margin-top: 25px !important;
   margin-bottom: 25px !important;
 }
+
+@media only screen and (max-width: 1400px) {
+  .resized-align {
+    text-align:center;
+  }
+
+  .btn-success {
+    width: 100%;
+  }
+
+  input[type=text] {
+    width: 100%;
+  }
+}
 {% endblock custom_css %}
 
 {% block content %}
-  <div class="col-sm-6 col-md-5 col-lg-4 col-xl-3 offset-sm-3 offset-md-3 offset-lg-4 outter">
-    <h2 class="text-center">Create A New Profile <span style="color:#{{object.color}}">{{ object.name }}</span></h2>
-    <div class="row">
-      <div class="col update-container text-center">
+<div class="row resized-align">
+  <div class="col">
+    <div class="card">
+      <h2 class="resized-align"><strong>Create A New Profile</strong></h2>
         <form id="profile_update_form" method="post">{% csrf_token %}
           <div id="icon-choice-container">
             <i class="fas fa-plus" id="icon-choice"></i><br>
@@ -93,7 +107,7 @@ h5, #color-container {
           </div>
           <input type="color" id="id_color_visible">
           <br>
-          <button id="update_profile" type="submit" class="btn btn-success full-width" name="button">Save Profile</button>
+          <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Profile</button>
         </form>
       </div>
     </div>

@@ -2,10 +2,12 @@
 
 {% block custom_css %}
 input[type=text] {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 7px;
+  border-radius: 3px;
   border: 1px solid #ccc;
+  margin-left: 12px;
+  postition: relative;
+  top: -3px;
 }
 
 input[type=color] {
@@ -40,9 +42,66 @@ tbody > tr > td {
 #id_color, #id_icon {
   display: none;
 }
+
+.main {
+  padding:20px;
+  background-color: {{object.get_converted_hex_color}};
+  color: #{{object.color}};
+  font-size: 28px;
+  border-radius: 50%;
+}
+
 {% endblock custom_css %}
 
 {% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card" style="padding-bottom:15px;">
+      <span>
+        <i class="{{ object.icon }} main"></i>
+        {{ form.name }}
+        <button type="submit" class="btn btn-success" style="position:relative;top:-2px;">Save</button>
+        <i class="fas fa-trash-alt delete-large action-link animated item" href="{% url 'macros:delete_profile' pk=object.pk %}"></i>
+      </span>
+      <br>
+      <div class="row">
+        <div class="col-9">
+          <h6>RECORDINGS</h6>
+          <hr>
+            {% for recording in settings.current_profile.get_recordings %}
+              <div class="row" style="margin-bottom:10px;">
+                <div class="col-9">
+                  {{ recording.name }}
+                </div>
+                <div class="col text-right">
+                  <i class="fas fa-pencil-alt edit action-link animated item text-right" href="{% url 'macros:update_profile' pk=settings.current_profile.pk %}" style="margin-left:5px;"></i>
+                  <i class="fas fa-trash-alt delete action-link animated item text-right" href="{% url 'macros:delete_profile' pk=settings.current_profile.pk %}"></i>
+                </div>
+              </div>
+            {% empty %}
+            <div class="row" style="margin-bottom:10px;">
+              <div class="col">
+                There are no recordings saved to this profile
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col">
+          <h6>ACTIVATION</h6>
+          <hr>
+          {% for recording in settings.current_profile.get_recordings %}
+          <div class="row" style="margin-bottom:10px;">
+            <div class="col">
+              <text class="key-code">{{ recording.key_code }}</text>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
   <div class="col-md-4 col-xl-3 offset-md-1 update-container">
     <h2>Profile Details</h2>
     <form id="profile_update_form" method="post">{% csrf_token %}
@@ -54,37 +113,6 @@ tbody > tr > td {
         <br><br>
         <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
     </form>
-  </div>
-  <div class="col-md-7 col-xl-5 offset-md-1">
-    <br>
-    <h2>Recordings</h2>
-    <table class="table">
-      <thead class="black white-text">
-          <tr>
-            <th>Name</th>
-            <th>Activation Key</th>
-            <th>Interact</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for recording in object.get_recordings %}
-          <tr>
-            <th>{{ recording.name }}</th>
-            <td>{{ recording.key_code }}</td>
-            <td>
-              <i class="fas fa-pencil-alt edit action-link animated item" href="#" style="margin-left:5px;"></i>
-              <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_recording' pk=recording.pk %}"></i>
-            </td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="3">
-              You have no recordings for this profile!
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-    </table>
   </div>
 {% endblock content %}
 

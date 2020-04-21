@@ -15,7 +15,9 @@
   <form id="delete-form" method="post">{% csrf_token %}
     <h3>
       Are you sure you want to delete the profile
+      <br>
       <span class="fc-primary">{{ object }}</span>
+      <br>
       and all its recordings?
     </h3>
   </form>
