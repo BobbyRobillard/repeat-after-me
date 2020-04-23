@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="row">
+    <div class="col-12" style="margin-bottom:12px;">
+      <span>
+        <i class="fas fa-cog" style="padding:20px;background-color:#f2f3f4;color:black;font-size:28px;border-radius:50%;"></i>
+        <text style="font-weight:600;font-size:28px;margin-left:15px;">Shortcut Settings</text>
+      </span>
+    </div>
+    <div class="col-4 text-center" style="padding:10px;">
+      <h6>PLAY MODE</h6>
+      <hr>
+      <b class="switch-name" style="margin-right:10px;">{{ settings.play_mode_key }}</b>
+      <label class="switch" data-toggle="tooltip" title="You can only toggle via keyboard, press: '{{settings.play_mode_key}}' to activate/deactivate play mode!">
+        <input id="play-mode" type="checkbox">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div class="col-4 text-center" style="padding:10px;">
+      <h6>RECORDING</h6>
+      <hr>
+      <b class="switch-name" style="margin-right:10px;">{{ settings.recording_key }}</b>
+      <label class="switch" data-toggle="tooltip" title="You can only toggle via keyboard, press: '{{settings.recording_key}}' to activate/deactivate play mode!">
+        <input id="play-mode" type="checkbox">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <div class="col-4 text-center" style="padding:10px;">
+      <h6>QUICK PLAY</h6>
+      <hr>
+      <b class="switch-name" style="margin-right:10px;">{{ settings.quick_play_key }}</b>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:12px;">
+    <div class="col">
+        <button type="button" class="full-width btn btn-primary action-link" href="{% url 'macros:save_recording' %}" style="padding:15px 10px 15px 10px;font-size:20px;font-weight:500;">Save Recording</button>
+    </div>
+  </div>
+</div>
