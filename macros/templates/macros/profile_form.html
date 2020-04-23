@@ -53,8 +53,11 @@ label {
   font-size: 12px;
 }
 
-h5, #color-container {
+h6, #color-container {
   text-align: left;
+}
+
+h6 {
 }
 
 .modal-icon {
@@ -83,9 +86,9 @@ h5, #color-container {
             <i class="fas fa-plus" id="icon-choice"></i><br>
             <span id="icon-choice-text">(click to change icon)</span>
           </div>
-          <h5>Profile Name</h5>
+          <h6>Profile Name</h6>
           {{ form.as_p }}
-          <h5>Profile Color</h5>
+          <h6>Profile Color</h6>
           <div id="color-container">
             {% for color in default_colors %}
               <span class="color-option" style="background-color:{{color}};color:{{color}};" id="{{color}}">+</span>

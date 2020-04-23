@@ -3,7 +3,9 @@
     <div class="col-12" style="margin-bottom:12px;">
       <span>
         <i class="fas fa-cog" style="padding:20px;background-color:#f2f3f4;color:black;font-size:28px;border-radius:50%;"></i>
-        <text style="font-weight:600;font-size:28px;margin-left:15px;">Shortcut Settings</text>
+        <text style="font-weight:600;font-size:28px;margin-left:15px;">Shortcut Settings
+          <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_settings' pk=settings.pk %}" style="margin-left:5px;"></i>
+        </text>
       </span>
     </div>
     <div class="col-4 text-center" style="padding:10px;">
