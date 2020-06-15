@@ -13,7 +13,7 @@ import atexit
 
 default_username = "webmaster"
 domain = "http://localhost:8000"
-token = "ac72977141e060ff46fa1efc8472afb8687d90fd"
+token = "0a6f065a6ce6760bb4bb01b483529449ff62500d"
 
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()
@@ -144,7 +144,7 @@ def play_recording(char):
                     keyboard_controller.type(event["key_code"])
                 except Exception as key_exception:
                     print(str(key_exception))
-            time.sleep(1)
+            time.sleep(.25)
 
     except Exception as e:
         print(str(e))
@@ -220,7 +220,7 @@ mouse_listener.start()
 sync()
 print("Starting App")
 
-
+# Sync settings with server when application is close
 atexit.register(sync)
 
 
