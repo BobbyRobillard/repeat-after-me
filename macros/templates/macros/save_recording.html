@@ -33,7 +33,8 @@
   }
 {% endblock custom_css %}
 
-{% block content %}
+{% block content %}<br>
+{% include 'website/server_messages.html' %}
 <div id="add-container" class="center">
   <img id="profile-img" src="{% static 'website/images/save.png' %}" style="max-width: 100px;">
   <h2>SAVE A RECORDING</h2>
@@ -53,8 +54,10 @@
   </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-<script type="text/javascript">
-</script>
 {% endblock content %}
+
+
+{% block settings %}
+<br>
+  {% include 'website/settings.html' %}
+{% endblock settings %}

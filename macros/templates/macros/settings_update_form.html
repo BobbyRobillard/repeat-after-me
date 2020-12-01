@@ -3,29 +3,43 @@
 {% load static %}
 
 {% block custom_css %}
-
+.form-label {
+  margin-top: 5px !important;
+}
 {% endblock custom_css %}
 
 {% block content %}
-  <div class="col-4 update-container">
-    <h2>Update Your Settings</h2>
-    <br>
-    <form id="profile_update_form" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
-    </form>
-  </div>
-  <div class="col-4 update-container">
-    <ul>
-      <li>
-        <h4><b>Play Key:</b> This allows you to play back macros, and enable/disable the ability to record.</h4>
-      </li>
-      <li>
-        <h4><b>Recording Key:</b> This allows you to stop/start recordings. Play mode must be active to toggle recording.</h4>
-      </li>
-      <li>
-        <h4><b>Quick Play Key:</b> This allows you to play back a recording you have just recently created but not saved.</h4>
-      </li>
-    </ul>
+  <div class="row">
+    <div class="col-6 offset-3 text-center">
+      <br><br>
+      <h1><b>UPDATE YOUR SETTINGS</b></h1>
+      <div class="card">
+        <form id="profile_update_form" method="post">{% csrf_token %}
+            {% for field in form %}
+              <div class="row">
+                <div class="col">
+                  <h6 class="form-label">{{ field.label }}</h6>
+                </div>
+                <div class="col">
+                  {{ field }}
+                </div>
+              </div>
+              <hr>
+            {% endfor %}
+            <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
+        </form>
+      </div>
+      <ul>
+        <li>
+          <h6><b>Play Key:</b> This allows you to play back macros, and enable/disable the ability to record.</h6>
+        </li>
+        <li>
+          <h6><b>Recording Key:</b> This allows you to stop/start recordings. Play mode must be active to toggle recording.</h6>
+        </li>
+        <li>
+          <h6><b>Quick Play Key:</b> This allows you to play back a recording you have just recently created but not saved.</h6>
+        </li>
+      </ul>
+    </div>
   </div>
 {% endblock content %}

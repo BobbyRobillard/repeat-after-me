@@ -15,6 +15,7 @@
 {% endblock custom_css %}
 
 {% block content %}
+{% include 'website/server_messages.html' %}
     <div class="row">
       <div class="col-12">
         <div class="card" style="padding-bottom:15px;">
@@ -89,7 +90,7 @@
 {% endblock content %}
 
 {% block settings %}
-  {% include 'website/settings.html' %}
+  <br>{% include 'website/settings.html' %}
 {% endblock settings %}
 
 {% block js %}
