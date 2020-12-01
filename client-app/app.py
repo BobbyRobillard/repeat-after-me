@@ -1,5 +1,5 @@
 from pynput.mouse import Button, Controller as MouseController
-from pynput.keyboard import Controller as KeyboardController
+from pynput.keyboard import Key, Controller as KeyboardController
 from pynput import mouse, keyboard
 
 from operator import attrgetter
@@ -34,25 +34,29 @@ def handle_keyboard_event(key):
     global recording_key
     global playback_key
 
-    try:
+    try:  # Normal Key Pressed
         if key.char == playback_key:
             handle_playback()
+        elif playback_mode_active:
+            if key.char == recording_key:
+                handle_recording()
+            elif is_recording:
+                # TODO: This needs to store more info on press / release
+                actions.append(KeyboardAction(key.char))
+            else:
+                play_recording(key.char)
 
-        else:
-            if playback_mode_active:
-                if key.char == recording_key:
-                    handle_recording()
-
-                elif is_recording:
-                    # TODO: This needs to store more info on press / release
-                    actions.append(KeyboardAction(key.char))
-
-                else:
-                    play_recording(key.char)
-                    pass
-
-    except AttributeError:
-        print("Special key: {0} pressed".format(key))
+    except AttributeError:  # Special Key Pressed
+        if key == playback_key:
+            handle_playback()
+        elif playback_mode_active:
+            if key == recording_key:
+                handle_recording()
+            elif is_recording:
+                # TODO: This needs to store more info on press / release
+                actions.append(KeyboardAction(str(key)))
+            else:
+                play_recording(key)
 
 
 def handle_mouse_event(x, y, button, pressed):
@@ -83,6 +87,9 @@ class KeyboardAction(object):
     def __init__(self, char):
         self.char = char
 
+    def __str__(self):
+        return "KA: {0}".format(self.char)
+
     def do_action(self):
         global keyboard_controller
         keyboard_controller.type(self.char)
@@ -93,13 +100,13 @@ def handle_recording():
     global actions
     is_recording = not is_recording
     print("Recording: {0}".format(str(is_recording)))
-
-    if is_recording:
-        # Tell server a recording has started
-        response = requests.get("{0}/macros/start-recording/{1}".format(domain, token))
-    else:
-        # Stop recording and upload recording to server
-        upload_recording()
+    #
+    # if is_recording:
+    #     # Tell server a recording has started
+    #     response = requests.get("{0}/macros/start-recording/{1}".format(domain, token))
+    # else:
+    #     # Stop recording and upload recording to server
+    #     upload_recording()
 
 
 def handle_playback():
@@ -107,16 +114,16 @@ def handle_playback():
     playback_mode_active = not playback_mode_active
     print("Playback: {0}".format(str(playback_mode_active)))
 
-    if playback_mode_active:
-        # Tell server to toggle play mode is active
-        response = requests.get(
-            "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(1))
-        )
-    else:
-        # Tell server to toggle play mode is inactive
-        response = requests.get(
-            "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(0))
-        )
+    # if playback_mode_active:
+    #     # Tell server to toggle play mode is active
+    #     response = requests.get(
+    #         "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(1))
+    #     )
+    # else:
+    #     # Tell server to toggle play mode is inactive
+    #     response = requests.get(
+    #         "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(0))
+    #     )
 
 
 # TODO: There needs to be a way for a "fail-safe" stop
@@ -210,18 +217,18 @@ def sync():
 # --------------------------------------------------------------------------
 
 
-print("Setup Started")
+# print("Setup Started")
 keyboard_listener = keyboard.Listener(on_press=handle_keyboard_event)
 mouse_listener = mouse.Listener(on_click=handle_mouse_event)
 
 keyboard_listener.start()
 mouse_listener.start()
+#
+# sync()
+# print("Starting App")
 
-sync()
-print("Starting App")
-
-# Sync settings with server when application is close
-atexit.register(sync)
+# # Sync settings with server when application is close
+# atexit.register(sync)
 
 
 while True:

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User as User
 
 
 max_name_length = 75
-key_code_length = 10
+key_code_length = 30
 
 
 class Profile(models.Model):
