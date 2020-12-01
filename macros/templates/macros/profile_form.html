@@ -77,8 +77,9 @@ h6 {
 {% endblock custom_css %}
 
 {% block content %}
-  <div class="row" style="margin-top:5vh;margin-bottom:5vh;">
-    <div class="col offset-xl-5 offset-lg-2" style="max-width: 450px;">
+<br>
+  <div class="row">
+    <div class="col offset-lg-2" style="max-width: 450px;">
       <div class="card">
         <h2 class="resized-align text-center"><strong>Create A New Profile</strong></h2>
           <form id="profile_update_form" method="post">{% csrf_token %}
@@ -183,3 +184,8 @@ h6 {
     });
   </script>
 {% endblock content %}
+
+{% block settings %}
+<br>
+  {% include 'website/settings.html' %}
+{% endblock settings %}

@@ -51,17 +51,25 @@ tbody > tr > td {
   border-radius: 50%;
 }
 
+input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+  width: 100%;
+  margin-bottom: 10px;
+}
 {% endblock custom_css %}
 
 {% block content %}
+<br>
 <div class="row">
   <div class="col-12">
     <div class="card" style="padding-bottom:15px;">
+
       <span>
-        <i class="{{ object.icon }} main"></i>
-        {{ form.name }}
-        <button type="submit" class="btn btn-success" style="position:relative;top:-2px;">Save</button>
-        <i class="fas fa-trash-alt delete-large action-link animated item" href="{% url 'macros:delete_profile' pk=object.pk %}"></i>
+
+        <h2><i class="{{ object.icon }} main"></i> {{ object.name }} <i class="fas fa-trash-alt delete-large action-link animated item" href="{% url 'macros:delete_profile' pk=object.pk %}"></i></h2>
+
       </span>
       <br>
       <div class="row">
@@ -102,17 +110,20 @@ tbody > tr > td {
     </div>
   </div>
   </div>
-  <div class="col-md-4 col-xl-3 offset-md-1 update-container">
-    <h2>Profile Details</h2>
-    <form id="profile_update_form" method="post">{% csrf_token %}
+  <div class="col-6 update-container">
+    <div class="card" style="padding-bottom:15px;">
+      <h2>PROFILE DETAILS</h2>
+      <form id="profile_update_form" method="post">
+        {% csrf_token %}
         {{ form.as_p }}
-        (Click to change icon)<i class="{{object.icon}} change" style="color:#{{object.color}};"></i>
-        <br>
-        <br>
-        (Click to change color)<input type="color" id="id_color_visible" value="#{{object.color}}">
+        <i class="{{object.icon}} change" style="color:#{{object.color}};margin-right:10px;"></i>(Click to change icon)
+          <br>
+          <br>
+        <input type="color" id="id_color_visible" value="#{{object.color}}" style="margin-right:10px;">(Click to change color)
         <br><br>
         <button id="update_profile" type="submit" class="btn btn-success" name="button">Save Changes</button>
-    </form>
+      </form>
+    </div>
   </div>
 {% endblock content %}
 
