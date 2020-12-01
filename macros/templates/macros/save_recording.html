@@ -20,27 +20,37 @@
     font-size: 60px;
   }
 
-  .input-group-prepend > span {
-    background-color: var(--secondary-color) !important;
-    color: white;
-  }
-
   #id_color {
     visibility: hidden;
+  }
+
+  input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    width: 100%;
+    margin-bottom: 10px;
   }
 {% endblock custom_css %}
 
 {% block content %}
-<div id="add-container" class="col-4 offset-3 center">
+<div id="add-container" class="center">
+  <img id="profile-img" src="{% static 'website/images/save.png' %}" style="max-width: 100px;">
   <h2>SAVE A RECORDING</h2>
   (This recording will be saved to your current profile: <span class="fc-primary">{{ settings.current_profile }}</span>)
-  <img id="profile-img" src="{% static 'website/images/save.png' %}">
-
-  <form action="{% url 'macros:save_recording' %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-success" name="button">Save New Recording</button>
-  </form>
+  <br><br>
+  <div class="row">
+    <div class="col-6 offset-3">
+      <form action="{% url 'macros:save_recording' %}" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+          {{ field }}
+        {% endfor %}
+        <br><br>
+        <button class="btn btn-success" name="button">Save New Recording</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

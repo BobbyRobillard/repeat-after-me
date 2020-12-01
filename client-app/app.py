@@ -13,7 +13,7 @@ import atexit
 
 default_username = "webmaster"
 domain = "http://localhost:8000"
-token = "0a6f065a6ce6760bb4bb01b483529449ff62500d"
+token = "45ce395dc6aa1761ddf3c9ebf0c0454190fd4736"
 
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()
@@ -144,7 +144,7 @@ def play_recording(char):
                     keyboard_controller.type(event["key_code"])
                 except Exception as key_exception:
                     print(str(key_exception))
-            time.sleep(.25)
+            time.sleep(.05)
 
     except Exception as e:
         print(str(e))

@@ -34,8 +34,9 @@ class ProfileForm(forms.ModelForm):
 
 
 class RecordingForm(forms.Form):
-    name = forms.CharField(max_length=max_name_length)
-    key_code = forms.CharField(max_length=key_code_length)
+    name = forms.CharField(max_length=max_name_length,
+                           widget=forms.TextInput(attrs={'placeholder':'Recording Name...'}))
+    key_code = forms.CharField(max_length=key_code_length, widget=forms.TextInput(attrs={'placeholder':'Activation Key Code...'}))
 
     def clean_name(self):
         name = self.cleaned_data["name"]

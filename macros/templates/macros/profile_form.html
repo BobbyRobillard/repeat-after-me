@@ -77,28 +77,28 @@ h6 {
 {% endblock custom_css %}
 
 {% block content %}
-<div class="row" style="margin-top:5vh;margin-bottom:5vh;">
-  <div class="col offset-1" style="max-width: 450px;">
-    <div class="card">
-      <h2 class="resized-align text-center"><strong>Create A New Profile</strong></h2>
-        <form id="profile_update_form" method="post">{% csrf_token %}
-          <div id="icon-choice-container" class="text-center">
-            <i class="fas fa-plus" id="icon-choice"></i><br>
-            <span id="icon-choice-text">(click to change icon)</span>
-          </div>
-          <h6>Profile Name</h6>
-          {{ form.as_p }}
-          <h6>Profile Color</h6>
-          <div id="color-container">
-            {% for color in default_colors %}
-              <span class="color-option" style="background-color:{{color}};color:{{color}};" id="{{color}}">+</span>
-            {% endfor %}
-            <span class="btn btn-default" id="color-selector-toggle"><strong>+</strong></span>
-          </div>
-          <input type="color" id="id_color_visible">
-          <br>
-          <button id="update_profile" type="submit" class="btn btn-success full-width" name="button">Save Profile</button>
-        </form>
+  <div class="row" style="margin-top:5vh;margin-bottom:5vh;">
+    <div class="col offset-xl-5 offset-lg-2" style="max-width: 450px;">
+      <div class="card">
+        <h2 class="resized-align text-center"><strong>Create A New Profile</strong></h2>
+          <form id="profile_update_form" method="post">{% csrf_token %}
+            <div id="icon-choice-container" class="text-center">
+              <i class="fas fa-plus" id="icon-choice"></i><br>
+              <span id="icon-choice-text">(click to change icon)</span>
+            </div>
+            <h6>Profile Name</h6>
+            {{ form.as_p }}
+            <h6>Profile Color</h6>
+            <div id="color-container">
+              {% for color in default_colors %}
+                <span class="color-option" style="background-color:{{color}};color:{{color}};" id="{{color}}">+</span>
+              {% endfor %}
+              <span class="btn btn-default" id="color-selector-toggle"><strong>+</strong></span>
+            </div>
+            <input type="color" id="id_color_visible">
+            <br>
+            <button id="update_profile" type="submit" class="btn btn-success full-width" name="button">Save Profile</button>
+          </form>
       </div>
     </div>
   </div>
