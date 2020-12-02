@@ -156,6 +156,8 @@ class DeleteProfileView(DeleteView):
                 settings.current_profile = profile
                 settings.save()
         except Exception as outer_error:
+            settings.current_profile = None
+            settings.save()
             messages.error(
                 self.request, "You have no profiles to set as your current profile."
             )

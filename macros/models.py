@@ -36,7 +36,7 @@ class Settings(models.Model):
     is_recording = models.BooleanField(default=False)
     offer_tutorial = models.BooleanField(default=True)
     show_social_sharing = models.BooleanField(default=False)
-    current_profile = models.ForeignKey("Profile", on_delete=models.SET_NULL, null=True)
+    current_profile = models.ForeignKey("Profile", on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class Recording(models.Model):

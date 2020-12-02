@@ -15,38 +15,35 @@
 {% endblock custom_css %}
 
 {% block content %}
-{% include 'website/server_messages.html' %}
+  {% include 'website/server_messages.html' %}
     <div class="row">
+      {% ifnotequal settings.current_profile|stringformat:"s" "None" %}
       <div class="col-12">
         <div class="card" style="padding-bottom:15px;">
           <span>
             <i class="{{ settings.current_profile.icon }} main"></i>
             <text style="font-weight:600;font-size:28px;margin-left:15px;">{{ settings.current_profile }}</text>
-            <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=settings.current_profile.pk %}" style="margin-left:5px;"></i>
-            <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=settings.current_profile.pk %}"></i>
           </span>
           <br>
           <div class="row">
             <div class="col-9">
               <h6>RECORDINGS</h6>
               <hr>
-                {% for recording in settings.current_profile.get_recordings %}
-                  <div class="row" style="margin-bottom:10px;">
-                    <div class="col-9">
-                      {{ recording.name }}
-                    </div>
-                    <div class="col text-right">
-                      <i class="fas fa-pencil-alt edit action-link animated item text-right" href="{% url 'macros:update_profile' pk=settings.current_profile.pk %}" style="margin-left:5px;"></i>
-                      <i class="fas fa-trash-alt delete action-link animated item text-right" href="{% url 'macros:delete_profile' pk=settings.current_profile.pk %}"></i>
-                    </div>
-                  </div>
-                {% empty %}
-                <div class="row" style="margin-bottom:10px;">
-                  <div class="col">
-                    There are no recordings saved to this profile
-                  </div>
-                </div>
-                {% endfor %}
+                      {% for recording in settings.current_profile.get_recordings %}
+                        <div class="row" style="margin-bottom:10px;">
+                          <div class="col-9">
+                            {{ recording.name }}
+                          </div>
+                          <div class="col text-right">
+                          </div>
+                        </div>
+                      {% empty %}
+                      <div class="row" style="margin-bottom:10px;">
+                        <div class="col">
+                          There are no recordings saved to this profile
+                        </div>
+                      </div>
+                      {% endfor %}
             </div>
             <div class="col">
               <h6>ACTIVATION</h6>
@@ -63,6 +60,11 @@
 
         </div>
       </div>
+      {% else %}
+       <div class="col-12">
+         <h1 style="margin: 50px;">You Have No Current Profile Set</h1>
+       </div>
+      {% endifnotequal %}
       {% for profile in profiles %}
       <div class="col-md-12 col-lg-6 col-xl-4">
         <div class="info-box action-link elevation-1" href="{% url 'macros:set_current_profile' pk=profile.pk %}">
@@ -73,8 +75,6 @@
           <div class="info-box-content">
             <span class="info-box-text">
               <b>{{ profile.name }}</b>
-              <i class="fas fa-pencil-alt edit action-link animated item" href="{% url 'macros:update_profile' pk=profile.pk %}" style="margin-left:5px;"></i>
-              <i class="fas fa-trash-alt delete action-link animated item" href="{% url 'macros:delete_profile' pk=profile.pk %}"></i>
             </span>
             <span class="info-box-number">
               Recordings:
@@ -87,6 +87,7 @@
       </div>
       {% endfor %}
     </div>
+
 {% endblock content %}
 
 {% block settings %}
