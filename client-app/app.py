@@ -23,7 +23,7 @@ actions = []
 playback_mode_active = False
 is_recording = False
 
-playback_key = "p"
+playback_key = "Key.tab"
 recording_key = "r"
 
 
@@ -47,6 +47,7 @@ def handle_keyboard_event(key):
                 play_recording(key.char)
 
     except AttributeError:  # Special Key Pressed
+        key = str(key)
         if key == playback_key:
             handle_playback()
         elif playback_mode_active:
@@ -54,7 +55,7 @@ def handle_keyboard_event(key):
                 handle_recording()
             elif is_recording:
                 # TODO: This needs to store more info on press / release
-                actions.append(KeyboardAction(str(key)))
+                actions.append(KeyboardAction(key))
             else:
                 play_recording(key)
 
@@ -100,13 +101,13 @@ def handle_recording():
     global actions
     is_recording = not is_recording
     print("Recording: {0}".format(str(is_recording)))
-    #
-    # if is_recording:
-    #     # Tell server a recording has started
-    #     response = requests.get("{0}/macros/start-recording/{1}".format(domain, token))
-    # else:
-    #     # Stop recording and upload recording to server
-    #     upload_recording()
+
+    if is_recording:
+        # Tell server a recording has started
+        response = requests.get("{0}/macros/start-recording/{1}".format(domain, token))
+    else:
+        # Stop recording and upload recording to server
+        upload_recording()
 
 
 def handle_playback():
@@ -114,16 +115,16 @@ def handle_playback():
     playback_mode_active = not playback_mode_active
     print("Playback: {0}".format(str(playback_mode_active)))
 
-    # if playback_mode_active:
-    #     # Tell server to toggle play mode is active
-    #     response = requests.get(
-    #         "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(1))
-    #     )
-    # else:
-    #     # Tell server to toggle play mode is inactive
-    #     response = requests.get(
-    #         "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(0))
-    #     )
+    if playback_mode_active:
+        # Tell server to toggle play mode is active
+        response = requests.get(
+            "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(1))
+        )
+    else:
+        # Tell server to toggle play mode is inactive
+        response = requests.get(
+            "{0}/macros/toggle-play-mode/{1}/{2}/".format(domain, token, str(0))
+        )
 
 
 # TODO: There needs to be a way for a "fail-safe" stop
@@ -147,15 +148,15 @@ def play_recording(char):
                 mouse_controller.position = (event["x_pos"], event["y_pos"])
                 mouse_controller.click(Button.left)
             except Exception as e:
-                try:
-                    keyboard_controller.type(event["key_code"])
-                except Exception as key_exception:
-                    print(str(key_exception))
+                key_code = event["key_code"]
+                if len(key_code) == 1:
+                    keyboard_controller.type(key_code)
+                else:
+                    keyboard_controller.press(eval(key_code))
+                    keyboard_controller.release(eval(key_code))
             time.sleep(.05)
-
     except Exception as e:
         print(str(e))
-
     keyboard_listener = keyboard.Listener(on_press=handle_keyboard_event)
     keyboard_listener.start()
 
@@ -205,6 +206,7 @@ def upload_recording():
             url, json={"key_events": key_events, "mouse_events": mouse_events}
         )
         actions = []
+        print("Upload Complete")
 
 
 # Sync settings with server
@@ -223,12 +225,12 @@ mouse_listener = mouse.Listener(on_click=handle_mouse_event)
 
 keyboard_listener.start()
 mouse_listener.start()
-#
-# sync()
-# print("Starting App")
 
-# # Sync settings with server when application is close
-# atexit.register(sync)
+sync()
+print("Starting App")
+
+# Sync settings with server when application is close
+atexit.register(sync)
 
 
 while True:
