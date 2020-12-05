@@ -34,6 +34,7 @@ from .utils import (
     get_possible_icons,
     get_settings_from_token,
     Http404,
+    convert_from_url_safe_key_code
 )
 
 import json
@@ -266,8 +267,9 @@ class DeleteRecordingView(DeleteView):
 def download_recording(request, token, key_char):
     try:
         user = Token.objects.get(key=token).user
+        print(str("KEYCODE: " + convert_from_url_safe_key_code(key_char)))
         recording = Recording.objects.get(
-            key_code=key_char, profile=get_settings(user).current_profile
+            key_code=convert_from_url_safe_key_code(key_char), profile=get_settings(user).current_profile
         )
         events = recording.get_events()
 
@@ -276,9 +278,6 @@ def download_recording(request, token, key_char):
 
     key_event_serializer = KeyEventSerializer(events["key_events"], many=True)
     mouse_event_serializer = MouseEventSerializer(events["mouse_events"], many=True)
-
-    print(key_event_serializer.data)
-    print(mouse_event_serializer.data)
 
     return JsonResponse(
         {"events": key_event_serializer.data + mouse_event_serializer.data}, status=200

@@ -13,7 +13,7 @@ import atexit
 
 default_username = "webmaster"
 domain = "http://localhost:8000"
-token = "45ce395dc6aa1761ddf3c9ebf0c0454190fd4736"
+token = "3be8e3b40d5aae87872b50365289a052ec8eebb4"
 
 mouse_controller = MouseController()
 keyboard_controller = KeyboardController()
@@ -133,6 +133,8 @@ def play_recording(char):
 
     keyboard_listener.stop()
 
+    char = make_key_code_url_safe(char)
+
     try:
         response = requests.get(
             "{0}/macros/download-recording/{1}/{2}".format(domain, token, char)
@@ -216,6 +218,45 @@ def sync():
     print("Synced!")
 
 
+def make_key_code_url_safe(char):
+    unsafe_chars_map = {
+        "`": "aa",
+        "~": "ab",
+        "!": "ac",
+        "@": "ad",
+        "#": "ae",
+        "$": "af",
+        "%": "ag",
+        "^": "ah",
+        "&": "aj",
+        "*": "ak",
+        "(": "al",
+        ")": "am",
+        "-": "an",
+        "_": "ao",
+        "=": "ap",
+        "+": "aq",
+        "[": "ar",
+        "]": "as",
+        "{": "at",
+        "}": "au",
+        "\\": "av",
+        "|": "aw",
+        "'": "ax",
+        "\"": "ay",
+        ";": "az",
+        ":": "a1",
+        "/": "a2",
+        "?": "a3",
+        ".": "a4",
+        ">": "a5",
+        "<": "a6",
+        ",": "a7"
+    }
+    try:
+        return unsafe_chars_map[char]
+    except Exception as e:
+        return char
 # --------------------------------------------------------------------------
 
 

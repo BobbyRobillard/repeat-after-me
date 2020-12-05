@@ -137,3 +137,44 @@ def create_default_testing_profile(test_object):
         user=test_object.user,
     )
     return test_object
+
+
+def convert_from_url_safe_key_code(key_code):
+    unsafe_chars_map = {
+        "aa": "`",
+        "ab": "~",
+        "ac": "!",
+        "ad": "@",
+        "ae": "#",
+        "af": "$",
+        "ag": "%",
+        "ah": "^",
+        "aj": "&",
+        "ak": "*",
+        "al": "(",
+        "am": ")",
+        "an": "-",
+        "ao": "_",
+        "ap": "=",
+        "aq": "+",
+        "ar": "[",
+        "as": "]",
+        "at": "{",
+        "au": "}",
+        "av": "\\",
+        "aw": "|",
+        "ax": "'",
+        "ay": "\"",
+        "az": ";",
+        "a1": ":",
+        "a2": "/",
+        "a3": "?",
+        "a4": ".",
+        "a5": ">",
+        "a6": "<",
+        "a7": ","
+    }
+    try:
+        return unsafe_chars_map[key_code]
+    except Exception as e:
+        return key_code
