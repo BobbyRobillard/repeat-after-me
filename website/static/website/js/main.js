@@ -7,29 +7,6 @@ $('body').on('click', '.action-link', function(e) {
     window.location.href = $(this).attr('href');
 });
 //------------------------------------------------------------------------------
-// Real Time Updates Bar
-//------------------------------------------------------------------------------
-  const playModeSocket = new WebSocket(
-       'ws://'
-       + 'localhost:8000'
-       + '/ws/macros/'
-       + 'updates/'
-   );
-
-   playModeSocket.onmessage = function(e) {
-       const data = JSON.parse(e.data);
-       $("#play-mode").prop('checked', data.playMode);
-       $("#recording").prop('checked', data.isRecording);
-   };
-
-   playModeSocket.onclose = function(e) {
-       console.error('Chat socket closed unexpectedly');
-   };
-
-   setInterval(function() {
-     playModeSocket.send(JSON.stringify({}));
-   }, 250);
-//------------------------------------------------------------------------------
 // Convert Hex Color to opacity
 //------------------------------------------------------------------------------
 function convertHex(hex, opacity){

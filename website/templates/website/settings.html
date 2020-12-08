@@ -39,3 +39,34 @@
     </div>
   </div>
 </div>
+
+<script>
+  //------------------------------------------------------------------------------
+  // Real Time Updates Bar
+  //------------------------------------------------------------------------------
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/macros/'
+        + 'updates'
+        + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        console.log("Message: " + data.playMode);
+        console.log("Message: " + data.isRecording);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    setTimeout(function() {
+      setInterval(function() {
+        chatSocket.send(JSON.stringify({
+          'message': "updates"
+        }));
+      }, 250);
+    }, 2000);
+</script>
