@@ -55,9 +55,6 @@ def toggle_play_mode(token, toggle):
 
     settings.save()
 
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.send)("test", {"type": "chat.update_settings"})
-
 
 def stop_recording(user):
     settings = get_settings(user)

@@ -38,7 +38,9 @@ def handle_keyboard_event(key):
         if key.char == playback_key:
             handle_playback()
         elif playback_mode_active:
+            print("YOLO")
             if key.char == recording_key:
+                print("YOLO2")
                 handle_recording()
             elif is_recording:
                 # TODO: This needs to store more info on press / release
@@ -97,6 +99,7 @@ class KeyboardAction(object):
 
 
 def handle_recording():
+    print("YOLO3")
     global is_recording
     global actions
     is_recording = not is_recording
@@ -107,6 +110,7 @@ def handle_recording():
         response = requests.get("{0}/macros/start-recording/{1}".format(domain, token))
     else:
         # Stop recording and upload recording to server
+        response = requests.get("{0}/macros/stop-recording/{1}".format(domain, token))
         upload_recording()
 
 

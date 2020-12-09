@@ -22,7 +22,7 @@
       <hr>
       <b class="switch-name" style="margin-right:10px;">{{ settings.recording_key }}</b>
       <label class="switch" data-toggle="tooltip" title="You can only toggle via keyboard, press: '{{settings.recording_key}}' to activate/deactivate play mode!">
-        <input id="play-mode" type="checkbox">
+        <input id="recording" type="checkbox">
         <span class="slider round"></span>
       </label>
     </div>
@@ -35,7 +35,7 @@
 
   <div class="row" style="margin-top:12px;">
     <div class="col">
-        <button type="button" class="full-width btn btn-primary action-link" href="{% url 'macros:save_recording' %}" style="padding:15px 10px 15px 10px;font-size:20px;font-weight:500;">Save Recording</button>
+        <button id="save-recording" type="button" class="full-width btn btn-primary action-link" href="{% url 'macros:save_recording' %}" style="padding:15px 10px 15px 10px;font-size:20px;font-weight:500;">Save Recording</button>
     </div>
   </div>
 </div>
@@ -54,8 +54,14 @@
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        console.log("Message: " + data.playMode);
-        console.log("Message: " + data.isRecording);
+        $("#play-mode").prop('checked', data.playMode);
+        $("#recording").prop('checked', data.isRecording);
+        if(data.hasTempRecording) {
+          $('#save-recording').css('display', 'inline')
+        }
+        else {
+          $('#save-recording').css('display', 'none')
+        }
     };
 
     chatSocket.onclose = function(e) {
@@ -64,9 +70,7 @@
 
     setTimeout(function() {
       setInterval(function() {
-        chatSocket.send(JSON.stringify({
-          'message': "updates"
-        }));
+        chatSocket.send(JSON.stringify({}));
       }, 250);
     }, 2000);
 </script>

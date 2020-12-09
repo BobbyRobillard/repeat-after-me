@@ -4,6 +4,7 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 
 from .utils import get_settings
+from .models import Recording
 
 import json
 from channels.generic.websocket import WebsocketConsumer
@@ -17,14 +18,12 @@ class SettingsConsumer(WebsocketConsumer):
         pass
 
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-
         settings = get_settings(self.scope['user'])
 
         self.send(text_data=json.dumps({
             'playMode': settings.play_mode,
-            'isRecording': settings.is_recording
+            'isRecording': settings.is_recording,
+            'hasTempRecording': Recording.objects.filter(profile=settings.current_profile, is_temp=True).exists()
         }))
 
 # class PlayConsumer(WebsocketConsumer):

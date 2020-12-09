@@ -320,23 +320,26 @@ def stop_recording_view(request, token):
         key_code=settings.quick_play_key
     )
 
-    # Serialize  & save the incoming recording's key events
-    for json_encoded_event in request.data["key_events"]:
-        new_event = KeyEvent.objects.create(recording=new_recording)
-        serializer = KeyEventSerializer(new_event, json_encoded_event)
-        if not serializer.is_valid():
-            errors["key_event_errors"].append(serializer.errors)
-            errors_exist = True
-        serializer.save()
+    try:
+        # Serialize  & save the incoming recording's key events
+        for json_encoded_event in request.data["key_events"]:
+            new_event = KeyEvent.objects.create(recording=new_recording)
+            serializer = KeyEventSerializer(new_event, json_encoded_event)
+            if not serializer.is_valid():
+                errors["key_event_errors"].append(serializer.errors)
+                errors_exist = True
+            serializer.save()
 
-    # Serialize  & save the incoming recording's mouse events
-    for json_encoded_event in request.data["mouse_events"]:
-        new_event = MouseEvent.objects.create(recording=new_recording)
-        serializer = MouseEventSerializer(new_event, json_encoded_event)
-        if not serializer.is_valid():
-            errors["mouse_event_errors"].append(serializer.errors)
-            errors_exist = True
-        serializer.save()
+        # Serialize  & save the incoming recording's mouse events
+        for json_encoded_event in request.data["mouse_events"]:
+            new_event = MouseEvent.objects.create(recording=new_recording)
+            serializer = MouseEventSerializer(new_event, json_encoded_event)
+            if not serializer.is_valid():
+                errors["mouse_event_errors"].append(serializer.errors)
+                errors_exist = True
+            serializer.save()
+    except Exception as e:
+        print(str(e))
 
     # If errors exist, report them
     if errors_exist:
